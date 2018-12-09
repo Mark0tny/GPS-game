@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="net.simplifiedlearning.firebaseauth.SignUpActivity">
 
 
     <RelativeLayout
@@ -36,7 +37,6 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
-
             <EditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
@@ -44,6 +44,16 @@
                 android:fontFamily="sans-serif"
                 android:hint="email"
                 android:inputType="textEmailAddress"
+                android:paddingBottom="15dp"
+                android:textColorHint="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:hint="username"
+                android:inputType="textPersonName"
                 android:paddingBottom="15dp"
                 android:textColorHint="@color/colorAccent" />
 
@@ -58,22 +68,22 @@
                 android:textColorHint="@color/colorAccent" />
 
             <Button
-                android:id="@+id/buttonLogin"
+                android:id="@+id/buttonSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="7dp"
-                android:text="Login"
                 android:background="@color/btnLoginRef"
+                android:text="Sign Up"
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent" />
 
             <TextView
-                android:id="@+id/textViewSignup"
+                android:id="@+id/textViewLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Sign Up"
+                android:text="Login"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorAccent" />
@@ -88,6 +98,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:visibility="gone" />
+
     </RelativeLayout>
 
 
