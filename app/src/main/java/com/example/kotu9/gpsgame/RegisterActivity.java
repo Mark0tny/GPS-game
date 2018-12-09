@@ -40,15 +40,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textViewLogin:
+                finish();
                 startActivity(new Intent(this, LoginActivity.class));
                 break;
             case R.id.buttonSignUp:
-                registeruser();
+                registerUser();
                 break;
         }
     }
-
-    private void registeruser() {
+    private void registerUser() {
         String email = editTextEmail.getText().toString().trim();
         String username = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -84,11 +84,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getApplicationContext(), "Authentication success",
-                                    Toast.LENGTH_SHORT).show();
-
+                            finish();
+                            startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
                         } else {
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                 progressBar.setVisibility(View.VISIBLE);
