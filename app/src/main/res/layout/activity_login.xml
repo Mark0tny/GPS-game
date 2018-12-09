@@ -38,7 +38,7 @@
 
 
             <EditText
-                android:id="@+id/editTextEmail"
+                android:id="@+id/editTextEmailL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
@@ -48,7 +48,7 @@
                 android:textColorHint="@color/colorAccent" />
 
             <EditText
-                android:id="@+id/editTextPassword"
+                android:id="@+id/editTextPasswordL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
