@@ -18,5 +18,13 @@
     <string name="time">Time: </string>
     <string name="city">City: </string>
     <string name="latitude">Latitude: </string>  <!--szer-->
-    <string name="longitude">Longitude: </string>  <!-- dlug -->
-    </resources>
+    <string name="longitude">Longitude: </string> <!-- dlug -->
+
+    <!-- Strings related to profile -->
+    <string name="menu_logout">Logout</string>
+    <string name="menu_addMark">Add Mark</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_maps">Map</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="action_settings">Edit Profile</string>
+</resources>
