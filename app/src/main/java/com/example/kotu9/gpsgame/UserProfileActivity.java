@@ -8,7 +8,11 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,19 +41,24 @@ public class UserProfileActivity extends AppCompatActivity {
     private EditText editText;
     private Button savebtn;
     private ProgressBar progressBar;
-    Uri uriProfileImage;
-    String profileImageUrl;
+    private Uri uriProfileImage;
+    private String profileImageUrl;
     FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         mAuth = FirebaseAuth.getInstance();
         imageView = findViewById(R.id.imageView);
         editText = findViewById(R.id.editTextDisplayName);
         savebtn = findViewById(R.id.buttonSave);
         progressBar = findViewById(R.id.progressbarImage);
+
+        loadUserInformation();
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,13 +66,26 @@ public class UserProfileActivity extends AppCompatActivity {
                 showImageChooser();
             }
         });
-
         savebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveUserInformation();
             }
         });
+    }
+
+    private void loadUserInformation() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            if (user.getPhotoUrl() != null) {
+                Glide.with(getApplicationContext())
+                        .load(user.getPhotoUrl()
+                        .toString()).into(imageView);
+            }
+            if (user.getDisplayName() != null) {
+                editText.setText(user.getDisplayName());
+            }
+        }
     }
 
     private void saveUserInformation() {
@@ -73,8 +96,8 @@ public class UserProfileActivity extends AppCompatActivity {
             editText.requestFocus();
             return;
         }
-        FirebaseUser user =  mAuth.getCurrentUser();
-        if(user != null && profileImageUrl != null){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null && profileImageUrl != null) {
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
                     .setDisplayName(dissplayName)
                     .setPhotoUri(Uri.parse(profileImageUrl))
@@ -83,10 +106,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(),"Profile updated",
+                        Toast.makeText(getApplicationContext(), "Profile updated",
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getApplicationContext(),task.getException().toString(),
+                        Toast.makeText(getApplicationContext(), task.getException().toString(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -101,11 +124,47 @@ public class UserProfileActivity extends AppCompatActivity {
             uriProfileImage = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriProfileImage);
+                Toast.makeText(getApplicationContext(),uriProfileImage.toString(),Toast.LENGTH_SHORT).show();
                 imageView.setImageBitmap(bitmap);
                 uploadImageToFirebaseStorage();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menuLogout:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                break;
+            case R.id.menuSettings:
+                Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+        return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
     }
 
@@ -122,14 +181,14 @@ public class UserProfileActivity extends AppCompatActivity {
                     profileImageUrl = taskSnapshot.getStorage().getDownloadUrl().toString();
                 }
             })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 
