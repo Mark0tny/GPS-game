@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+
+    <TextView
+        android:id="@+id/idLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/longitude"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toEndOf="@+id/textLong"
+        app:layout_constraintTop_toBottomOf="@+id/idLati" />
+
+    <TextView
+        android:id="@+id/idCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/city"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toEndOf="@+id/textCity"
+        app:layout_constraintTop_toBottomOf="@+id/idTime" />
+
+    <TextView
+        android:id="@+id/idTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/time"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toEndOf="@+id/textTime"
+        app:layout_constraintTop_toBottomOf="@+id/idScore" />
+
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/time"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textScore" />
+
+    <TextView
+        android:id="@+id/idScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/score"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toEndOf="@+id/textScore"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/score"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textLati"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/latitude"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textCity" />
+
+    <TextView
+        android:id="@+id/textCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/city"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTime" />
+
+    <TextView
+        android:id="@+id/textLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/longitude"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLati" />
+
+    <TextView
+        android:id="@+id/idLati"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/_18dp"
+        android:text="@string/latitude"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/_18dp"
+        app:layout_constraintStart_toEndOf="@+id/textLati"
+        app:layout_constraintTop_toBottomOf="@+id/idCity" />
+
+</android.support.constraint.ConstraintLayout>
