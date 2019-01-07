@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame;
+package com.example.kotu9.gpsgame.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +10,19 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import lombok.NonNull;
 
@@ -22,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     EditText editTextEmail, editTextUsername, editTextPassword;
     ProgressBar progressBar;
+    DatabaseReference reference;
     private FirebaseAuth mAuth;
 
     @Override
@@ -29,12 +38,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
+        findViewById(R.id.textViewLogin).setOnClickListener(this);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
         progressBar = findViewById(R.id.progressbar);
 
         mAuth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().getRoot().child("users");
+
     }
     @Override
     public void onClick(View view) {
@@ -49,9 +61,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
     private void registerUser() {
-        String email = editTextEmail.getText().toString().trim();
-        String username = editTextUsername.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
+        final String username = editTextUsername.getText().toString().trim();
+        final String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             editTextEmail.setError("Please enter email");
@@ -84,10 +96,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            finish();
-                            startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
+
+                            User user = new User(username,email,password,null,mAuth.getCurrentUser().getUid(),0,getCurrentDate(),0.0,0.0,null);
+                            reference.child(mAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                                @Override
+                                public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        progressBar.setVisibility(View.GONE);
+                                        finish();
+                                        startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
+                                    }else{
+                                        progressBar.setVisibility(View.GONE);
+                                        Toast.makeText(getApplicationContext(), "Could not register user",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         } else {
                             if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                 progressBar.setVisibility(View.VISIBLE);
@@ -102,5 +128,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }
                 });
+    }
+
+    public Date getCurrentDate(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date currDate = new Date();
+        return currDate;
     }
 }

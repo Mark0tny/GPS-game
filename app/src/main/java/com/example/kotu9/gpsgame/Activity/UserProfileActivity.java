@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame;
+package com.example.kotu9.gpsgame.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,11 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,10 +34,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     private static final int CHOOSE_IMAGE = 101;
-    private ImageView imageView;
+    private CircleImageView circleImageView;
     private EditText editText;
     private Button savebtn;
     private ProgressBar progressBar;
@@ -53,14 +55,14 @@ public class UserProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
-        imageView = findViewById(R.id.imageView);
+        circleImageView = findViewById(R.id.circleProfileImage);
         editText = findViewById(R.id.editTextDisplayName);
         savebtn = findViewById(R.id.buttonSave);
         progressBar = findViewById(R.id.progressbarImage);
 
         loadUserInformation();
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showImageChooser();
@@ -80,7 +82,7 @@ public class UserProfileActivity extends AppCompatActivity {
             if (user.getPhotoUrl() != null) {
                 Glide.with(getApplicationContext())
                         .load(user.getPhotoUrl()
-                        .toString()).into(imageView);
+                        .toString()).into(circleImageView);
             }
             if (user.getDisplayName() != null) {
                 editText.setText(user.getDisplayName());
@@ -125,7 +127,7 @@ public class UserProfileActivity extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriProfileImage);
                 Toast.makeText(getApplicationContext(),uriProfileImage.toString(),Toast.LENGTH_SHORT).show();
-                imageView.setImageBitmap(bitmap);
+                circleImageView.setImageBitmap(bitmap);
                 uploadImageToFirebaseStorage();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -170,7 +172,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void uploadImageToFirebaseStorage() {
         StorageReference profileImageURI =
-                FirebaseStorage.getInstance().getReference("profileimages/" + System.currentTimeMillis() + ".jpg");
+                FirebaseStorage.getInstance().getReference("profileimages/" + mAuth.getCurrentUser().getUid()+ ".jpg");
 
         if (uriProfileImage != null) {
             progressBar.setVisibility(View.VISIBLE);

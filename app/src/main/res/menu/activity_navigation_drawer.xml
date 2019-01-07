@@ -3,8 +3,8 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_profile"
-              android:icon="@drawable/ic_account_box_black_24dp"
-              android:title="@string/menu_profile">
+            android:icon="@drawable/ic_account_box_black_24dp"
+            android:title="@string/menu_profile">
         </item>
 
         <item android:id="@+id/nav_maps"
@@ -26,6 +26,7 @@
             android:icon="@drawable/ic_send_black_24dp"
             android:title="@string/menu_logout">
         </item>
+
     </group> >
 
 </menu>

@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame;
+package com.example.kotu9.gpsgame.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -53,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(mAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(),NavigationActivity.class));
         }
     }
 
@@ -89,12 +90,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     finish();
-                    Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
                     intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getApplicationContext(), task.getException().getMessage(),
-                            Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
                 }
             }
         });

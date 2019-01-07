@@ -13,10 +13,11 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.Toolbar>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tap on camera to choose profile picture"
+        android:text="Tap on icon to choose profile picture"
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
@@ -24,17 +25,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleProfileImage"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_18dp"
             android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:src="@drawable/ic_account_circle_black_24dp" />
 
         <ProgressBar
             android:id="@+id/progressbarImage"
@@ -50,7 +49,7 @@
         android:id="@+id/editTextDisplayName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Display Name" />
+        android:hint="Enter Username" />
 
     <Button
         android:id="@+id/buttonSave"
