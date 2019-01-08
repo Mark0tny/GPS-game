@@ -33,4 +33,8 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="MapView">Map view</string>
+    <string name="listView">List View</string>
+    <string name="title_activity_navigation_maps">Map</string>
+    <string name="title_activity_user_location">UserLocationActivity</string>
 </resources>

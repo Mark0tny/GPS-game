@@ -3,7 +3,6 @@ package com.example.kotu9.gpsgame.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -17,7 +16,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
+
+public class LoginActivity extends ActivityManagePermission implements View.OnClickListener {
     private EditText editTextEmail, editTextPassword;
     private ProgressBar progressBar;
     public FirebaseAuth mAuth;
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editTextEmail = findViewById(R.id.editTextEmailL);
         editTextPassword = findViewById(R.id.editTextPasswordL);
         progressBar = findViewById(R.id.progressbar);
+
     }
 
     @Override
@@ -54,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(mAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(),NavigationActivity.class));
+            startActivity(new Intent(getApplicationContext(),NavigationMapsActivity.class));
         }
     }
 
@@ -90,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     finish();
-                    Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), NavigationMapsActivity.class);
                     intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 } else {
