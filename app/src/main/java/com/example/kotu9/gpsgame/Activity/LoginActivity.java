@@ -56,7 +56,7 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
 
         if(mAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(),NavigationMapsActivity.class));
+            startActivity(new Intent(getApplicationContext(),UserLocationActivity.class));
         }
     }
 
@@ -92,7 +92,7 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     finish();
-                    Intent intent = new Intent(getApplicationContext(), NavigationMapsActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), UserLocationActivity.class);
                     intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 } else {
