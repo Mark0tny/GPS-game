@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,7 +32,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText editTextEmail, editTextUsername, editTextPassword;
     ProgressBar progressBar;
     DatabaseReference reference;
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +99,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            User user = new User(username,email,password,null,mAuth.getCurrentUser().getUid(),0,getCurrentDate(),0.0,0.0,null);
+                            User user = new User(username,email,password,
+                                    null,mAuth.getCurrentUser().getUid(),
+                                    0,getCurrentDate(),0.0,0.0,null);
                             reference.child(mAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
 
                                 @Override
