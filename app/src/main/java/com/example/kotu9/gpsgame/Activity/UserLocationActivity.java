@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,18 +25,21 @@ import android.widget.Toast;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import lombok.NonNull;
+import com.google.firebase.firestore.GeoPoint;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
-
 import static com.example.kotu9.gpsgame.Utils.Constants.*;
 
 
@@ -47,6 +51,7 @@ public class UserLocationActivity extends ActivityManagePermission
     private FirebaseUser user;
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,7 @@ public class UserLocationActivity extends ActivityManagePermission
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -75,7 +81,7 @@ public class UserLocationActivity extends ActivityManagePermission
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -88,7 +94,7 @@ public class UserLocationActivity extends ActivityManagePermission
         super.onResume();
         if (checkMapServices()) {
             if (mLocationPermissionGranted) {
-
+                getLastKnownLocation();
             } else {
                 getLocationPermission();
             }
@@ -141,7 +147,7 @@ public class UserLocationActivity extends ActivityManagePermission
             logout();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -160,7 +166,7 @@ public class UserLocationActivity extends ActivityManagePermission
             return;
         }
         mMap.setMyLocationEnabled(true);
-        LatLng userLocation = new LatLng(0,0);
+        LatLng userLocation = new LatLng(0, 0);
         mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
         Toast.makeText(getApplicationContext(), userLocation.toString(), Toast.LENGTH_SHORT).show();
@@ -169,9 +175,7 @@ public class UserLocationActivity extends ActivityManagePermission
 
     private boolean checkMapServices() {
         if (isServicesOK()) {
-            if (isMapsEnabled()) {
-                return true;
-            }
+            return isMapsEnabled();
         }
         return false;
     }
@@ -192,7 +196,7 @@ public class UserLocationActivity extends ActivityManagePermission
 
     public boolean isMapsEnabled() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!(manager != null && manager.isProviderEnabled(LocationManager.GPS_PROVIDER))) {
             buildAlertMessageNoGps();
             return false;
         }
@@ -204,6 +208,7 @@ public class UserLocationActivity extends ActivityManagePermission
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
+            getLastKnownLocation();
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -250,12 +255,28 @@ public class UserLocationActivity extends ActivityManagePermission
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if (mLocationPermissionGranted) {
+                    getLastKnownLocation();
                 } else {
                     getLocationPermission();
                 }
             }
         }
+    }
 
+    private void getLastKnownLocation() {
+        Log.d(TAG, "getLastKnownLocation: called.");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@android.support.annotation.NonNull Task<Location> task) {
+                if(task.isSuccessful()){
+                    Location location = task.getResult();
+                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(),location.getLongitude());
+                }
+            }
+        });
     }
 
 
