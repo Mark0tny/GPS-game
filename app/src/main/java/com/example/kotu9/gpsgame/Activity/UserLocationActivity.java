@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.Fragment.ProfileFragment;
+import com.example.kotu9.gpsgame.Fragment.SettingsFragment;
+import com.example.kotu9.gpsgame.Fragment.UserLocationFragment;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -65,6 +69,12 @@ public class UserLocationActivity extends ActivityManagePermission
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        UserLocationFragment userLocationFragment = new UserLocationFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_container,userLocationFragment);
+        fragmentTransaction.commit();
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
@@ -77,6 +87,8 @@ public class UserLocationActivity extends ActivityManagePermission
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -131,16 +143,27 @@ public class UserLocationActivity extends ActivityManagePermission
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            finish();
-            Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-            startActivity(intent);
+//            finish();
+//            Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+//            startActivity(intent);
+            ProfileFragment profileFragment = new ProfileFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container,profileFragment);
+            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_maps) {
-            finish();
-            Intent intent = new Intent(getApplicationContext(), UserLocationActivity.class);
-            startActivity(intent);
+//            finish();
+//            Intent intent = new Intent(getApplicationContext(), UserLocationActivity.class);
+//            startActivity(intent);
+            UserLocationFragment userLocationFragment = new UserLocationFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container,userLocationFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_settings) {
-
+            SettingsFragment settingsFragment = new SettingsFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container,settingsFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_addMark) {
 
         } else if (id == R.id.nav_logout) {

@@ -85,7 +85,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         .toString()).into(circleImageView);
             }
             if (user.getDisplayName() != null) {
-                editText.setText(user.getDisplayName());
+                //editText.setText(user.getDisplayName());
             }
         }
     }

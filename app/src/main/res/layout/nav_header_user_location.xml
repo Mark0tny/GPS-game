@@ -22,6 +22,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_account_circle_black_24dp" />
     <TextView
+        android:id="@+id/navUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/_18dp"
@@ -29,6 +30,17 @@
         android:layout_gravity="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
         android:text="Username"
+        />
+
+    <TextView
+        android:id="@+id/navEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_18dp"
+        android:textSize="@dimen/_18dp"
+        android:layout_gravity="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:text="Email"
         />
 
 </LinearLayout>

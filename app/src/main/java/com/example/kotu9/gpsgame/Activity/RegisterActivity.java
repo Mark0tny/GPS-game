@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.Model.Location;
 import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,9 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,10 +31,9 @@ import lombok.NonNull;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText editTextEmail, editTextUsername, editTextPassword;
-    ProgressBar progressBar;
-    DatabaseReference reference;
-    FirebaseAuth mAuth;
+    private EditText editTextEmail, editTextUsername, editTextPassword;
+    private ProgressBar progressBar;
+    private FirebaseFirestore mDb;
 
 
     @Override
@@ -46,10 +47,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextPassword = findViewById(R.id.editTextPassword);
         progressBar = findViewById(R.id.progressbar);
 
-        mAuth = FirebaseAuth.getInstance();
-        reference = FirebaseDatabase.getInstance().getReference().getRoot().child("users");
-
+        mDb = FirebaseFirestore.getInstance();
+        hideSoftKeyboard();
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -62,10 +63,70 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
         }
     }
+
     private void registerUser() {
         final String email = editTextEmail.getText().toString().trim();
         final String username = editTextUsername.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
+        registrationFieldsCheck(email, username, password);
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            User user = new User(username, email, password,
+                                    null, FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                    0, getCurrentDate(), new Location(0, 0), null, null);
+
+                            FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                                    .setTimestampsInSnapshotsEnabled(true)
+                                    .build();
+                            mDb.setFirestoreSettings(settings);
+                            DocumentReference newUserRef = mDb
+                                    .collection(getString(R.string.collection_users))
+                                    .document(FirebaseAuth.getInstance().getUid());
+
+                            newUserRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        progressBar.setVisibility(View.GONE);
+                                        finish();
+                                        startActivity(new Intent(getApplicationContext(), UserLocationActivity.class));
+                                    } else {
+                                        progressBar.setVisibility(View.GONE);
+                                        Toast.makeText(getApplicationContext(), "Could not register user",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                progressBar.setVisibility(View.VISIBLE);
+                                Toast.makeText(getApplicationContext(), "User already exist",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                progressBar.setVisibility(View.VISIBLE);
+                                Toast.makeText(getApplicationContext(), task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+                });
+    }
+
+    public Date getCurrentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date currDate = new Date();
+        return currDate;
+    }
+
+    private void hideSoftKeyboard() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public void registrationFieldsCheck(String email, String username, String password) {
 
         if (TextUtils.isEmpty(email)) {
             editTextEmail.setError("Please enter email");
@@ -92,50 +153,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             editTextPassword.requestFocus();
             return;
         }
-
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            User user = new User(username,email,password,
-                                    null,mAuth.getCurrentUser().getUid(),
-                                    0,getCurrentDate(),0.0,0.0,null);
-                            reference.child(mAuth.getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                                @Override
-                                public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        progressBar.setVisibility(View.GONE);
-                                        finish();
-                                        startActivity(new Intent(getApplicationContext(),UserProfileActivity.class));
-                                    }else{
-                                        progressBar.setVisibility(View.GONE);
-                                        Toast.makeText(getApplicationContext(), "Could not register user",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                        } else {
-                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                progressBar.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(), "User already exist",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                progressBar.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(), task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    }
-                });
-    }
-
-    public Date getCurrentDate(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date currDate = new Date();
-        return currDate;
     }
 }
