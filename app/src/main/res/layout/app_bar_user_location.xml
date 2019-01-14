@@ -15,13 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
    <!--<include layout="@layout/content_user_location" />-->
     <FrameLayout
         android:id="@+id/frame_container"
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>>
+        android:layout_height="match_parent"/>
+
 
 </android.support.design.widget.CoordinatorLayout>

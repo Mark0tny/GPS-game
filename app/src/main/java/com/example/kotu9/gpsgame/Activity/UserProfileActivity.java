@@ -56,8 +56,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         circleImageView = findViewById(R.id.circleProfileImage);
-        editText = findViewById(R.id.editTextDisplayName);
-        savebtn = findViewById(R.id.buttonSave);
         progressBar = findViewById(R.id.progressbarImage);
 
         loadUserInformation();
@@ -85,7 +83,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         .toString()).into(circleImageView);
             }
             if (user.getDisplayName() != null) {
-                //editText.setText(user.getDisplayName());
+                editText.setText(user.getDisplayName());
             }
         }
     }
@@ -161,13 +159,12 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (mAuth.getCurrentUser() == null) {
-            finish();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-        }
+        protected void onStart() {
+            super.onStart();
+            if (mAuth.getCurrentUser() == null) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
     }
 
     private void uploadImageToFirebaseStorage() {
