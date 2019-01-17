@@ -2,28 +2,48 @@ package com.example.kotu9.gpsgame.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.kotu9.gpsgame.Fragment.ProfileFragment;
 import com.example.kotu9.gpsgame.Fragment.SettingsFragment;
 import com.example.kotu9.gpsgame.Fragment.UserLocationFragment;
+import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
 
 
 public class UserLocationActivity extends ActivityManagePermission
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = UserLocationActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
+    private FirebaseFirestore mDb;
+    private View header;
+    private TextView username,email;
+    private CircleImageView circleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +52,7 @@ public class UserLocationActivity extends ActivityManagePermission
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mAuth = FirebaseAuth.getInstance();
+        mDb = FirebaseFirestore.getInstance();
 
         UserLocationFragment userLocationFragment = new UserLocationFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -46,6 +67,13 @@ public class UserLocationActivity extends ActivityManagePermission
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        header = navigationView.getHeaderView(0);
+        username = header.findViewById(R.id.navUsername);
+        email = header.findViewById(R.id.navEmail);
+        circleImageView = header.findViewById(R.id.circleProfileImageN);
+        setProfileInfoInNavHeader();
     }
 
     @Override
@@ -118,6 +146,35 @@ public class UserLocationActivity extends ActivityManagePermission
         finish();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
+    }
+
+
+    public void setProfileInfoInNavHeader(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            User user = task.getResult().toObject(User.class);
+                            username.setText(user.getUsername());
+                            email.setText(user.getEmail());
+                            Picasso.get().load(user.getImageUrl())
+                                    .into(circleImageView);
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+
     }
 
 }

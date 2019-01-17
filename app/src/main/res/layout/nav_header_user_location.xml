@@ -13,19 +13,17 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleProfileImage"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:id="@+id/circleProfileImageN"
+        android:layout_width="154dp"
+        android:layout_height="154dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_18dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_account_circle_black_24dp" />
     <TextView
         android:id="@+id/navUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/_18dp"
         android:textSize="@dimen/_18dp"
         android:layout_gravity="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
@@ -36,8 +34,7 @@
         android:id="@+id/navEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/_18dp"
-        android:textSize="@dimen/_18dp"
+        android:textSize="@dimen/_16dp"
         android:layout_gravity="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
         android:text="Email"

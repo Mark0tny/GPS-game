@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,9 +77,6 @@ public class UserProfileActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             if (user.getPhotoUrl() != null) {
-                Glide.with(getApplicationContext())
-                        .load(user.getPhotoUrl()
-                        .toString()).into(circleImageView);
             }
             if (user.getDisplayName() != null) {
                 editText.setText(user.getDisplayName());
@@ -124,7 +120,7 @@ public class UserProfileActivity extends AppCompatActivity {
             uriProfileImage = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriProfileImage);
-                Toast.makeText(getApplicationContext(),uriProfileImage.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), uriProfileImage.toString(), Toast.LENGTH_SHORT).show();
                 circleImageView.setImageBitmap(bitmap);
                 uploadImageToFirebaseStorage();
             } catch (IOException e) {
@@ -136,7 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu, menu);
 
         return true;
     }
@@ -144,14 +140,14 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menuLogout:
                 FirebaseAuth.getInstance().signOut();
                 finish();
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 break;
             case R.id.menuSettings:
-                Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
                 break;
 
         }
@@ -159,17 +155,17 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     @Override
-        protected void onStart() {
-            super.onStart();
-            if (mAuth.getCurrentUser() == null) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            }
+    protected void onStart() {
+        super.onStart();
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        }
     }
 
     private void uploadImageToFirebaseStorage() {
         StorageReference profileImageURI =
-                FirebaseStorage.getInstance().getReference("profileimages/" + mAuth.getCurrentUser().getUid()+ ".jpg");
+                FirebaseStorage.getInstance().getReference("profileimages/" + mAuth.getCurrentUser().getUid() + ".jpg");
 
         if (uriProfileImage != null) {
             progressBar.setVisibility(View.VISIBLE);

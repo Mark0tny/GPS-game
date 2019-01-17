@@ -16,18 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.kotu9.gpsgame.Activity.LoginActivity;
-import com.example.kotu9.gpsgame.Activity.UserLocationActivity;
 import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -53,7 +50,6 @@ public class ProfileFragment extends Fragment {
     private TextView regDate, score, latitudeText, longitude, username, emaiil;
     private ProgressBar progressBar;
     private Uri uriProfileImage;
-    private String profileImageUrl;
     FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
 
@@ -90,9 +86,9 @@ public class ProfileFragment extends Fragment {
         mDb = FirebaseFirestore.getInstance();
         try {
             circleImageView = view.findViewById(R.id.circleProfileImageF);
-            progressBar =  view.findViewById(R.id.progressbarImage);
-            regDate =  view.findViewById(R.id.regDateDisplay);
-            score =  view.findViewById(R.id.scoreDisplay);
+            progressBar = view.findViewById(R.id.progressbarImage);
+            regDate = view.findViewById(R.id.regDateDisplay);
+            score = view.findViewById(R.id.scoreDisplay);
             latitudeText = view.findViewById(R.id.latitudeDisplay);
             longitude = view.findViewById(R.id.longitudeDisplay);
             username = view.findViewById(R.id.profUsername);
@@ -136,8 +132,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setFieldsValues(User user) {
-        Glide.with(getActivity())
-                .load(user.getImageUrl())
+        Picasso.get().load(user.getImageUrl())
                 .into(circleImageView);
         regDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(user.getRegDate()));
         score.setText(Double.toString(user.getScore()));
@@ -155,7 +150,6 @@ public class ProfileFragment extends Fragment {
             uriProfileImage = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriProfileImage);
-                Toast.makeText(getActivity(), uriProfileImage.toString(), Toast.LENGTH_SHORT).show();
                 circleImageView.setImageBitmap(bitmap);
                 uploadImageToFirebaseStorage();
             } catch (IOException e) {
@@ -172,47 +166,47 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
     private void uploadImageToFirebaseStorage() {
-        StorageReference profileImageURI =
+        final StorageReference profileImageURI =
                 FirebaseStorage.getInstance().getReference("profileimages/" + mAuth.getCurrentUser().getUid() + ".jpg");
         if (uriProfileImage != null) {
             progressBar.setVisibility(View.VISIBLE);
-            profileImageURI.putFile(uriProfileImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            UploadTask uploadTask = profileImageURI.putFile(uriProfileImage);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressBar.setVisibility(View.GONE);
-                    profileImageUrl = taskSnapshot.getStorage().getDownloadUrl().toString();
-                    FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                            .setTimestampsInSnapshotsEnabled(true)
-                            .build();
-                    mDb.setFirestoreSettings(settings);
-                    DocumentReference newUserRef = mDb
-                            .collection(getString(R.string.collection_users))
-                            .document(FirebaseAuth.getInstance().getUid());
-
-                    newUserRef.update(
-                            "imageUrl",profileImageUrl
-                    ).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@lombok.NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-
-                            } else {
-                            }
-                        }
-                    });
-
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return profileImageURI.getDownloadUrl();
                 }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), e.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri taskResult = task.getResult();
+                        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                                .setTimestampsInSnapshotsEnabled(true)
+                                .build();
+                        mDb.setFirestoreSettings(settings);
+                        DocumentReference newUserRef = mDb
+                                .collection(getString(R.string.collection_users))
+                                .document(FirebaseAuth.getInstance().getUid());
+                        newUserRef.update(
+                                "imageUrl", taskResult.toString()
+                        ).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@lombok.NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(getActivity(), "Image Successful uploaded", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    }
+                }
+            });
         }
     }
 

@@ -17,6 +17,7 @@
             android:background="@color/colorPrimaryDark">
 
             <TextView
+                android:id="@+id/tapHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/TapHintProfileImage"
@@ -25,11 +26,12 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleProfileImageF"
-                android:layout_width="144dp"
-                android:layout_height="144dp"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_18dp"
+                android:layout_width="154dp"
+                android:layout_height="154dp"
+                android:layout_below="@+id/tapHint"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="fill_vertical|fill_horizontal|center"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_account_circle_black_24dp" />
 
@@ -45,13 +47,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_below="@id/circleProfileImageF"
                 android:orientation="vertical"
-                android:layout_marginTop="154dp">
+              >
 
                 <TextView
                     android:id="@+id/profUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                     android:textSize="@dimen/_18dp"
                     />
 
@@ -59,7 +63,8 @@
                     android:id="@+id/profEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_18dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:textSize="@dimen/_16dp"
                     />
             </LinearLayout>
 
