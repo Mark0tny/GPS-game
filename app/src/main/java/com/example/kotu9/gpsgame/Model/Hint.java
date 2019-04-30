@@ -13,5 +13,6 @@ import lombok.NonNull;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class Hint {
+
     public List<String> hints;
 }

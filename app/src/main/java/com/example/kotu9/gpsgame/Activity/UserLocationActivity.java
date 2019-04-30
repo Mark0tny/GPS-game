@@ -27,8 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,7 +40,7 @@ public class UserLocationActivity extends ActivityManagePermission
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
     private View header;
-    private TextView username,email;
+    private TextView username, email;
     private CircleImageView circleImageView;
 
     @Override
@@ -67,7 +65,6 @@ public class UserLocationActivity extends ActivityManagePermission
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         header = navigationView.getHeaderView(0);
         username = header.findViewById(R.id.navUsername);
@@ -101,9 +98,6 @@ public class UserLocationActivity extends ActivityManagePermission
         if (id == R.id.action_listView) {
             return true;
         }
-        if (id == R.id.action_logout) {
-            logout();
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -131,7 +125,9 @@ public class UserLocationActivity extends ActivityManagePermission
             fragmentTransaction.replace(R.id.frame_container, settingsFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_addMark) {
-
+            finish();
+            //Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
+            //startActivity(intent);
         } else if (id == R.id.nav_logout) {
             logout();
         }
@@ -149,7 +145,7 @@ public class UserLocationActivity extends ActivityManagePermission
     }
 
 
-    public void setProfileInfoInNavHeader(){
+    public void setProfileInfoInNavHeader() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());

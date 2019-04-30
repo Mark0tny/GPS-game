@@ -10,8 +10,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.example.kotu9.gpsgame.Model.Location;
 import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,10 +75,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (task.isSuccessful()) {
                             User user = new User(username, email, password,
                                     null, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                    0, getCurrentDate(), new Location(0, 0), null, null);
+                                    0, getCurrentDate(), new GeoPoint(0,0), null, null);
 
                             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                                    .setTimestampsInSnapshotsEnabled(true)
+                                    .setSslEnabled(true)
                                     .build();
                             mDb.setFirestoreSettings(settings);
                             DocumentReference newUserRef = mDb
@@ -118,7 +117,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     public Date getCurrentDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date currDate = new Date();
+        Date currDate;
+        currDate = new Date();
         return currDate;
     }
 

@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,6 +36,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import lombok.NonNull;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment {
                 .into(circleImageView);
         regDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(user.getRegDate()));
         score.setText(Double.toString(user.getScore()));
-        latitudeText.setText(Double.toString(user.getLocation().getLongitude()));
+        latitudeText.setText(Double.toString(user.getLocation().getLatitude()));
         longitude.setText(Double.toString(user.getLocation().getLongitude()));
         username.setText(user.getUsername());
         emaiil.setText(user.getEmail());
@@ -186,7 +186,6 @@ public class ProfileFragment extends Fragment {
                     if (task.isSuccessful()) {
                         Uri taskResult = task.getResult();
                         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                                .setTimestampsInSnapshotsEnabled(true)
                                 .build();
                         mDb.setFirestoreSettings(settings);
                         DocumentReference newUserRef = mDb

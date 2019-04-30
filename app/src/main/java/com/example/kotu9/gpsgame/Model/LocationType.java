@@ -1,5 +1,7 @@
 package com.example.kotu9.gpsgame.Model;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,5 +14,5 @@ import lombok.NonNull;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class LocationType extends EventType {
-    public Location location;
+    public GeoPoint location;
 }

@@ -82,7 +82,6 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
 
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                            .setTimestampsInSnapshotsEnabled(true)
                             .build();
                     db.setFirestoreSettings(settings);
 

@@ -1,11 +1,13 @@
 package com.example.kotu9.gpsgame.Fragment;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -19,7 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.Services.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,15 +34,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+
+import java.util.Objects;
 
 import lombok.NonNull;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static com.example.kotu9.gpsgame.Utils.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.kotu9.gpsgame.Utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.kotu9.gpsgame.Utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -47,27 +58,21 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private static final String TAG = "UserLocationActivity";
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public User user;
 
     private String mParam1;
     private String mParam2;
+    private FirebaseFirestore mDb;
 
     public UserLocationFragment() {
     }
 
-    public static UserLocationFragment newInstance(String param1, String param2) {
-        UserLocationFragment fragment = new UserLocationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +81,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,6 +94,8 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         }
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mAuth = FirebaseAuth.getInstance();
+        mDb = FirebaseFirestore.getInstance();
+        user = new User();
 
         return rootView;
     }
@@ -98,25 +106,27 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         if (checkMapServices()) {
             if (mLocationPermissionGranted) {
                 getLastKnownLocation();
+                loadUserInformation();
             } else {
                 getLocationPermission();
             }
         }
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         setupMapView();
         Context context = getActivity();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mMap.setMyLocationEnabled(true);
         LatLng userLocation = new LatLng(0, 0);
         mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-        Toast.makeText(context, userLocation.toString(), Toast.LENGTH_SHORT).show();
+
     }
 
     private boolean checkMapServices() {
@@ -127,22 +137,23 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
                     }
                 });
         final AlertDialog alert = builder.create();
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
         alert.show();
     }
 
     public boolean isMapsEnabled() {
         LocationManager manager =
-                (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (!(manager != null && manager.isProviderEnabled(LocationManager.GPS_PROVIDER))) {
             buildAlertMessageNoGps();
             return false;
@@ -156,6 +167,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
             getLastKnownLocation();
+            loadUserInformation();
         } else {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -180,6 +192,44 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         return false;
     }
 
+    private void loadUserInformation() {
+        if (user == null) {
+            FirebaseUser userAuth = mAuth.getCurrentUser();
+            if (userAuth != null) {
+                DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@android.support.annotation.NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                user = task.getResult().toObject(User.class);
+                                getLastKnownLocation();
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+            }
+        } else {
+            getLastKnownLocation();
+        }
+    }
+
+    private void saveUserLocation() {
+        if (user != null) {
+            DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+            docRef.update("location", user.getLocation()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                    Log.d(TAG, "saveUserLocation: location saved in DB");
+                }
+            });
+        }
+    }
 
     private void getLastKnownLocation() {
         Log.d(TAG, "getLastKnownLocation: called.");
@@ -192,11 +242,13 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 if (task.isSuccessful()) {
                     Location location = task.getResult();
                     GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                    user.setLocation(geoPoint);
+                    saveUserLocation();
+                    startLocationService();
                 }
             }
         });
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -221,6 +273,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if (mLocationPermissionGranted) {
                     getLastKnownLocation();
+                    loadUserInformation();
                 } else {
                     getLocationPermission();
                 }
@@ -229,7 +282,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
 
-    private void setupMapView(){
+    private void setupMapView() {
         UiSettings settings = mMap.getUiSettings();
         settings.setAllGesturesEnabled(true);
         settings.setCompassEnabled(true);
@@ -240,5 +293,52 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         settings.setZoomControlsEnabled(true);
         settings.setZoomGesturesEnabled(true);
     }
+
+    private void setCameraView() {
+
+        double bottomBoundary = user.getLocation().getLatitude() - .1;
+        double leftBoundary = user.getLocation().getLongitude() - .1;
+        double topBoundary = user.getLocation().getLatitude() + .1;
+        double rightBoundary = user.getLocation().getLongitude() + .1;
+
+        new LatLngBounds(
+                new LatLng(bottomBoundary, leftBoundary),
+                new LatLng(topBoundary, rightBoundary)
+        );
+        LatLngBounds mMapBoundary;
+        mMapBoundary = new LatLngBounds(new LatLng(0, 0), new LatLng(0, 0));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 0));
+    }
+
+    private void startLocationService() {
+        if (!isLocationServiceRunning()) {
+            Intent serviceIntent = new Intent(getActivity(), LocationService.class);
+            getActivity().startService(serviceIntent);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                getActivity().startForegroundService(serviceIntent);
+            } else {
+                getActivity().startService(serviceIntent);
+            }
+        }
+    }
+
+
+    private boolean isLocationServiceRunning() {
+        try {
+            ActivityManager manager = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (".Services.LocationService".equals(service.service.getClassName())) {
+                    Log.d(TAG, "isLocationServiceRunning: location service is already running.");
+                    return true;
+                }
+            }
+            Log.d(TAG, "isLocationServiceRunning: location service is not running.");
+        } catch (NullPointerException e) {
+            Log.d(TAG, e.getMessage());
+        }
+        return false;
+    }
+
 
 }

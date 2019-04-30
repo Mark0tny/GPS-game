@@ -1,5 +1,7 @@
 package com.example.kotu9.gpsgame.Model;
 
+import com.example.kotu9.gpsgame.Utils.EnumEventTypes;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +14,6 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class EventType {
 
-    public EventType eventType;
+    public EnumEventTypes eventType;
     public double points;
 }
