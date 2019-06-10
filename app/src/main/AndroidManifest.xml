@@ -5,9 +5,7 @@
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+        android:required="true" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -27,6 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Activity.administration.AdminDashboardActivity"></activity>
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,7 +62,6 @@
         <service
             android:name=".Services.LocationService"
             android:stopWithTask="true" />
-
     </application>
 
 </manifest>

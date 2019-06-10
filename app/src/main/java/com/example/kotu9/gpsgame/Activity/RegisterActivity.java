@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.NonNull;
+
+import static com.example.kotu9.gpsgame.Utils.Constants.USER_ROLE_USER;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -74,8 +77,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             User user = new User(username, email, password,
-                                    null, FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                    0, getCurrentDate(), new GeoPoint(0,0), null, null);
+                                    null, FirebaseAuth.getInstance().getCurrentUser().getUid(), USER_ROLE_USER,
+                                    0, getCurrentDate(), new GeoPoint(0, 0), null, null);
+
 
                             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                                     .setSslEnabled(true)
@@ -84,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             DocumentReference newUserRef = mDb
                                     .collection(getString(R.string.collection_users))
                                     .document(FirebaseAuth.getInstance().getUid());
+
 
                             newUserRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

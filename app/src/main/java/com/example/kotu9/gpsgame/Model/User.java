@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class User {
 
-    public String username,email,password,imageUrl,id;
+    public String username,email,password,imageUrl,id,role;
     public double score;
     public Date regDate;
     public GeoPoint location;

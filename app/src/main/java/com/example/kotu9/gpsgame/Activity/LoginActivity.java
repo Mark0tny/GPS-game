@@ -111,7 +111,7 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         loginFieldsCheck(email, password);
-
+        
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
