@@ -65,7 +65,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public User user;
+    public static User user;
 
     private String mParam1;
     private String mParam2;
@@ -127,8 +127,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         LatLng userLocation = new LatLng(0, 0);
         mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-
     }
 
     private boolean checkMapServices() {
@@ -149,8 +147,9 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     }
                 });
         final AlertDialog alert = builder.create();
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
         alert.show();
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+
     }
 
     public boolean isMapsEnabled() {
@@ -195,7 +194,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void loadUserInformation() {
-        if (user == null) {
+        if (user != null) {
             FirebaseUser userAuth = mAuth.getCurrentUser();
             if (userAuth != null) {
                 DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
@@ -206,6 +205,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 user = task.getResult().toObject(User.class);
+                                setCameraView();
                                 getLastKnownLocation();
                             } else {
                                 Log.d(TAG, "No such document");
@@ -298,18 +298,24 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private void setCameraView() {
 
-        double bottomBoundary = user.getLocation().getLatitude() - .1;
-        double leftBoundary = user.getLocation().getLongitude() - .1;
-        double topBoundary = user.getLocation().getLatitude() + .1;
-        double rightBoundary = user.getLocation().getLongitude() + .1;
+        if(user != null){
+            double bottomBoundary = user.getLocation().getLatitude() - .1;
+            double leftBoundary = user.getLocation().getLongitude() - .1;
+            double topBoundary = user.getLocation().getLatitude() + .1;
+            double rightBoundary = user.getLocation().getLongitude() + .1;
 
-        new LatLngBounds(
-                new LatLng(bottomBoundary, leftBoundary),
-                new LatLng(topBoundary, rightBoundary)
-        );
-        LatLngBounds mMapBoundary;
-        mMapBoundary = new LatLngBounds(new LatLng(0, 0), new LatLng(0, 0));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 0));
+            LatLngBounds mMapBoundary = new LatLngBounds(
+                    new LatLng(bottomBoundary, leftBoundary),
+                    new LatLng(topBoundary, rightBoundary)
+            );
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 10));
+        } else{
+            Log.d(TAG,"setCameraView user null");
+            Toast.makeText(getContext(),"setCameraView user null",Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     private void startLocationService() {
