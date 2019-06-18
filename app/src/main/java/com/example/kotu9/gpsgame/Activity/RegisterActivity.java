@@ -2,8 +2,10 @@ package com.example.kotu9.gpsgame.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,14 +20,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import lombok.NonNull;
 
@@ -33,6 +43,7 @@ import static com.example.kotu9.gpsgame.Utils.Constants.USER_ROLE_USER;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "RegisterActivity";
     private EditText editTextEmail, editTextUsername, editTextPassword;
     private ProgressBar progressBar;
     private FirebaseFirestore mDb;
@@ -66,21 +77,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
     private void registerUser() {
         final String email = editTextEmail.getText().toString().trim();
         final String username = editTextUsername.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         registrationFieldsCheck(email, username, password);
+
+        if(userNameExistsAlready(username) || emailExistsAlready(email)) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(RegisterActivity.this,new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             User user = new User(username, email, password,
                                     null, FirebaseAuth.getInstance().getCurrentUser().getUid(), USER_ROLE_USER,
                                     0, getCurrentDate(), new GeoPoint(0, 0), null, null);
-
-
                             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                                     .setSslEnabled(true)
                                     .build();
@@ -88,8 +100,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             DocumentReference newUserRef = mDb
                                     .collection(getString(R.string.collection_users))
                                     .document(FirebaseAuth.getInstance().getUid());
-
-
                             newUserRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -104,20 +114,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     }
                                 }
                             });
-                        } else {
-                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                progressBar.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(), "User already exist",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                progressBar.setVisibility(View.VISIBLE);
-                                Toast.makeText(getApplicationContext(), task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
                         }
                     }
                 });
+        }
     }
 
     public Date getCurrentDate() {
@@ -159,5 +159,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private boolean userNameExistsAlready(String username) {
+        Query mQuery = mDb.collection(getString(R.string.collection_users))
+                .whereEqualTo("username", username);
+
+        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>(){
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                for (DocumentSnapshot ds: queryDocumentSnapshots){
+                    if (ds!=null && ds.exists()){
+                        Toast.makeText(RegisterActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        return false;
+    }
+
+    private boolean emailExistsAlready(String email) {
+        Query mQuery = mDb.collection(getString(R.string.collection_users))
+                .whereEqualTo("email", email);
+
+        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>(){
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                for (DocumentSnapshot ds: queryDocumentSnapshots){
+                    if (ds!=null && ds.exists()){
+                        Toast.makeText(RegisterActivity.this, "Email already exists!", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        return false;
     }
 }
