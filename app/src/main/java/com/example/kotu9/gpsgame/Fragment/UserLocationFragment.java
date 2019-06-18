@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -125,8 +126,8 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
-        LatLng userLocation = new LatLng(0, 0);
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker"));
+        LatLng userLocation = new LatLng(54,19);
+        mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon36_camera));
     }
 
     private boolean checkMapServices() {
@@ -298,7 +299,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private void setCameraView() {
 
-        if(user != null){
+        if (user != null) {
             double bottomBoundary = user.getLocation().getLatitude() - .1;
             double leftBoundary = user.getLocation().getLongitude() - .1;
             double topBoundary = user.getLocation().getLatitude() + .1;
@@ -309,11 +310,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     new LatLng(topBoundary, rightBoundary)
             );
             mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 10));
-        } else{
-            Log.d(TAG,"setCameraView user null");
-            Toast.makeText(getContext(),"setCameraView user null",Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d(TAG, "setCameraView user null");
+            Toast.makeText(getContext(), "setCameraView user null", Toast.LENGTH_SHORT).show();
         }
-
 
 
     }
