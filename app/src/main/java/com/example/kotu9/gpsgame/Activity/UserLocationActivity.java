@@ -37,7 +37,7 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 
 
 public class UserLocationActivity extends ActivityManagePermission
-        implements NavigationView.OnNavigationItemSelectedListener, CreateEventInfo.OnFragmentInteractionListener, CreateEventDetails.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CreateEventInfo.OnFragmentInteractionListener{
 
     private static final String TAG = UserLocationActivity.class.getSimpleName();
     private FirebaseAuth mAuth;

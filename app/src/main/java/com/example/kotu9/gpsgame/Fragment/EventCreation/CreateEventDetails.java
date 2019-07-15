@@ -1,6 +1,7 @@
 package com.example.kotu9.gpsgame.Fragment.EventCreation;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +10,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.navigation.NavController;
+import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
 
 
-public class CreateEventDetails extends Fragment {
+public class CreateEventDetails extends Fragment implements NavHost {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private Button buttonNext;
+    private Button buttonPrev;
     private String mParam1;
     private String mParam2;
 
@@ -52,13 +55,24 @@ public class CreateEventDetails extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_event_details, container, false);
 
 
-        buttonNext = view.findViewById(R.id.button_next);
+        buttonNext = view.findViewById(R.id.buttonDetailsNext);
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(),"Next Clicked",Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventInfo);
-                navController.navigate(R.id.action_createEventInfo_to_createEventDetails);
+                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventDetails);
+                navController.navigate(R.id.action_createEventDetails_to_createEventLocation);
+
+            }
+        });
+
+        buttonPrev = view.findViewById(R.id.buttonDetailsPrev);
+        buttonPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"Prev Clicked",Toast.LENGTH_SHORT).show();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventDetails);
+                navController.navigate(R.id.action_createEventDetails_to_createEventInfo);
 
             }
         });
@@ -67,5 +81,9 @@ public class CreateEventDetails extends Fragment {
     }
 
 
-
+    @NonNull
+    @Override
+    public NavController getNavController() {
+        return null;
+    }
 }

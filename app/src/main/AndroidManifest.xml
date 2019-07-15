@@ -26,7 +26,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.administration.AdminDashboardActivity"></activity>
+        <activity android:name=".Activity.CreateEventActivity"></activity>
+        <activity android:name=".Activity.administration.AdminDashboardActivity" />
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

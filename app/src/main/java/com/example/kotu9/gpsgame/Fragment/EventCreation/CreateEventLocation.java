@@ -5,6 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
 
@@ -18,6 +23,8 @@ public class CreateEventLocation extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button buttonNext;
+    private Button buttonPrev;
 
 
     public CreateEventLocation() {
@@ -45,8 +52,32 @@ public class CreateEventLocation extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_event_location, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_event_location, container, false);
+
+
+        buttonNext = view.findViewById(R.id.buttonLocationNext);
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Next Clicked", Toast.LENGTH_SHORT).show();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventLocation);
+                navController.navigate(R.id.action_createEventLocation_to_createEventMarker);
+
+            }
+        });
+
+        buttonPrev = view.findViewById(R.id.buttonLocationPrev);
+        buttonPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Prev Clicked", Toast.LENGTH_SHORT).show();
+                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventLocation);
+                navController.navigate(R.id.action_createEventLocation_to_createEventDetails);
+
+            }
+        });
+
+        return view;
     }
 
 

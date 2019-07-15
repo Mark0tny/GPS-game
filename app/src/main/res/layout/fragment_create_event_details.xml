@@ -20,13 +20,13 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/buttonDetailsPrev"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Prev" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/buttonDetailsNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Next" />

@@ -3,25 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    app:navGraph="@navigation/nav_graph"
     app:startDestination="@id/createEventInfo">
     <fragment
         android:id="@+id/createEventInfo"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo"
         android:label="fragment_create_event_info"
-        tools:layout="@layout/fragment_create_event_info" >
+        tools:layout="@layout/fragment_create_event_info">
         <action
             android:id="@+id/action_createEventInfo_to_createEventDetails"
-            app:destination="@id/createEventDetails"
+            app:destination="@+id/createEventDetails"
+            app:enterAnim="@anim/fui_slide_in_right"
             app:launchSingleTop="true" />
     </fragment>
     <fragment
         android:id="@+id/createEventDetails"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventDetails"
         android:label="fragment_create_event_details"
-        tools:layout="@layout/fragment_create_event_details" >
+        tools:layout="@layout/fragment_create_event_details">
         <action
             android:id="@+id/action_createEventDetails_to_createEventLocation"
-            app:destination="@id/createEventLocation" />
+            app:destination="@+id/createEventLocation" />
         <action
             android:id="@+id/action_createEventDetails_to_createEventQRcode"
             app:destination="@id/createEventQRcode" />
@@ -31,46 +33,82 @@
         <action
             android:id="@+id/action_createEventDetails_to_createEventQuiz"
             app:destination="@id/createEventQuiz" />
+        <action
+            android:id="@+id/action_createEventDetails_to_createEventInfo"
+            app:destination="@id/createEventInfo"
+            app:enterAnim="@anim/fui_slide_in_right" />
     </fragment>
     <fragment
         android:id="@+id/createEventLocation"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventLocation"
         android:label="fragment_create_event_location"
-        tools:layout="@layout/fragment_create_event_location" >
+        tools:layout="@layout/fragment_create_event_location">
         <action
             android:id="@+id/action_createEventLocation_to_createEventMarker"
             app:destination="@id/createEventMarker" />
+        <action
+            android:id="@+id/action_createEventLocation_to_createEventDetails"
+            app:destination="@+id/createEventDetails"
+            app:enterAnim="@anim/fui_slide_in_right" />
     </fragment>
     <fragment
         android:id="@+id/createEventPhotoCompare"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventPhotoCompare"
         android:label="fragment_create_event_photo_compare"
-        tools:layout="@layout/fragment_create_event_photo_compare" >
+        tools:layout="@layout/fragment_create_event_photo_compare">
         <action
             android:id="@+id/action_createEventPhotoCompare_to_createEventMarker"
             app:destination="@id/createEventMarker" />
+        <action
+            android:id="@+id/action_createEventPhotoCompare_to_createEventDetails"
+            app:destination="@id/createEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/createEventQRcode"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventQRcode"
         android:label="fragment_create_event_qrcode"
-        tools:layout="@layout/fragment_create_event_qrcode" >
+        tools:layout="@layout/fragment_create_event_qrcode">
         <action
             android:id="@+id/action_createEventQRcode_to_createEventMarker"
             app:destination="@id/createEventMarker" />
+        <action
+            android:id="@+id/action_createEventQRcode_to_createEventDetails"
+            app:destination="@id/createEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/createEventQuiz"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventQuiz"
         android:label="fragment_create_event_quiz"
-        tools:layout="@layout/fragment_create_event_quiz" >
+        tools:layout="@layout/fragment_create_event_quiz">
         <action
             android:id="@+id/action_createEventQuiz_to_createEventMarker"
             app:destination="@id/createEventMarker" />
+        <action
+            android:id="@+id/action_createEventQuiz_to_createEventDetails"
+            app:destination="@id/createEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/createEventMarker"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventMarker"
         android:label="fragment_create_event_marker"
-        tools:layout="@layout/fragment_create_event_marker" />
+        tools:layout="@layout/fragment_create_event_marker" >
+        <action
+            android:id="@+id/action_createEventMarker_to_createEventLocation"
+            app:destination="@id/createEventLocation" />
+        <action
+            android:id="@+id/action_createEventMarker_to_createEventPhotoCompare"
+            app:destination="@id/createEventPhotoCompare" />
+        <action
+            android:id="@+id/action_createEventMarker_to_createEventQRcode"
+            app:destination="@id/createEventQRcode" />
+        <action
+            android:id="@+id/action_createEventMarker_to_createEventQuiz"
+            app:destination="@id/createEventQuiz" />
+    </fragment>
+    <action android:id="@+id/action_global_createEventInfo" app:destination="@id/createEventInfo" />
+    <activity
+        android:id="@+id/userLocationActivity"
+        android:name="com.example.kotu9.gpsgame.Activity.UserLocationActivity"
+        android:label="activity_user_location"
+        tools:layout="@layout/app_bar_user_location" />
 </navigation>

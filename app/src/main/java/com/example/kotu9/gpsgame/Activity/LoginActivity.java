@@ -147,14 +147,14 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
     private  void showUserUI() {
         finish();
         Intent intent = new Intent(getApplicationContext(), UserLocationActivity.class);
-        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     private  void showAdminUI() {
         finish();
         Intent intent = new Intent(getApplicationContext(), AdminDashboardActivity.class);
-        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

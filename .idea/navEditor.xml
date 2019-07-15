@@ -8,17 +8,27 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="action_global_createEventInfo">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="createEventDetails">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="150" />
-                            <option name="y" value="32" />
+                            <option name="x" value="144" />
+                            <option name="y" value="35" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_createEventDetails_to_createEventInfo">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_createEventDetails_to_createEventLocation">
                               <value>
                                 <LayoutPositions />
@@ -76,6 +86,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_createEventLocation_to_createEventDetails">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_createEventLocation_to_createEventMarker">
                               <value>
                                 <LayoutPositions />
@@ -95,6 +110,30 @@
                             <option name="y" value="47" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_createEventMarker_to_createEventLocation">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_createEventMarker_to_createEventPhotoCompare">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_createEventMarker_to_createEventQRcode">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_createEventMarker_to_createEventQuiz">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -109,6 +148,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_createEventPhotoCompare_to_createEventDetails">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_createEventPhotoCompare_to_createEventMarker">
                               <value>
                                 <LayoutPositions />
@@ -130,6 +174,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_createEventQRcode_to_createEventDetails">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_createEventQRcode_to_createEventMarker">
                               <value>
                                 <LayoutPositions />
@@ -151,12 +200,29 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_createEventQuiz_to_createEventDetails">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_createEventQuiz_to_createEventMarker">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="userLocationActivity">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-378" />
+                            <option name="y" value="36" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
