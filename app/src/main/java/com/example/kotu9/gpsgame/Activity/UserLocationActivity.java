@@ -128,10 +128,8 @@ public class UserLocationActivity extends ActivityManagePermission
             fragmentTransaction.replace(R.id.frame_container, settingsFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_addMark) {
-            CreateEventInfo createEventInfo = new CreateEventInfo();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_container, createEventInfo);
-            fragmentTransaction.commit();
+            Intent intent = new Intent(getApplicationContext(), CreateEventActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_logout) {
             logout();
         }
