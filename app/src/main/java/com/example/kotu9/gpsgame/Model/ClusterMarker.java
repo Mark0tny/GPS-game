@@ -20,7 +20,7 @@ public class ClusterMarker implements ClusterItem {
     private String snippet;
     private int iconPicture;
     private Event event;
-    private User user;
+    private User owner;
 
 
     @Override

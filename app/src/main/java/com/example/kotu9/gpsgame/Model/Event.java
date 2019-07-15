@@ -13,14 +13,13 @@ import lombok.NonNull;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 class Event {
-
     private EventType eventType;
     private String name;
     private String description;
     private List<Hint> hintList;
-    private double rating;
     private double distance;
-    private String size;
+    private double rating;
+    private double difficulty;
     private boolean status;
     private Long time;
     private List<User> userList;

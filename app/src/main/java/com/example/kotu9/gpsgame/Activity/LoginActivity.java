@@ -120,7 +120,10 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            checkUserRole(((UserClient)(getApplicationContext())).getUser());
+                            User user = ((UserClient)(getApplicationContext())).getUser();
+                            if(user != null){
+                                checkUserRole(user);
+                            }
                         } else {
                             Toast.makeText(getApplicationContext(), task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();

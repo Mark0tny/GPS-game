@@ -1,6 +1,7 @@
 package com.example.kotu9.gpsgame.Activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.example.kotu9.gpsgame.Fragment.ProfileFragment;
 import com.example.kotu9.gpsgame.Fragment.SettingsFragment;
 import com.example.kotu9.gpsgame.Fragment.UserLocationFragment;
+import com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventDetails;
+import com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo;
 import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,7 +37,7 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 
 
 public class UserLocationActivity extends ActivityManagePermission
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CreateEventInfo.OnFragmentInteractionListener, CreateEventDetails.OnFragmentInteractionListener {
 
     private static final String TAG = UserLocationActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
@@ -125,9 +128,10 @@ public class UserLocationActivity extends ActivityManagePermission
             fragmentTransaction.replace(R.id.frame_container, settingsFragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_addMark) {
-            finish();
-            //Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
-            //startActivity(intent);
+            CreateEventInfo createEventInfo = new CreateEventInfo();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container, createEventInfo);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_logout) {
             logout();
         }
@@ -173,4 +177,8 @@ public class UserLocationActivity extends ActivityManagePermission
 
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
