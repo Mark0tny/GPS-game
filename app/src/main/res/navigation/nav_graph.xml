@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_create_event_info">
         <action
             android:id="@+id/action_createEventInfo_to_createEventDetails"
-            app:destination="@+id/createEventDetails"
+            app:destination="@id/createEventDetails"
             app:enterAnim="@anim/fui_slide_in_right"
-            app:launchSingleTop="true" />
+            app:popUpTo="@id/createEventInfo" />
     </fragment>
     <fragment
         android:id="@+id/createEventDetails"
@@ -23,20 +23,27 @@
         tools:layout="@layout/fragment_create_event_details">
         <action
             android:id="@+id/action_createEventDetails_to_createEventLocation"
-            app:destination="@+id/createEventLocation" />
+            app:destination="@id/createEventLocation"
+            app:popUpTo="@id/createEventLocation"
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventDetails_to_createEventQRcode"
             app:destination="@id/createEventQRcode" />
         <action
             android:id="@+id/action_createEventDetails_to_createEventPhotoCompare"
-            app:destination="@id/createEventPhotoCompare" />
+            app:destination="@id/createEventQRcode"
+            app:popUpTo="@id/createEventPhotoCompare"
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventDetails_to_createEventQuiz"
-            app:destination="@id/createEventQuiz" />
+            app:destination="@id/createEventQuiz"
+            app:enterAnim="@anim/fui_slide_in_right"
+            app:popUpTo="@+id/createEventQuiz" />
         <action
             android:id="@+id/action_createEventDetails_to_createEventInfo"
             app:destination="@id/createEventInfo"
-            app:enterAnim="@anim/fui_slide_in_right" />
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:popUpTo="@id/createEventInfo" />
     </fragment>
     <fragment
         android:id="@+id/createEventLocation"
@@ -45,11 +52,15 @@
         tools:layout="@layout/fragment_create_event_location">
         <action
             android:id="@+id/action_createEventLocation_to_createEventMarker"
-            app:destination="@id/createEventMarker" />
+            app:destination="@id/createEventMarker"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/createEventMarker" />
         <action
             android:id="@+id/action_createEventLocation_to_createEventDetails"
-            app:destination="@+id/createEventDetails"
-            app:enterAnim="@anim/fui_slide_in_right" />
+            app:destination="@id/createEventDetails"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:popUpTo="@id/createEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/createEventPhotoCompare"
@@ -58,10 +69,13 @@
         tools:layout="@layout/fragment_create_event_photo_compare">
         <action
             android:id="@+id/action_createEventPhotoCompare_to_createEventMarker"
-            app:destination="@id/createEventMarker" />
+            app:destination="@id/createEventMarker"
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventPhotoCompare_to_createEventDetails"
-            app:destination="@id/createEventDetails" />
+            app:destination="@id/createEventDetails"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:popUpTo="@+id/createEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/createEventQRcode"
@@ -70,10 +84,13 @@
         tools:layout="@layout/fragment_create_event_qrcode">
         <action
             android:id="@+id/action_createEventQRcode_to_createEventMarker"
-            app:destination="@id/createEventMarker" />
+            app:destination="@id/createEventMarker"
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventQRcode_to_createEventDetails"
-            app:destination="@id/createEventDetails" />
+            app:destination="@id/createEventDetails"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:popUpTo="@+id/createEventDetails" />
     </fragment>
     <fragment
         android:id="@+id/createEventQuiz"
@@ -82,10 +99,13 @@
         tools:layout="@layout/fragment_create_event_quiz">
         <action
             android:id="@+id/action_createEventQuiz_to_createEventMarker"
-            app:destination="@id/createEventMarker" />
+            app:destination="@id/createEventMarker"
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventQuiz_to_createEventDetails"
-            app:destination="@id/createEventDetails" />
+            app:destination="@id/createEventDetails"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:popUpTo="@+id/createEventQuiz" />
     </fragment>
     <fragment
         android:id="@+id/createEventMarker"
@@ -94,16 +114,25 @@
         tools:layout="@layout/fragment_create_event_marker" >
         <action
             android:id="@+id/action_createEventMarker_to_createEventLocation"
-            app:destination="@id/createEventLocation" />
+            app:destination="@+id/createEventLocation"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/createEventLocation" />
         <action
             android:id="@+id/action_createEventMarker_to_createEventPhotoCompare"
-            app:destination="@id/createEventPhotoCompare" />
+            app:destination="@id/createEventPhotoCompare"
+            app:enterAnim="@anim/fui_slide_out_left"
+            app:launchSingleTop="true" />
         <action
             android:id="@+id/action_createEventMarker_to_createEventQRcode"
-            app:destination="@id/createEventQRcode" />
+            app:destination="@+id/createEventQuiz"
+            app:launchSingleTop="false"
+            app:popUpTo="@+id/createEventQuiz"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_createEventMarker_to_createEventQuiz"
-            app:destination="@id/createEventQuiz" />
+            app:destination="@id/createEventQuiz"
+            app:enterAnim="@anim/fui_slide_out_left" />
     </fragment>
     <action android:id="@+id/action_global_createEventInfo" app:destination="@id/createEventInfo" />
     <activity

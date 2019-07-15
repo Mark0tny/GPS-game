@@ -56,26 +56,10 @@ public class CreateEventDetails extends Fragment implements NavHost {
 
 
         buttonNext = view.findViewById(R.id.buttonDetailsNext);
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"Next Clicked",Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventDetails);
-                navController.navigate(R.id.action_createEventDetails_to_createEventLocation);
-
-            }
-        });
+        buttonNext.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_createEventDetails_to_createEventLocation));
 
         buttonPrev = view.findViewById(R.id.buttonDetailsPrev);
-        buttonPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"Prev Clicked",Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventDetails);
-                navController.navigate(R.id.action_createEventDetails_to_createEventInfo);
-
-            }
-        });
+        buttonPrev.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_createEventDetails_to_createEventInfo));
 
         return view;
     }

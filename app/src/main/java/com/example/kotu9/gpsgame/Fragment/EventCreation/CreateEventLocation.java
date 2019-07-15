@@ -56,26 +56,10 @@ public class CreateEventLocation extends Fragment {
 
 
         buttonNext = view.findViewById(R.id.buttonLocationNext);
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Next Clicked", Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventLocation);
-                navController.navigate(R.id.action_createEventLocation_to_createEventMarker);
-
-            }
-        });
+        buttonNext.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_createEventLocation_to_createEventMarker));
 
         buttonPrev = view.findViewById(R.id.buttonLocationPrev);
-        buttonPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Prev Clicked", Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(getActivity(), R.id.createEventLocation);
-                navController.navigate(R.id.action_createEventLocation_to_createEventDetails);
-
-            }
-        });
+        buttonPrev.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_createEventLocation_to_createEventDetails));
 
         return view;
     }
