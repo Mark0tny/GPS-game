@@ -39,7 +39,7 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
 
     @Override
     protected boolean shouldRenderAsCluster(Cluster<ClusterMarker> cluster) {
-        return false;
+        return cluster.getSize() > 1;
     }
 
     @Override

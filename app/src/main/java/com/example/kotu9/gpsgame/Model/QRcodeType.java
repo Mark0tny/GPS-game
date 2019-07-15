@@ -12,7 +12,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class QRcodeType extends EventType {
+public class QRcodeType extends Event {
 
     public String imageURL;
     public boolean status;

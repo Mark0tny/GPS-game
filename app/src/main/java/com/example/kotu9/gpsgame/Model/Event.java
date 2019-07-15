@@ -17,10 +17,10 @@ class Event {
     private String name;
     private String description;
     private List<Hint> hintList;
-    private double distance;
-    private double rating;
     private double difficulty;
     private boolean status;
+    private double distance;
+    private double rating;
     private Long time;
     private List<User> userList;
 

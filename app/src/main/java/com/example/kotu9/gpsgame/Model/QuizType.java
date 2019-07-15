@@ -13,7 +13,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor(access=AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class QuizType extends EventType{
+public class QuizType extends Event{
 
     public List<Question> questionsList;
 }

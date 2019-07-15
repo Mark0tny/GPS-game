@@ -11,7 +11,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class PhotoCompareType extends EventType {
+public class PhotoCompareType extends Event {
     public String photoURL;
     public boolean status;
 }
