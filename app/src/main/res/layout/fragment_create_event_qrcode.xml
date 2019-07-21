@@ -7,29 +7,35 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <TextView
+        <ImageView
+            android:id="@+id/imageViewphoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hello_event_qrcode" />
+            tools:src="@tools:sample/avatars" />
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonQRPrev"
+                android:id="@+id/sendEmailQR"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Prev" />
+                android:text="@string/Send_QR"
+                />
 
             <Button
-                android:id="@+id/buttonQRNext"
+                android:id="@+id/downloadQR"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Next" />
+                android:text="@string/downloadQR"
+               />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -33,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:hint="question"
-                android:inputType="textEmailAddress"
                 android:paddingBottom="15dp"
                 android:textColorHint="@color/colorAccent" />
 
@@ -61,7 +60,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:hint="select if answer is correct"
-                    android:inputType="textEmailAddress"
                     android:paddingBottom="15dp"
                     android:textColorHint="@color/colorAccent" />
 

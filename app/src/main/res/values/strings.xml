@@ -82,4 +82,8 @@
     <string name="submitQuiz">Submit Quiz</string>
     <string name="add_answer">Add Answer</string>
 
+    <!--    Event QRcode    -->
+    <string name="Send_QR">Send to Email</string>
+    <string name="downloadQR">Download QR code</string>
+
 </resources>
