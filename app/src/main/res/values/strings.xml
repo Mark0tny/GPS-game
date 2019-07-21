@@ -85,5 +85,7 @@
     <!--    Event QRcode    -->
     <string name="Send_QR">Send to Email</string>
     <string name="downloadQR">Download QR code</string>
+    <string name="markPleaceToFind">Pleace mark pleace to find</string>
+    <string name="eventLocalization">Enter Event Localization on Map</string>
 
 </resources>

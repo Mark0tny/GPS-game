@@ -12,9 +12,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 
-public class CreateEventLocation extends Fragment {
+public class CreateEventLocation extends Fragment implements OnMapReadyCallback {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -24,6 +30,9 @@ public class CreateEventLocation extends Fragment {
     private String mParam2;
     private Button buttonNext;
     private Button buttonPrev;
+    private GoogleMap mMap;
+    private MapView mapView;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
 
     public CreateEventLocation() {
@@ -54,12 +63,17 @@ public class CreateEventLocation extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_event_location, container, false);
 
 
-        buttonNext = view.findViewById(R.id.buttonLocationNext);
-
-        buttonPrev = view.findViewById(R.id.buttonLocationPrev);
+        mapView = view.findViewById(R.id.eventMap);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         return view;
     }
 
-
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+    }
 }
