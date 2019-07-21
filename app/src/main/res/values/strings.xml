@@ -74,4 +74,12 @@
     <string name="navigation_photoCompare">Photo Compare</string>
     <string name="navigation_quiz">Quiz</string>
 
+    <!--    Event Quiz    -->
+    <string name="add_questions">Please, Add questions and answers</string>
+    <string name="add_question">Enter a Question</string>
+    <string name="add_answers">Enter an answer</string>
+    <string name="answerHint">Only one should be correct</string>
+    <string name="submitQuiz">Submit Quiz</string>
+    <string name="add_answer">Add Answer</string>
+
 </resources>
