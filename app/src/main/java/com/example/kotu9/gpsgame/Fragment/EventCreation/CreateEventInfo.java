@@ -1,35 +1,29 @@
 package com.example.kotu9.gpsgame.Fragment.EventCreation;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
-
+import com.example.kotu9.gpsgame.Activity.CreateEventActivity;
 import com.example.kotu9.gpsgame.R;
 
 
-public class CreateEventInfo extends Fragment implements NavHost {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+public class CreateEventInfo extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
-
-    private Button buttonNext;
-    private OnFragmentInteractionListener mListener;
-
+    public Spinner spinnerEvent;
+    SpinnerListener spinnerListener;
     public CreateEventInfo() {
         // Required empty public constructor
     }
@@ -58,46 +52,46 @@ public class CreateEventInfo extends Fragment implements NavHost {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_info, container, false);
 
+        spinnerEvent = view.findViewById(R.id.spinnerEvent);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.Types));
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinnerEvent.setAdapter(adapter);
 
-        buttonNext = view.findViewById(R.id.button_next);
-        buttonNext.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_createEventInfo_to_createEventDetails));
+        spinnerEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerListener.onSpinnerEventSelected(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         return view;
-    }
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        if(context instanceof CreateEventActivity)
+        spinnerListener = ((CreateEventActivity)context);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        spinnerListener = null;
     }
 
-    @NonNull
-    @Override
-    public NavController getNavController() {
-        return null;
-    }
+    public interface SpinnerListener {
+         void onSpinnerEventSelected(Integer position);
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
-
 }
+
+
+
+
+

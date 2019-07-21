@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.example.kotu9.gpsgame.Fragment.ProfileFragment;
 import com.example.kotu9.gpsgame.Fragment.SettingsFragment;
 import com.example.kotu9.gpsgame.Fragment.UserLocationFragment;
-import com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventDetails;
 import com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo;
 import com.example.kotu9.gpsgame.Model.User;
 import com.example.kotu9.gpsgame.R;
@@ -37,7 +36,7 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 
 
 public class UserLocationActivity extends ActivityManagePermission
-        implements NavigationView.OnNavigationItemSelectedListener, CreateEventInfo.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private static final String TAG = UserLocationActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
@@ -175,8 +174,4 @@ public class UserLocationActivity extends ActivityManagePermission
 
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

@@ -14,21 +14,16 @@ import androidx.navigation.Navigation;
 import com.example.kotu9.gpsgame.R;
 
 
-public class CreateEventMarker extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class CreateEventMarker extends Fragment  {
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
-    private Button buttonCreate;
-    private Button buttonPrev;
-
 
     public CreateEventMarker() {
-        // Required empty public constructor
     }
 
     public static CreateEventMarker newInstance(String param1, String param2) {
@@ -54,23 +49,7 @@ public class CreateEventMarker extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_marker, container, false);
 
-
-        buttonCreate = view.findViewById(R.id.buttonMarkerCreate);
-        buttonCreate.setOnClickListener(this);
-
-        buttonPrev = view.findViewById(R.id.buttonMarkerPrev);
-        buttonPrev.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_createEventMarker_to_createEventLocation));
-
-
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.buttonMarkerCreate:
-                Toast.makeText(getContext(),"Created",Toast.LENGTH_LONG).show();
-                break;
-        }
-    }
 }

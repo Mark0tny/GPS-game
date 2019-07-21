@@ -5,33 +5,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
 
 
-public class CreateEventLocation extends Fragment {
+public class CreateEventHints extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
     private String mParam1;
     private String mParam2;
-    private Button buttonNext;
-    private Button buttonPrev;
 
 
-    public CreateEventLocation() {
-        // Required empty public constructor
+    public CreateEventHints() {
+
     }
 
-    public static CreateEventLocation newInstance(String param1, String param2) {
-        CreateEventLocation fragment = new CreateEventLocation();
+    public static CreateEventHints newInstance(String param1, String param2) {
+        CreateEventHints fragment = new CreateEventHints();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -51,15 +43,7 @@ public class CreateEventLocation extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_create_event_location, container, false);
-
-
-        buttonNext = view.findViewById(R.id.buttonLocationNext);
-
-        buttonPrev = view.findViewById(R.id.buttonLocationPrev);
-
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_create_event_hints, container, false);
     }
-
-
 }
