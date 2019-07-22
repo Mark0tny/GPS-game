@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_host_fragment"
-    android:name="androidx.navigation.fragment.NavHostFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:defaultNavHost="true"
-    app:navGraph="@navigation/nav_graph"
-    tools:context=".Fragment.EventCreation.CreateEventInfo">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/nav_host_fragment"
+             android:name="androidx.navigation.fragment.NavHostFragment"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             app:defaultNavHost="true"
+             app:navGraph="@navigation/nav_graph"
+             tools:context=".Fragment.EventCreation.CreateEventInfo"
+           >
 
 
     <LinearLayout
@@ -17,27 +18,30 @@
         android:orientation="vertical">
 
 
+        <EditText
+            android:id="@+id/editNameEvent"
+            style="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="sans-serif"
+            android:hint="Event name"
+            android:paddingBottom="15dp"/>
 
-            <EditText
-                android:id="@+id/editNameEvent"
-                style="@style/Theme.AppCompat.Light.DarkActionBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:hint="Event name"
-                android:paddingBottom="15dp" />
 
-
-            <EditText
-                android:id="@+id/editEventDescription"
-                style="@style/Widget.AppCompat.AutoCompleteTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:hint="Event description"
-                android:singleLine="false"
-                android:lines="4"
-                android:paddingBottom="15dp" />
+        <EditText
+            android:id="@+id/editEventDescription"
+            style="@style/Widget.AppCompat.AutoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="sans-serif"
+            android:hint="Event description"
+            android:lines="4"
+            android:paddingBottom="15dp"
+            android:singleLine="false"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,24 +51,25 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Difficulty"
-                android:textAlignment="center" />
+                android:text="@string/difficulty"
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/seekBarDiffChange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_16dp" />
+                android:textAlignment="center"
+                android:textSize="@dimen/_18dp"/>
 
             <SeekBar
                 android:id="@+id/seekBarDifficulty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:thumbTint="@color/btnLoginRef"
+                android:max="6"
+                android:progress="0"
                 android:progressBackgroundTint="@color/browser_actions_title_color"
                 android:progressTint="@color/btnLoginRef"
-                android:progress="0"
-                android:max="9"
+                android:thumbTint="@color/btnLoginRef"
                 />
         </LinearLayout>
 
@@ -78,16 +83,16 @@
                 android:id="@+id/spinnerEventTypes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
                 android:text="Choose event type"
-                android:textSize="@dimen/_16dp" />
+                android:textAlignment="center"
+                android:textSize="@dimen/_16dp"/>
 
             <Spinner
                 android:id="@+id/spinnerEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/support_simple_spinner_dropdown_item"
-                android:entries="@array/Types"/>
+                android:entries="@array/Types"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item"/>
 
         </LinearLayout>
 

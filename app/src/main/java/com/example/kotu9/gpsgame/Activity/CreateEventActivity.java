@@ -39,7 +39,6 @@ public class CreateEventActivity extends AppCompatActivity implements BottomNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.navigation_step1:
-                navView.getMenu().getItem(menuItem.getOrder() + 1).setEnabled(true);
                 navController.navigate(R.id.createEventInfo);
                 break;
             case R.id.navigation_step2:

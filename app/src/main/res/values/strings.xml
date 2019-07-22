@@ -48,10 +48,11 @@
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
     <string name="permission_required_toast">Location permission is required for this demo.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Other-->
+    <string name="difficulty">Difficulty</string>
     <string name="registerDate">Registration Date:</string>
     <string name="TapHintProfileImage">Tap on icon to choose profile picture</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="Types">
         <item></item>
@@ -87,5 +88,6 @@
     <string name="downloadQR">Download QR code</string>
     <string name="markPleaceToFind">Pleace mark pleace to find</string>
     <string name="eventLocalization">Enter Event Localization on Map</string>
+
 
 </resources>
