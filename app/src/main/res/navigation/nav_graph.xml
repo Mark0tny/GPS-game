@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:navGraph="@navigation/nav_graph"
-    app:startDestination="@id/createEventInfo">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:navGraph="@navigation/nav_graph"
+            app:startDestination="@id/createEventInfo">
     <fragment
         android:id="@+id/createEventInfo"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo"
@@ -19,17 +19,17 @@
             android:id="@+id/action_createEventInfo_to_createEventPhotoCompare"
             app:destination="@id/createEventPhotoCompare"
             app:enterAnim="@anim/fui_slide_in_right"
-           />
+            />
         <action
             android:id="@+id/action_createEventInfo_to_createEventQRcode"
             app:destination="@id/createEventQRcode"
             app:enterAnim="@anim/fui_slide_in_right"
-           />
+            />
         <action
             android:id="@+id/action_createEventInfo_to_createEventQuiz"
             app:destination="@id/createEventQuiz"
             app:enterAnim="@anim/fui_slide_in_right"
-          />
+            />
     </fragment>
     <fragment
         android:id="@+id/createEventHints"
@@ -41,29 +41,29 @@
             android:id="@+id/action_createEventHints_to_createEventMarker"
             app:destination="@id/createEventMarker"
             app:enterAnim="@anim/fui_slide_in_right"
-             />
+            />
         <action
             android:id="@+id/action_createEventHints_to_createEventLocation"
             app:destination="@id/createEventLocation"
             app:enterAnim="@anim/fui_slide_out_left"
-            app:launchSingleTop="true" />
+            />
         <action
             android:id="@+id/action_createEventHints_to_createEventPhotoCompare"
             app:destination="@id/createEventPhotoCompare"
             app:enterAnim="@anim/fui_slide_out_left"
-            app:launchSingleTop="true"
-          />
+
+            />
         <action
             android:id="@+id/action_createEventHints_to_createEventQRcode"
             app:destination="@id/createEventQRcode"
             app:enterAnim="@anim/fui_slide_out_left"
-            app:launchSingleTop="true"
-           />
+
+            />
         <action
             android:id="@+id/action_createEventHints_to_createEventQuiz"
             app:destination="@+id/createEventQuiz"
             app:enterAnim="@anim/fui_slide_out_left"
-            app:launchSingleTop="true"
+
             />
     </fragment>
     <fragment
@@ -76,13 +76,12 @@
             android:id="@+id/action_createEventLocation_to_createEventHints"
             app:destination="@id/createEventHints"
             app:enterAnim="@anim/fui_slide_in_right"
-           />
+            />
         <action
             android:id="@+id/action_createEventLocation_to_createEventInfo"
             app:destination="@id/createEventInfo"
             app:enterAnim="@anim/fui_slide_out_left"
-            app:launchSingleTop="false"
-            />
+          />
     </fragment>
     <fragment
         android:id="@+id/createEventPhotoCompare"
@@ -99,6 +98,7 @@
             android:id="@+id/action_createEventPhotoCompare_to_createEventInfo"
             app:destination="@id/createEventInfo"
             app:enterAnim="@anim/fui_slide_out_left"
+
             />
     </fragment>
     <fragment
@@ -111,7 +111,7 @@
             android:id="@+id/action_createEventQRcode_to_createEventHints"
             app:destination="@id/createEventHints"
             app:enterAnim="@anim/fui_slide_in_right"
-             />
+            />
         <action
             android:id="@+id/action_createEventQRcode_to_createEventInfo"
             app:destination="@id/createEventInfo"
@@ -128,7 +128,7 @@
             android:id="@+id/action_createEventQuiz_to_createEventHints"
             app:destination="@+id/createEventHints"
             app:enterAnim="@anim/fui_slide_in_right"
-           />
+            />
         <action
             android:id="@+id/action_createEventQuiz_to_createEventInfo"
             app:destination="@id/createEventInfo"
@@ -139,17 +139,18 @@
         android:id="@+id/createEventMarker"
         android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventMarker"
         android:label="fragment_create_event_marker"
-        tools:layout="@layout/fragment_create_event_marker" >
+        tools:layout="@layout/fragment_create_event_marker">
 
         <action
             android:id="@+id/action_createEventMarker_to_createEventHints"
             app:destination="@id/createEventHints"
             app:enterAnim="@anim/fui_slide_out_left"
-             />
+            />
     </fragment>
+
     <activity
         android:id="@+id/userLocationActivity"
         android:name="com.example.kotu9.gpsgame.Activity.CreateEventActivity"
         android:label="activity_user_location"
-        tools:layout="@layout/activity_create_event" />
+        tools:layout="@layout/activity_create_event"/>
 </navigation>
