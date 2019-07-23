@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#fdfdfd</color>
     <color name="btnLoginRef">#03460d</color>
+    <color name="green">#32CD32</color>
 </resources>

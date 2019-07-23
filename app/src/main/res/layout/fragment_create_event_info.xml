@@ -58,7 +58,9 @@
                 android:id="@+id/seekBarDiffChange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Easy"
                 android:textAlignment="center"
+                android:textColor="@color/green"
                 android:textSize="@dimen/_18dp"/>
 
             <SeekBar

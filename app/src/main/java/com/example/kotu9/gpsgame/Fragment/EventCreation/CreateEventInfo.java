@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kotu9.gpsgame.Activity.CreateEventActivity;
 import com.example.kotu9.gpsgame.Model.Event;
@@ -31,12 +30,14 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 
 	private String mParam1;
 	private String mParam2;
+	private boolean checkFildsFilled = false;
 	public Spinner spinnerEvent;
 	SpinnerListener spinnerListener;
 	private Event event;
 	private EditText eventName, eventDescription;
 	private SeekBar seekBarDiff;
 	private TextView difficulty;
+
 
 	public CreateEventInfo() {
 	}
@@ -84,10 +85,6 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 
 			}
 		});
-		event.setName(eventName.getText().toString().trim());
-		event.setDescription(eventDescription.getText().toString().trim());
-
-
 		return view;
 	}
 
@@ -115,6 +112,7 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 		eventDescription.setOnFocusChangeListener(this);
 
 		difficulty = view.findViewById(R.id.seekBarDiffChange);
+
 		seekBarDiff = view.findViewById(R.id.seekBarDifficulty);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 				R.layout.support_simple_spinner_dropdown_item,
@@ -125,13 +123,16 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				updateEventType(position);
-				checkIfFildsAreComplited();
-				spinnerListener.onSpinnerEventSelected(position);
+				checkIfFildsAreCompleted();
+				if (checkFildsFilled){
+					spinnerListener.onSpinnerEventSelected(position);
+				}
 
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
+
 			}
 		});
 	}
@@ -164,9 +165,7 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-
 		if (!hasFocus) hideKeyboard(v);
-		else Toast.makeText(getContext(), "FOCUSED", Toast.LENGTH_LONG).show();
 	}
 
 	public interface SpinnerListener {
@@ -179,25 +178,30 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
-	//TODO Naprawic zeby poprawnie wyskakiwał blad tylko przy selekcji  typu
-	public void checkIfFildsAreComplited(){
+	public void checkIfFildsAreCompleted() {
+		event.setName(eventName.getText().toString().trim());
+		event.setDescription(eventDescription.getText().toString().trim());
+		int i = 0;
 
 		if (TextUtils.isEmpty(event.getName())) {
 			eventName.setError("Please enter event name");
 			eventName.requestFocus();
+			i++;
 			return;
 		}
 		if (TextUtils.isEmpty(event.getDescription())) {
 			eventDescription.setError("Please enter event description");
 			eventDescription.requestFocus();
+			i++;
 			return;
 		}
 		if (TextUtils.isEmpty(event.getDifficulty().name())) {
 			difficulty.setError("Please select event difficulty");
 			difficulty.requestFocus();
+			i++;
 			return;
 		}
-
+		if (i % 3 == 0) checkFildsFilled = true;
 	}
 }
 
