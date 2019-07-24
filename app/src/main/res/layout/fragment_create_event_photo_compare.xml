@@ -37,6 +37,13 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_sd_storage_black_24dp" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/submitPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/submitInfo" />
     </LinearLayout>
 
 </FrameLayout>

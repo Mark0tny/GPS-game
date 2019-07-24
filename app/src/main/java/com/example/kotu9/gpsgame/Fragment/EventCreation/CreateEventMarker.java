@@ -1,20 +1,19 @@
 package com.example.kotu9.gpsgame.Fragment.EventCreation;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
-import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 
-public class CreateEventMarker extends Fragment  {
+public class CreateEventMarker extends Fragment implements OnMapReadyCallback {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -22,6 +21,9 @@ public class CreateEventMarker extends Fragment  {
 
     private String mParam1;
     private String mParam2;
+    private GoogleMap mMap;
+    private MapView mapView;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     public CreateEventMarker() {
     }
@@ -49,7 +51,16 @@ public class CreateEventMarker extends Fragment  {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_marker, container, false);
 
+
+        mapView = view.findViewById(R.id.eventMap);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
         return view;
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+    }
 }

@@ -89,5 +89,13 @@
     <string name="markPleaceToFind">Pleace mark pleace to find</string>
     <string name="eventLocalization">Enter Event Localization on Map</string>
 
+    <!--    Event Hints    -->
+    <string name="add_hint">Enter a Hint</string>
+    <string name="add_hint_butt">Add Hint</string>
+    <string name="submitHints">Submit Hints</string>
+
+    <string name="markerLocalization" >Enter Marker Localization on Map</string>
+    <string name="submitInfo">Submit</string>
+
 
 </resources>

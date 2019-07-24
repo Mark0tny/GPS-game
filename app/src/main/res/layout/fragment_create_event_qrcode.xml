@@ -37,5 +37,11 @@
                 android:text="@string/downloadQR"
                />
         </LinearLayout>
+        <Button
+            android:id="@+id/submitQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/submitInfo" />
     </LinearLayout>
 </FrameLayout>
