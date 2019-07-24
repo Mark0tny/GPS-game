@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -23,7 +24,7 @@ import com.example.kotu9.gpsgame.Utils.EventDifficulty;
 import com.example.kotu9.gpsgame.Utils.EventTypes;
 
 
-public class CreateEventInfo extends Fragment implements View.OnFocusChangeListener {
+public class CreateEventInfo extends Fragment implements View.OnFocusChangeListener,View.OnClickListener {
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
 
@@ -37,6 +38,8 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 	private EditText eventName, eventDescription;
 	private SeekBar seekBarDiff;
 	private TextView difficulty;
+	public Button btnSubmit;
+	private static int spinnerPosition;
 
 
 	public CreateEventInfo() {
@@ -107,6 +110,8 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 	private void setUpComponents(View view) {
 		spinnerEvent = view.findViewById(R.id.spinnerEvent);
 		eventName = view.findViewById(R.id.editNameEvent);
+		btnSubmit = view.findViewById(R.id.submitInfo);
+		btnSubmit.setOnClickListener(this);
 		eventName.setOnFocusChangeListener(this);
 		eventDescription = view.findViewById(R.id.editEventDescription);
 		eventDescription.setOnFocusChangeListener(this);
@@ -123,11 +128,6 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				updateEventType(position);
-				checkIfFildsAreCompleted();
-				if (checkFildsFilled){
-					spinnerListener.onSpinnerEventSelected(position);
-				}
-
 			}
 
 			@Override
@@ -138,6 +138,7 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 	}
 
 	private void updateEventType(int position) {
+		if (position != 0) spinnerPosition = position;
 		switch (position) {
 			case 1:
 				event.setEventType(new EventType(EventTypes.Location));
@@ -166,6 +167,14 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!hasFocus) hideKeyboard(v);
+	}
+
+	@Override
+	public void onClick(View v) {
+		checkIfFildsAreCompleted();
+		if (checkFildsFilled){
+			spinnerListener.onSpinnerEventSelected(spinnerPosition);
+		}
 	}
 
 	public interface SpinnerListener {
@@ -201,7 +210,12 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
 			i++;
 			return;
 		}
-		if (i % 3 == 0) checkFildsFilled = true;
+		if (spinnerPosition == 0 ){
+			((TextView)spinnerEvent.getSelectedView()).setError("Please select event type");
+			i++;
+			return;
+		}
+		if (i % 4 == 0) checkFildsFilled = true;
 	}
 }
 
