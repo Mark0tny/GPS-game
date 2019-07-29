@@ -1,8 +1,8 @@
 package com.example.kotu9.gpsgame.Model;
 
 import com.example.kotu9.gpsgame.Utils.EventDifficulty;
-import com.example.kotu9.gpsgame.Utils.EventTypes;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -15,15 +15,15 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class Event {
-    private String name;
-    private String description;
-    private List<Hint> hintList;
-    private EventDifficulty difficulty;
-    private EventType eventType;
-    private boolean status;
-    private double distance;
-    private double rating;
-    private Long time;
-    private List<User> userList;
+public class Event implements Serializable {
+    public String name;
+    public String description;
+    public List<Hint> hintList;
+    public EventDifficulty difficulty;
+    public EventType eventType;
+    public boolean active;
+    public double distance;
+    public double rating;
+    public Long time;
+    public List<User> userList;
 }

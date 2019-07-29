@@ -1,49 +1,56 @@
 package com.example.kotu9.gpsgame.Fragment.EventCreation;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
+import com.example.kotu9.gpsgame.Model.Event;
+import com.example.kotu9.gpsgame.Model.LocationType;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 
-public class CreateEventLocation extends Fragment implements OnMapReadyCallback {
+public class CreateEventLocation extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    private String mParam1;
-    private String mParam2;
-    private Button buttonNext;
-    private Button buttonPrev;
+    private static final String TAG = Activity.class.getSimpleName();
+    private Button btnSubmit,addLocation;
+    private ImageButton mapFullScreen;
+    private EditText latitude, longitude;
+    private GeoPoint location;
     private GoogleMap mMap;
     private MapView mapView;
+    public LocationType event;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private Marker myEventLoc;
 
 
     public CreateEventLocation() {
-        // Required empty public constructor
     }
 
-    public static CreateEventLocation newInstance(String param1, String param2) {
+    public static CreateEventLocation newInstance() {
         CreateEventLocation fragment = new CreateEventLocation();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +59,8 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            event = new LocationType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
+
         }
     }
 
@@ -62,18 +69,93 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_location, container, false);
 
+        Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
+        setupView(view, savedInstanceState);
 
+
+        addLocation.setOnClickListener(this);
+
+        return view;
+    }
+
+    private void changeMarkerPosition(LatLng latLng) {
+        if (myEventLoc == null) {
+            myEventLoc = mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title("Pleace to find"));
+        } else {
+            myEventLoc.setPosition(latLng);
+        }
+    }
+
+    private void setupView(View view, Bundle savedInstanceState) {
+        btnSubmit = view.findViewById(R.id.submitLoc);
+        addLocation = view.findViewById(R.id.imageButtonEvent);
+        mapFullScreen = view.findViewById(R.id.fullScreenMapEvent);
+        latitude = view.findViewById(R.id.eventLocLatitude);
+        longitude = view.findViewById(R.id.eventLocLongitude);
         mapView = view.findViewById(R.id.eventMap);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-        return view;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        setupMapView();
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (myEventLoc == null) {
+                    myEventLoc = mMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title("Pleace to find"));
+                } else {
+                    myEventLoc.setPosition(latLng);
+                }
+                latitude.setText(String.valueOf(latLng.latitude));
+                longitude.setText(String.valueOf(latLng.longitude));
+                location = new GeoPoint(latLng.latitude, latLng.longitude);
+                event.setLocation(location);
+            }
+        });
+    }
+
+    public void setupMapView() {
+        UiSettings settings = mMap.getUiSettings();
+        settings.setAllGesturesEnabled(true);
+        settings.setCompassEnabled(true);
+        settings.setMyLocationButtonEnabled(true);
+        settings.setRotateGesturesEnabled(true);
+        settings.setScrollGesturesEnabled(true);
+        settings.setTiltGesturesEnabled(true);
+        settings.setZoomControlsEnabled(true);
+        settings.setZoomGesturesEnabled(true);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.submitInfo:
+                break;
+            case R.id.imageButtonEvent:
+                changeMarkerPosition(getPositionEditText());
+                break;
+        }
+    }
+
+    private LatLng getPositionEditText() {
+
+        //TODO ddodac check if puste , copy pasta metody
+        LatLng position = new LatLng(  Double.valueOf(latitude.getText().toString()),  Double.valueOf(longitude.getText().toString()));
+
+        return position;
     }
 }

@@ -49,10 +49,9 @@
                                 android:text="@string/latitude" />
 
                             <EditText
-                                android:id="@+id/EventLocLatitude"
+                                android:id="@+id/eventLocLatitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
                                 android:textColorHint="@color/colorAccent" />
@@ -69,24 +68,21 @@
                                 android:text="@string/longitude" />
 
                             <EditText
-                                android:id="@+id/EventLocLongitude"
+                                android:id="@+id/eventLocLongitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
                                 android:textColorHint="@color/colorAccent" />
-
                         </LinearLayout>
                     </LinearLayout>
-
                     <ImageButton
-                        android:id="@+id/imageButton"
+                        android:id="@+id/imageButtonEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="8dp"
                         android:src="@drawable/ic_my_location_black_24dp" />
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -103,10 +99,10 @@
 
                 <ImageButton
                     android:id="@+id/fullScreenMapEvent"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="60dp"
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_fullscreen_black_24dp" />
 

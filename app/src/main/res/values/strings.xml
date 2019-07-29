@@ -96,6 +96,7 @@
 
     <string name="markerLocalization" >Enter Marker Localization on Map</string>
     <string name="submitInfo">Submit</string>
+    <string name="eventBundle">eventBundle</string>
 
 
 </resources>

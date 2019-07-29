@@ -64,12 +64,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     public static User user;
-
-    private String mParam1;
-    private String mParam2;
     private FirebaseFirestore mDb;
 
     public UserLocationFragment() {
@@ -79,10 +74,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -298,7 +289,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void setCameraView() {
-
         if (user != null) {
             double bottomBoundary = user.getLocation().getLatitude() - .1;
             double leftBoundary = user.getLocation().getLongitude() - .1;
@@ -314,7 +304,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             Log.d(TAG, "setCameraView user null");
             Toast.makeText(getContext(), "setCameraView user null", Toast.LENGTH_SHORT).show();
         }
-
 
     }
 
