@@ -18,7 +18,7 @@ import lombok.NonNull;
 public class Event implements Serializable {
     public String name;
     public String description;
-    public List<Hint> hintList;
+    public Hint hintList;
     public EventDifficulty difficulty;
     public EventType eventType;
     public boolean active;
