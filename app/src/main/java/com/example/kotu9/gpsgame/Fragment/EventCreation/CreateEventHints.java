@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,13 +18,12 @@ import com.example.kotu9.gpsgame.Model.Hint;
 import com.example.kotu9.gpsgame.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 
-public class CreateEventHints extends Fragment implements View.OnClickListener {
+public class CreateEventHints extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
 
 	public CreateEventHints() {
@@ -35,7 +35,6 @@ public class CreateEventHints extends Fragment implements View.OnClickListener {
 	private Hint hintList;
 	private ListView listView;
 	private Event event;
-	private List<String> hints;
 	private ArrayAdapter<String> adapter;
 	private NavController navController;
 
@@ -50,7 +49,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		hints = new ArrayList<>();
+		hintList.hints = new ArrayList<>();
 		event = ((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
 		Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
 		if (getArguments() != null) {
@@ -64,9 +63,9 @@ public class CreateEventHints extends Fragment implements View.OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_create_event_hints, container, false);
 
 		adapter = new ArrayAdapter<String>(getContext(),
-				android.R.layout.simple_list_item_1, hints);
+				android.R.layout.simple_list_item_1, hintList.hints);
 		listView.setAdapter(adapter);
-
+		listView.setOnItemClickListener(this);
 		setupViews(view);
 		return view;
 	}
@@ -84,8 +83,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener {
 
 
 	private void addHintToList() {
-		hints.add(getHintFromEditText());
-		hintList.hints = hints;
+		hintList.hints.add(getHintFromEditText());
 		Toast.makeText(getContext(), hintList.toString(), Toast.LENGTH_LONG).show();
 		adapter.notifyDataSetChanged();
 		editTexthints.setText("");
@@ -134,4 +132,9 @@ public class CreateEventHints extends Fragment implements View.OnClickListener {
 		}
 	}
 
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		hintList.hints.remove(position);
+		adapter.notifyDataSetChanged();
+	}
 }
