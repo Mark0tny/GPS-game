@@ -1,7 +1,6 @@
 package com.example.kotu9.gpsgame.Fragment.EventCreation;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.kotu9.gpsgame.Model.Event;
 import com.example.kotu9.gpsgame.Model.LocationType;
 import com.example.kotu9.gpsgame.R;
-import com.example.kotu9.gpsgame.Utils.ViewWeightAnimationWrapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,21 +36,15 @@ import androidx.navigation.Navigation;
 public class CreateEventLocation extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
 	private static final String TAG = Activity.class.getSimpleName();
-	private static final int MAP_LAYOUT_STATE_CONTRACTED = 0;
-	private static final int MAP_LAYOUT_STATE_EXPANDED = 1;
-
-	private Button btnSubmit, addLocation;
-	private ImageButton mapFullScreen;
+	private Button btnSubmit;
+	private ImageButton addLocation;
 	private EditText latitude, longitude;
-	private RelativeLayout mMapContainer;
 	private GeoPoint location;
 	private GoogleMap mMap;
 	private MapView mapView;
 	public LocationType event;
 	private FusedLocationProviderClient mFusedLocationProviderClient;
 	private Marker myEventLoc;
-
-	private int mMapLayoutState = 0;
 	private NavController navController;
 
 
@@ -84,27 +75,28 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 		Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
 		setupView(view, savedInstanceState);
 		addLocation.setOnClickListener(this);
+		btnSubmit.setOnClickListener(this);
 
 		return view;
 	}
 
 	private void changeMarkerPosition(LatLng latLng) {
-		if (myEventLoc == null) {
-			myEventLoc = mMap.addMarker(new MarkerOptions()
-					.position(latLng)
-					.title("Pleace to find"));
-		} else {
-			myEventLoc.setPosition(latLng);
+		if (latLng != null) {
+			if (myEventLoc == null) {
+				myEventLoc = mMap.addMarker(new MarkerOptions()
+						.position(latLng)
+						.title("Pleace to find"));
+			} else {
+				myEventLoc.setPosition(latLng);
+			}
 		}
 	}
 
 	private void setupView(View view, Bundle savedInstanceState) {
-		btnSubmit = view.findViewById(R.id.submitLoc);
+		btnSubmit = view.findViewById(R.id.submitLocation);
 		addLocation = view.findViewById(R.id.imageButtonEvent);
-		mapFullScreen = view.findViewById(R.id.fullScreenMapEvent);
 		latitude = view.findViewById(R.id.eventLocLatitude);
 		longitude = view.findViewById(R.id.eventLocLongitude);
-		mMapContainer = view.findViewById(R.id.map_container);
 		navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 		mapView = view.findViewById(R.id.eventMap);
 		mapView.onCreate(savedInstanceState);
@@ -155,21 +147,12 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.submitInfo:
-				checkLatLangFields();
+			case R.id.submitLocation:
+				checkLatLangFields();o
 				submitEventLocation();
 				break;
 			case R.id.imageButtonEvent:
 				changeMarkerPosition(getPositionEditText());
-				break;
-			case R.id.fullScreenMapEvent:
-				if (mMapLayoutState == MAP_LAYOUT_STATE_CONTRACTED) {
-					mMapLayoutState = MAP_LAYOUT_STATE_EXPANDED;
-					expandMapAnimation();
-				} else if (mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED) {
-					mMapLayoutState = MAP_LAYOUT_STATE_CONTRACTED;
-					contractMapAnimation();
-				}
 				break;
 		}
 	}
@@ -188,8 +171,17 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 	}
 
 	private LatLng getPositionEditText() {
-		checkLatLangFields();
-		return new LatLng(Double.valueOf(latitude.getText().toString()), Double.valueOf(longitude.getText().toString()));
+		try {
+			checkLatLangFields();
+			double lat = Double.valueOf(latitude.getText().toString().trim());
+			double lang = Double.valueOf(longitude.getText().toString().trim());
+			LatLng latLng = new LatLng(lat, lang);
+			return latLng;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	private void checkLatLangFields() {
@@ -205,25 +197,4 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 		}
 		return;
 	}
-
-	private void expandMapAnimation() {
-		ViewWeightAnimationWrapper mapAnimationWrapper = new ViewWeightAnimationWrapper(mMapContainer);
-		ObjectAnimator mapAnimation = ObjectAnimator.ofFloat(mapAnimationWrapper,
-				"weight",
-				50,
-				100);
-		mapAnimation.setDuration(800);
-		mapAnimation.start();
-	}
-
-	private void contractMapAnimation() {
-		ViewWeightAnimationWrapper mapAnimationWrapper = new ViewWeightAnimationWrapper(mMapContainer);
-		ObjectAnimator mapAnimation = ObjectAnimator.ofFloat(mapAnimationWrapper,
-				"weight",
-				100,
-				50);
-		mapAnimation.setDuration(800);
-		mapAnimation.start();
-	}
-
 }

@@ -46,7 +46,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/latitude" />
+                                android:text="@string/latitude"/>
 
                             <EditText
                                 android:id="@+id/eventLocLatitude"
@@ -54,7 +54,7 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
-                                android:textColorHint="@color/colorAccent" />
+                                android:textColorHint="@color/colorAccent"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -65,7 +65,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/longitude" />
+                                android:text="@string/longitude"/>
 
                             <EditText
                                 android:id="@+id/eventLocLongitude"
@@ -73,17 +73,28 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
-                                android:textColorHint="@color/colorAccent" />
+                                android:textColorHint="@color/colorAccent"/>
+
                         </LinearLayout>
                     </LinearLayout>
+
                     <ImageButton
                         android:id="@+id/imageButtonEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_my_location_black_24dp" />
+                        android:src="@drawable/ic_my_location_black_24dp"/>
+
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/submitLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/submitInfo"/>
+
             </LinearLayout>
 
             <RelativeLayout
@@ -97,23 +108,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <ImageButton
-                    android:id="@+id/fullScreenMapEvent"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/ic_fullscreen_black_24dp" />
-
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/submitLoc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/submitInfo" />
         </LinearLayout>
 
     </RelativeLayout>
