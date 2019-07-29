@@ -148,7 +148,7 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.submitLocation:
-				checkLatLangFields();o
+				checkLatLangFields();
 				submitEventLocation();
 				break;
 			case R.id.imageButtonEvent:
