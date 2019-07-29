@@ -88,6 +88,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener {
 		hintList.hints = hints;
 		Toast.makeText(getContext(), hintList.toString(), Toast.LENGTH_LONG).show();
 		adapter.notifyDataSetChanged();
+		editTexthints.setText("");
 	}
 
 	private String getHintFromEditText() {
