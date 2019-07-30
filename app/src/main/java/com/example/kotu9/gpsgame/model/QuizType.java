@@ -15,6 +15,7 @@ import lombok.NonNull;
 @AllArgsConstructor(access=AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class QuizType extends Event implements Serializable {
+
     public List<Question> questionsList;
 
     public QuizType(Event event) {

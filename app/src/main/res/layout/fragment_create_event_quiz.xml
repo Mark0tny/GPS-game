@@ -95,7 +95,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerAnswers"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                android:scrollbars="vertical"/>
 
         </LinearLayout>
     </LinearLayout>
