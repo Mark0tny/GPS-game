@@ -49,7 +49,7 @@
                                 android:text="@string/latitude" />
 
                             <EditText
-                                android:id="@+id/EventLocLatitudeMarker"
+                                android:id="@+id/eventLocLatitudeMarker"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
@@ -69,7 +69,7 @@
                                 android:text="@string/longitude" />
 
                             <EditText
-                                android:id="@+id/EventLocLongitudeMarker"
+                                android:id="@+id/eventLocLongitudeMarker"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"
@@ -90,6 +90,13 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <Button
+                android:id="@+id/submitMarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/submitInfo"/>
+
             <RelativeLayout
                 android:id="@+id/map_container"
                 android:layout_width="match_parent"
@@ -103,12 +110,6 @@
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/submitMarker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/submitInfo" />
         </LinearLayout>
 
     </RelativeLayout>

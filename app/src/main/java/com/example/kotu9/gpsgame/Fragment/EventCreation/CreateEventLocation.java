@@ -63,7 +63,6 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			event = new LocationType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
-
 		}
 	}
 
@@ -175,12 +174,10 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
 			checkLatLangFields();
 			double lat = Double.valueOf(latitude.getText().toString().trim());
 			double lang = Double.valueOf(longitude.getText().toString().trim());
-			LatLng latLng = new LatLng(lat, lang);
-			return latLng;
+			return new LatLng(lat, lang);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 

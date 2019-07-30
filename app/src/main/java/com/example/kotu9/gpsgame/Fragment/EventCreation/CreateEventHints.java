@@ -49,6 +49,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		hintList = new Hint();
 		hintList.hints = new ArrayList<>();
 		event = ((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
 		Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
@@ -61,12 +62,12 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 	                         Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.fragment_create_event_hints, container, false);
-
+		setupViews(view);
 		adapter = new ArrayAdapter<String>(getContext(),
 				android.R.layout.simple_list_item_1, hintList.hints);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
-		setupViews(view);
+
 		return view;
 	}
 
@@ -83,14 +84,13 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 
 
 	private void addHintToList() {
-		hintList.hints.add(getHintFromEditText());
-		Toast.makeText(getContext(), hintList.toString(), Toast.LENGTH_LONG).show();
+		if (!TextUtils.isEmpty(getHintFromEditText()) && getHintFromEditText().length() >= 3)
+			hintList.hints.add(getHintFromEditText());
 		adapter.notifyDataSetChanged();
 		editTexthints.setText("");
 	}
 
 	private String getHintFromEditText() {
-		checkHintField();
 		return editTexthints.getText().toString().trim();
 	}
 
@@ -100,7 +100,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 			editTexthints.requestFocus();
 			return;
 		}
-		if (editTexthints.getText().length() > 1 && editTexthints.getText().length() < 25) {
+		if (editTexthints.getText().length() <= 3) {
 			editTexthints.setError("Hint should be longer");
 			editTexthints.requestFocus();
 			return;
@@ -125,8 +125,8 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 			case R.id.submitHints:
 				submitEventHints();
 				break;
-
 			case R.id.buttonAddHint:
+				checkHintField();
 				addHintToList();
 				break;
 		}
