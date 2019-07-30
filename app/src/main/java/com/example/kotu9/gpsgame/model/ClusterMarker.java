@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Model;
+package com.example.kotu9.gpsgame.model;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;

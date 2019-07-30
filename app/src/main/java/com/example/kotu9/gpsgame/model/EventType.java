@@ -1,6 +1,6 @@
-package com.example.kotu9.gpsgame.Model;
+package com.example.kotu9.gpsgame.model;
 
-import com.example.kotu9.gpsgame.Utils.EventTypes;
+import com.example.kotu9.gpsgame.utils.EventTypes;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,6 +34,4 @@ public class EventType {
 				break;
 		}
 	}
-
-	;
 }

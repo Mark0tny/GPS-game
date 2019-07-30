@@ -1,6 +1,8 @@
-package com.example.kotu9.gpsgame.Model;
+package com.example.kotu9.gpsgame.model;
 
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class Hint {
-
-    public List<String> hints;
+public class Question {
+	public String question;
+	public Map<String, Boolean> answers = new HashMap<>();
 }

@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Model;
+package com.example.kotu9.gpsgame.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +15,9 @@ import lombok.NonNull;
 @AllArgsConstructor(access=AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class QuizType extends Event implements Serializable {
-
     public List<Question> questionsList;
+
+    public QuizType(Event event) {
+        super(event.name, event.description, event.hintList, event.difficulty, event.eventType, event.active, event.distance, event.rating, event.time, event.userList);
+    }
 }

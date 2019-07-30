@@ -1,6 +1,6 @@
-package com.example.kotu9.gpsgame.Model;
+package com.example.kotu9.gpsgame.model;
 
-import com.example.kotu9.gpsgame.Utils.EventDifficulty;
+import com.example.kotu9.gpsgame.utils.EventDifficulty;
 
 import java.io.Serializable;
 import java.util.List;
