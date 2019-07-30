@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Utils.UserClient"
+        android:name=".utils.UserClient"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,19 +27,19 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Activity.CreateEventActivity"
+            android:name=".activity.CreateEventActivity"
             android:label="@string/title_activity_create_event"></activity>
-        <activity android:name=".Activity.administration.AdminDashboardActivity" />
-        <activity android:name=".Activity.LoginActivity">
+        <activity android:name=".activity.administration.AdminDashboardActivity" />
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.RegisterActivity" />
+        <activity android:name=".activity.RegisterActivity" />
         <activity
-            android:name=".Activity.UserProfileActivity"
+            android:name=".activity.UserProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -59,12 +59,12 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name=".Activity.UserLocationActivity"
+            android:name=".activity.UserLocationActivity"
             android:label="@string/title_activity_user_location"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".Services.LocationService"
+            android:name=".services.LocationService"
             android:stopWithTask="true" />
     </application>
 

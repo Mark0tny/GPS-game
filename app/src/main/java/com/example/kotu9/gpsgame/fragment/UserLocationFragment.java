@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Fragment;
+package com.example.kotu9.gpsgame.fragment;
 
 import android.Manifest;
 import android.app.ActivityManager;
@@ -23,9 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.R;
-import com.example.kotu9.gpsgame.Services.LocationService;
+import com.example.kotu9.gpsgame.services.LocationService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -53,9 +53,9 @@ import java.util.Objects;
 import lombok.NonNull;
 
 import static android.content.Context.ACTIVITY_SERVICE;
-import static com.example.kotu9.gpsgame.Utils.Constants.ERROR_DIALOG_REQUEST;
-import static com.example.kotu9.gpsgame.Utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
-import static com.example.kotu9.gpsgame.Utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
+import static com.example.kotu9.gpsgame.utils.Constants.ERROR_DIALOG_REQUEST;
+import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 public class UserLocationFragment extends Fragment implements OnMapReadyCallback {
 

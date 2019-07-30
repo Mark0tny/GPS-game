@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Services;
+package com.example.kotu9.gpsgame.services;
 
 import android.Manifest;
 import android.app.Notification;
@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.icu.text.UnicodeSetIterator;
 import android.location.Location;
 
 import android.os.Build;
@@ -19,9 +18,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.EventCreation.CreateEventQuiz">
+    tools:context=".fragment.eventCreation.CreateEventQuiz">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                     android:textColorHint="@color/colorAccent" />
 
                 <RadioButton
-                    android:id="@+id/radioButton"
+                    android:id="@+id/radioBtnAnswer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
@@ -72,30 +72,30 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/buttonAdd"
+                android:id="@+id/buttonAddAnswer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/add_answer" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerAnswers"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
             <Button
                 android:id="@+id/submitQuiz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/submitQuiz" />
+                android:text="@string/submitQuiz"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         </LinearLayout>
     </LinearLayout>

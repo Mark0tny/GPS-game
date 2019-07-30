@@ -1,5 +1,6 @@
-package com.example.kotu9.gpsgame.Fragment.EventCreation;
+package com.example.kotu9.gpsgame.fragment.eventCreation;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -13,8 +14,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Model.Event;
-import com.example.kotu9.gpsgame.Model.Hint;
+import com.example.kotu9.gpsgame.model.Event;
+import com.example.kotu9.gpsgame.model.Hint;
 import com.example.kotu9.gpsgame.R;
 
 import java.util.ArrayList;
@@ -25,18 +26,18 @@ import androidx.navigation.Navigation;
 
 public class CreateEventHints extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-
-	public CreateEventHints() {
-
-	}
-
+	private static final String TAG = Activity.class.getSimpleName();
 	private Button btnSubmitHints, btnAddHint;
-	private EditText editTexthints;
+	private EditText editTextHints;
 	private Hint hintList;
 	private ListView listView;
 	private Event event;
 	private ArrayAdapter<String> adapter;
 	private NavController navController;
+
+	public CreateEventHints() {
+
+	}
 
 
 	public static CreateEventHints newInstance() {
@@ -53,8 +54,6 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 		hintList.hints = new ArrayList<>();
 		event = ((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
 		Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
-		if (getArguments() != null) {
-		}
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 	private void setupViews(View view) {
 		btnSubmitHints = view.findViewById(R.id.submitHints);
 		btnAddHint = view.findViewById(R.id.buttonAddHint);
-		editTexthints = view.findViewById(R.id.editTextHint);
+		editTextHints = view.findViewById(R.id.editTextHint);
 		listView = view.findViewById(R.id.hintList);
 		navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 		btnAddHint.setOnClickListener(this);
@@ -87,22 +86,22 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 		if (!TextUtils.isEmpty(getHintFromEditText()) && getHintFromEditText().length() >= 3)
 			hintList.hints.add(getHintFromEditText());
 		adapter.notifyDataSetChanged();
-		editTexthints.setText("");
+		editTextHints.setText("");
 	}
 
 	private String getHintFromEditText() {
-		return editTexthints.getText().toString().trim();
+		return editTextHints.getText().toString().trim();
 	}
 
 	private void checkHintField() {
-		if (TextUtils.isEmpty(editTexthints.getText().toString())) {
-			editTexthints.setError("Please enter hint");
-			editTexthints.requestFocus();
+		if (TextUtils.isEmpty(editTextHints.getText().toString())) {
+			editTextHints.setError("Please enter hint");
+			editTextHints.requestFocus();
 			return;
 		}
-		if (editTexthints.getText().length() <= 3) {
-			editTexthints.setError("Hint should be longer");
-			editTexthints.requestFocus();
+		if (editTextHints.getText().length() <= 3) {
+			editTextHints.setError("Hint should be longer");
+			editTextHints.requestFocus();
 			return;
 		}
 	}

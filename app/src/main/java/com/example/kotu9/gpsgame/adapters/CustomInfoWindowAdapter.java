@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Adapters;
+package com.example.kotu9.gpsgame.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

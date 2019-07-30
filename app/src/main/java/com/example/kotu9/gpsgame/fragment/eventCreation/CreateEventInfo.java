@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Fragment.EventCreation;
+package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,12 +17,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Activity.CreateEventActivity;
-import com.example.kotu9.gpsgame.Model.Event;
-import com.example.kotu9.gpsgame.Model.EventType;
+import com.example.kotu9.gpsgame.activity.CreateEventActivity;
+import com.example.kotu9.gpsgame.model.Event;
+import com.example.kotu9.gpsgame.model.EventType;
 import com.example.kotu9.gpsgame.R;
-import com.example.kotu9.gpsgame.Utils.EventDifficulty;
-import com.example.kotu9.gpsgame.Utils.EventTypes;
+import com.example.kotu9.gpsgame.utils.EventDifficulty;
+import com.example.kotu9.gpsgame.utils.EventTypes;
 
 
 public class CreateEventInfo extends Fragment implements View.OnFocusChangeListener, View.OnClickListener {

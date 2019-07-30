@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Utils;
+package com.example.kotu9.gpsgame.utils;
 
 import android.graphics.Color;
 

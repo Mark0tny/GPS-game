@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Fragment.EventCreation;
+package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Model.Event;
-import com.example.kotu9.gpsgame.Model.LocationType;
+import com.example.kotu9.gpsgame.model.Event;
+import com.example.kotu9.gpsgame.model.LocationType;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;

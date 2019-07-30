@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Fragment;
+package com.example.kotu9.gpsgame.fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Activity.LoginActivity;
-import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.activity.LoginActivity;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;

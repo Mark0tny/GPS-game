@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Fragment.EventCreation;
+package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

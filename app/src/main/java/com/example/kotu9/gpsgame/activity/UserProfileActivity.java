@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Activity;
+package com.example.kotu9.gpsgame.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

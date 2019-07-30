@@ -7,7 +7,7 @@
             app:startDestination="@id/createEventInfo">
     <fragment
         android:id="@+id/createEventInfo"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventInfo"
         android:label="fragment_create_event_info"
         tools:layout="@layout/fragment_create_event_info">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/createEventHints"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventHints"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventHints"
         android:label="fragment_create_event_hints"
         tools:layout="@layout/fragment_create_event_hints">
 
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/createEventLocation"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventLocation"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventLocation"
         android:label="fragment_create_event_location"
         tools:layout="@layout/fragment_create_event_location">
 
@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/createEventPhotoCompare"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventPhotoCompare"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventPhotoCompare"
         android:label="fragment_create_event_photo_compare"
         tools:layout="@layout/fragment_create_event_photo_compare">
 
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/createEventQRcode"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventQRcode"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventQRcode"
         android:label="fragment_create_event_qrcode"
         tools:layout="@layout/fragment_create_event_qrcode">
 
@@ -120,7 +120,7 @@
     </fragment>
     <fragment
         android:id="@+id/createEventQuiz"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventQuiz"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventQuiz"
         android:label="fragment_create_event_quiz"
         tools:layout="@layout/fragment_create_event_quiz">
 
@@ -137,7 +137,7 @@
     </fragment>
     <fragment
         android:id="@+id/createEventMarker"
-        android:name="com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventMarker"
+        android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventMarker"
         android:label="fragment_create_event_marker"
         tools:layout="@layout/fragment_create_event_marker">
 
@@ -150,7 +150,7 @@
 
     <activity
         android:id="@+id/userLocationActivity"
-        android:name="com.example.kotu9.gpsgame.Activity.CreateEventActivity"
+        android:name="com.example.kotu9.gpsgame.activity.CreateEventActivity"
         android:label="activity_user_location"
         tools:layout="@layout/activity_create_event"/>
 </navigation>

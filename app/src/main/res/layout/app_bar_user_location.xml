@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:navGraph="@navigation/nav_graph"
-    tools:context=".Activity.UserLocationActivity">
+    tools:context=".activity.UserLocationActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

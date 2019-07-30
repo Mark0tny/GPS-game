@@ -1,11 +1,9 @@
-package com.example.kotu9.gpsgame.Activity;
+package com.example.kotu9.gpsgame.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,15 +11,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -35,11 +30,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import lombok.NonNull;
 
-import static com.example.kotu9.gpsgame.Utils.Constants.USER_ROLE_USER;
+import static com.example.kotu9.gpsgame.utils.Constants.USER_ROLE_USER;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 

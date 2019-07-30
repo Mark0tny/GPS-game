@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Activity.UserLocationActivity"
+    tools:context=".activity.UserLocationActivity"
     tools:showIn="@layout/app_bar_user_location">
 
     <fragment
@@ -13,6 +13,6 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activity.UserLocationActivity" />
+        tools:context=".activity.UserLocationActivity" />
 
 </RelativeLayout>

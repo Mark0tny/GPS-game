@@ -1,6 +1,5 @@
-package com.example.kotu9.gpsgame.Activity.administration;
+package com.example.kotu9.gpsgame.activity.administration;
 
-import android.os.TestLooperManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;

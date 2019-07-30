@@ -1,8 +1,8 @@
-package com.example.kotu9.gpsgame.Utils;
+package com.example.kotu9.gpsgame.utils;
 
 import android.app.Application;
 
-import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.model.User;
 
 public class UserClient extends Application {
 

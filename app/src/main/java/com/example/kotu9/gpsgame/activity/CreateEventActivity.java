@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.Activity;
+package com.example.kotu9.gpsgame.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo;
+import com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventInfo;
 import com.example.kotu9.gpsgame.R;
 
 public class CreateEventActivity extends AppCompatActivity implements CreateEventInfo.SpinnerListener {

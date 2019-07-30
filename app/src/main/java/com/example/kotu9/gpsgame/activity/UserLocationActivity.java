@@ -1,7 +1,6 @@
-package com.example.kotu9.gpsgame.Activity;
+package com.example.kotu9.gpsgame.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,11 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.kotu9.gpsgame.Fragment.ProfileFragment;
-import com.example.kotu9.gpsgame.Fragment.SettingsFragment;
-import com.example.kotu9.gpsgame.Fragment.UserLocationFragment;
-import com.example.kotu9.gpsgame.Fragment.EventCreation.CreateEventInfo;
-import com.example.kotu9.gpsgame.Model.User;
+import com.example.kotu9.gpsgame.fragment.ProfileFragment;
+import com.example.kotu9.gpsgame.fragment.SettingsFragment;
+import com.example.kotu9.gpsgame.fragment.UserLocationFragment;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

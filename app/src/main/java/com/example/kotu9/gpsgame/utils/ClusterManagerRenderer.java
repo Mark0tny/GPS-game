@@ -1,11 +1,11 @@
-package com.example.kotu9.gpsgame.Utils;
+package com.example.kotu9.gpsgame.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.kotu9.gpsgame.Model.ClusterMarker;
+import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
