@@ -3,6 +3,8 @@ package com.example.kotu9.gpsgame.fragment.eventCreation;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +13,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.adapters.QuizRecyclerViewAdapter;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.Question;
 import com.example.kotu9.gpsgame.model.QuizType;
-import com.example.kotu9.gpsgame.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +40,10 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 	private QuizType event;
 	private NavController navController;
 
+	private RecyclerView recyclerView;
+	private RecyclerView.Adapter mAdapter;
+	private RecyclerView.LayoutManager layoutManager;
+
 	public CreateEventQuiz() {
 	}
 
@@ -51,6 +59,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		question = new Question();
 		question.answers = new HashMap<>();
+		questions = new ArrayList<>();
 		event = new QuizType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
 		Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
 
@@ -62,7 +71,21 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_create_event_quiz, container, false);
 
 		setupViews(view);
+		setupRecyclerView(view);
 		return view;
+	}
+
+	private void setupRecyclerView(View view) {
+		recyclerView = view.findViewById(R.id.recyclerAnswers);
+
+
+		recyclerView.setHasFixedSize(true);
+
+		layoutManager = new LinearLayoutManager(getContext());
+		recyclerView.setLayoutManager(layoutManager);
+
+		mAdapter = new QuizRecyclerViewAdapter(getContext(), questions);
+		recyclerView.setAdapter(mAdapter);
 	}
 
 	private void setupViews(View view) {

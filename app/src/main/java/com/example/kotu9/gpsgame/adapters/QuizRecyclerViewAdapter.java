@@ -14,13 +14,13 @@ import java.util.List;
 
 public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerViewAdapter.ViewHolder> {
 
-	private List<Question> questionList;
+	private List<Question> questionsList;
 	private LayoutInflater mInflater;
 	private ItemClickListener mClickListener;
 
-	QuizRecyclerViewAdapter(Context context, List<Question> data) {
+	public QuizRecyclerViewAdapter(Context context, List<Question> data) {
 		this.mInflater = LayoutInflater.from(context);
-		this.questionList = data;
+		this.questionsList = data;
 	}
 
 	@Override
@@ -31,18 +31,19 @@ public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerVi
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
-
+//		String animal = mData.get(position);  <- pozycja pytania z listy
+//		holder.myTextView.setText(animal);
+//      do   textView przypisywac zawartosc Question
 	}
 
 	@Override
 	public int getItemCount() {
-		return questionList.size();
+		return questionsList.size();
 	}
 
 	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		TextView question, answer1, answer2, answer3, answer4;
-
 
 		ViewHolder(View itemView) {
 			super(itemView);
@@ -62,14 +63,14 @@ public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerVi
 
 
 	Question getItem(int id) {
-		return questionList.get(id);
+		return questionsList.get(id);
 	}
 
 
 	void setClickListener(ItemClickListener itemClickListener) {
 		this.mClickListener = itemClickListener;
 	}
-	
+
 	public interface ItemClickListener {
 		void onItemClick(View view, int position);
 	}
