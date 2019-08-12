@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_questions"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_question"
-                android:textAlignment="center"/>
+                android:textAlignment="center" />
 
             <EditText
                 android:id="@+id/editTextQuestion"
@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_answers"
-                android:textAlignment="center"/>
+                android:textAlignment="center" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,23 +67,38 @@
                     android:id="@+id/radioBtnAnswer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
-                    />
+                    android:layout_marginEnd="15dp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonAddAnswer"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/add_answer" />
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/buttonAddAnswer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/_18dp"
+                    android:text="@string/add_answer" />
+
+                <Button
+                    android:id="@+id/submitQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/submitQuestion" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/submitQuiz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/submitQuiz"/>
+                android:text="@string/submitQuiz" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="true"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
         </LinearLayout>
     </LinearLayout>

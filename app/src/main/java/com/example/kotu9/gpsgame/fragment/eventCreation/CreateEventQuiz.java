@@ -33,7 +33,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
     private static final int QUESTIONS_LIMIT = 5;
     private static final int ANSWER_LIMIT = 4;
 
-    private Button btnSubmitQuiz, btnAddQwestion;
+    private Button btnSubmitQuiz, btnSubmitQuestion, btnAddAnswer;
     private EditText editTextQuestion, editTextAnswer;
     private RadioButton radioAnswer;
     private Question question;
@@ -90,13 +90,15 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 
     private void setupViews(View view) {
         btnSubmitQuiz = view.findViewById(R.id.submitQuiz);
-        btnAddQwestion = view.findViewById(R.id.buttonAddAnswer);
+        btnSubmitQuestion = view.findViewById(R.id.submitQuestion);
+        btnAddAnswer = view.findViewById(R.id.buttonAddAnswer);
         editTextQuestion = view.findViewById(R.id.editTextQuestion);
         editTextAnswer = view.findViewById(R.id.editTextAnswer);
         radioAnswer = view.findViewById(R.id.radioBtnAnswer);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         btnSubmitQuiz.setOnClickListener(this);
-        btnAddQwestion.setOnClickListener(this);
+        btnSubmitQuestion.setOnClickListener(this);
+        btnAddAnswer.setOnClickListener(this);
     }
 
     @Override
@@ -108,17 +110,48 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
             case R.id.buttonAddAnswer:
                 addAnswerToMap();
                 break;
+            case R.id.submitQuestion:
+                submitQuestion();
+                break;
         }
     }
 
-    private void addAnswerToMap(){
-        question.answers.put(getAnswerFormEditText(),correctAnswerSet);
+    //TODO uwzględnić ze może być tylko 1 poprawna odpowiedz
+    //TODO zabezpieczyć przed dodawaniem takich samych odpowiedzi
+    private void addAnswerToMap() {
+        if (question.answers.size() < ANSWER_LIMIT)
+            question.answers.put(getAnswerFormEditText(), correctAnswerSet);
+        else
+            Toast.makeText(getContext(), "To much answers", Toast.LENGTH_SHORT).show();
+
+        clearAnswerField();
+        Toast.makeText(getContext(), question.answers.toString(), Toast.LENGTH_SHORT).show();
     }
 
-    private String getAnswerFormEditText(){
+    private String getAnswerFormEditText() {
         checkAnswer();
         checkAnswerRadio();
         return editTextAnswer.getText().toString().trim();
+    }
+
+    private void clearAnswerField() {
+        editTextAnswer.setText("");
+        radioAnswer.setChecked(false);
+    }
+
+    private void submitQuestion() {
+        if (question.answers.size() == ANSWER_LIMIT) {
+            question.question = editTextQuestion.getText().toString().trim();
+            clearQuestionField();
+        } else {
+            Toast.makeText(getContext(), "Not enough answers. Add " + (ANSWER_LIMIT - question.answers.size()) + "more", Toast.LENGTH_SHORT).show();
+        }
+        questions.add(question);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void clearQuestionField() {
+        editTextQuestion.setText("");
     }
 
     private void checkAnswer() {
@@ -140,13 +173,23 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
     }
 
     private void submitQuiz() {
-        setEventQuiz();
-        Bundle eventBundle = new Bundle();
-        eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
-        navController.navigate(R.id.createEventMarker, eventBundle);
+        if (checkSizeOfQuestions()) {
+            setEventQuiz();
+            Bundle eventBundle = new Bundle();
+            eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
+            navController.navigate(R.id.createEventMarker, eventBundle);
+        } else
+            Toast.makeText(getContext(), "Please add questions to quiz", Toast.LENGTH_SHORT).show();
+
     }
 
     private void setEventQuiz() {
         event.setQuestionsList(questions);
+    }
+
+    private boolean checkSizeOfQuestions() {
+        if (event.questionsList.size() > 0 && event.questionsList.size() <= QUESTIONS_LIMIT)
+            return true;
+        else return false;
     }
 }
