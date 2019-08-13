@@ -1,9 +1,12 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,12 @@ import androidx.navigation.Navigation;
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.QRcodeType;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.zxing.WriterException;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
+import androidmads.library.qrgenearator.QRGSaver;
 
 public class CreateEventQRcode extends Fragment implements View.OnClickListener {
     private static final String TAG = Activity.class.getSimpleName();
@@ -27,6 +36,10 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
     private ImageView mQRcodeView;
     private QRcodeType event;
     private NavController navController;
+    private Bitmap bitmap;
+    private FirebaseAuth mAuth;
+    private QRGEncoder qrgEncoder;
+    private String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/";
 
     public CreateEventQRcode() {
 
@@ -95,16 +108,38 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         }
     }
 
-    //TODO pobieranie na telefon pdf
-    private void downloadQR() {
+    private String getMessageFormEditText() {
+        checkMessage();
+        return editTextMessageQRcode.getText().toString().trim();
     }
 
-    //TODO mail pdf
+    private void downloadQR(){
+        try {
+            QRGSaver.save(savePath, event.name, bitmap, QRGContents.ImageType.IMAGE_JPEG);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TODO mail https://stackoverflow.com/questions/6078099/android-intent-for-sending-email-with-attachment
     private void sendEmailQR() {
     }
 
+    private String generateMessage() {
+        StringBuilder message = null;
+        message.append("Message from ").append(event.name).append(" : ").append(getMessageFormEditText());
+        return message.toString();
+    }
 
     private void generateQRcode() {
+
+        qrgEncoder = new QRGEncoder(generateMessage(), null, QRGContents.Type.TEXT, 300);
+        try {
+            bitmap = qrgEncoder.encodeAsBitmap();
+            mQRcodeView.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            Log.v(TAG, e.toString());
+        }
     }
 
     private void submitQRcode() {
@@ -114,8 +149,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         navController.navigate(R.id.createEventMarker, eventBundle);
     }
 
-    //TODO mail pdf zapisac arraybate sciezke ?
-    private void setQRcode() {
+    private void setQRcode(){
 
     }
 }
