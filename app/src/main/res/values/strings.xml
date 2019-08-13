@@ -98,6 +98,8 @@
     <string name="submitInfo">Submit</string>
     <string name="eventBundle">eventBundle</string>
     <string name="submitQuestion">Submit Question</string>
+    <string name="generate">Generate QRcode</string>
+    <string name="QRmessage">QR code message</string>
 
 
 </resources>
