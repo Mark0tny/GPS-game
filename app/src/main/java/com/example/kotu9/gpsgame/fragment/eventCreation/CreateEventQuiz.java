@@ -40,7 +40,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 	private List<Question> questions;
 	private QuizType event;
 	private NavController navController;
-	private int correctAnswer = 0;
+	private int correctAnswers = 0;
 
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter mAdapter;
@@ -138,27 +138,44 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 				if (question.answers.containsValue(true) && checkAnswerRadio()) {
 					Toast.makeText(getContext(), "Question already have correct answer", Toast.LENGTH_SHORT).show();
 				} else {
-					if (correctAnswer == ANSWER_LIMIT) {
-						Toast.makeText(getContext(), "Please add any correct answer", Toast.LENGTH_SHORT).show();
-					} else {
+					if (checkNextAnswer()) correctAnswers--;
+					if (correctAnswers != ANSWER_LIMIT - 1) {
 						question.answers.put(getAnswerFormEditText(), checkAnswerRadio());
 						calculateAnswers();
-						Toast.makeText(getContext(), String.valueOf(correctAnswer), Toast.LENGTH_SHORT).show();
 
+					} else {
+						Toast.makeText(getContext(), "Please add any correct answer", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
 		} else {
 			Toast.makeText(getContext(), "To much answers", Toast.LENGTH_SHORT).show();
 		}
+		addAnswerBtnHide();
 		clearAnswerField();
 		Toast.makeText(getContext(), question.answers.toString(), Toast.LENGTH_SHORT).show();
 
 	}
 
+	private boolean checkNextAnswer() {
+		checkAnswer();
+		return checkAnswerRadio();
+	}
+
+	private void addAnswerBtnHide() {
+		if (question.answers.size() == ANSWER_LIMIT)
+			btnAddAnswer.setEnabled(false);
+	}
+
+	private void addAnswerBtnShow() {
+		if (question.answers.size() != ANSWER_LIMIT)
+			btnAddAnswer.setEnabled(true);
+	}
+
+
 	private void calculateAnswers() {
 		if (question.answers.values().contains(false))
-			correctAnswer++;
+			correctAnswers++;
 	}
 
 	private String getAnswerFormEditText() {
@@ -170,9 +187,11 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 	private void clearAnswerField() {
 		editTextAnswer.setText("");
 		radioAnswer.setChecked(false);
+		radioAnswer.setSelected(false);
 	}
 
 	private void submitQuestion() {
+		checkAnswer();
 		if (question.answers.size() == ANSWER_LIMIT) {
 			question.question = editTextQuestion.getText().toString().trim();
 			clearQuestionField();
@@ -181,7 +200,10 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 		} else {
 			Toast.makeText(getContext(), "Not enough answers. Add " + (ANSWER_LIMIT - question.answers.size()) + " more", Toast.LENGTH_SHORT).show();
 		}
+
 		question = new Question();
+		correctAnswers = 0;
+		addAnswerBtnShow();
 	}
 
 	private void clearQuestionField() {
@@ -208,6 +230,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 
 
 	private void submitQuiz() {
+
 		if (checkSizeOfQuestions()) {
 			setEventQuiz();
 			Bundle eventBundle = new Bundle();
@@ -222,8 +245,9 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 	}
 
 	private boolean checkSizeOfQuestions() {
-		if (event.questionsList.size() > 0 && event.questionsList.size() <= QUESTIONS_LIMIT)
-			return true;
-		else return false;
+		if (event.questionsList != null) {
+			return event.questionsList.size() > 0 && event.questionsList.size() <= QUESTIONS_LIMIT;
+		}
+		return false;
 	}
 }

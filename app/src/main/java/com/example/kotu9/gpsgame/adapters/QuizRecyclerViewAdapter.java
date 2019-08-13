@@ -37,6 +37,7 @@ public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerVi
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         holder.question.setText(questionsList.get(position).getQuestion());
+
         for (Map.Entry<String, Boolean> entry : questionsList.get(position).getAnswers().entrySet()) {
             answers.get(position).setText(entry.getKey());
             answers.get(position).setTextColor(Color.RED);
