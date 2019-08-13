@@ -109,6 +109,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 				submitQuiz();
 				break;
 			case R.id.buttonAddAnswer:
+				checkAnswer();
 				addAnswerToMap();
 				break;
 			case R.id.submitQuestion:
@@ -140,9 +141,9 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 				} else {
 					if (checkNextAnswer()) correctAnswers--;
 					if (correctAnswers != ANSWER_LIMIT - 1) {
-						question.answers.put(getAnswerFormEditText(), checkAnswerRadio());
+						if (!TextUtils.isEmpty(editTextAnswer.getText().toString()))
+							question.answers.put(getAnswerFormEditText(), checkAnswerRadio());
 						calculateAnswers();
-
 					} else {
 						Toast.makeText(getContext(), "Please add any correct answer", Toast.LENGTH_SHORT).show();
 					}
@@ -191,7 +192,6 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 	}
 
 	private void submitQuestion() {
-		checkAnswer();
 		if (question.answers.size() == ANSWER_LIMIT) {
 			question.question = editTextQuestion.getText().toString().trim();
 			clearQuestionField();
@@ -237,7 +237,17 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 			eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
 			navController.navigate(R.id.createEventMarker, eventBundle);
 		} else
-			Toast.makeText(getContext(), "Please add questions to quiz", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "Please add " + countQuestionToAdd() + " more questions to quiz", Toast.LENGTH_SHORT).show();
+	}
+
+	private int countQuestionToAdd() {
+		if (event.questionsList != null) {
+			if (!event.questionsList.isEmpty())
+				return (QUESTIONS_LIMIT - event.questionsList.size());
+			else return QUESTIONS_LIMIT;
+		}
+		return QUESTIONS_LIMIT;
+
 	}
 
 	private void setEventQuiz() {
