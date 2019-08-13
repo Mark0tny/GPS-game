@@ -12,83 +12,88 @@ import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.Question;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerViewAdapter.ViewHolder> {
 
-    private List<Question> questionsList;
-    private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
-    private List<TextView> answers = new ArrayList<>();
+	private List<Question> questionsList;
+	private LayoutInflater mInflater;
+	private ItemClickListener mClickListener;
+	private List<TextView> answers = new ArrayList<>();
+	private Map<String, Boolean> answersMap = new HashMap<>();
 
-    public QuizRecyclerViewAdapter(Context context, List<Question> data) {
-        this.mInflater = LayoutInflater.from(context);
-        this.questionsList = data;
-    }
+	public QuizRecyclerViewAdapter(Context context, List<Question> data) {
+		this.mInflater = LayoutInflater.from(context);
+		this.questionsList = data;
+	}
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.quiz_rec_view, parent, false);
-        return new ViewHolder(view);
-    }
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		answers = new ArrayList<>();
+		View view = mInflater.inflate(R.layout.quiz_rec_view, parent, false);
+		return new ViewHolder(view);
+	}
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.question.setText(questionsList.get(position).getQuestion());
-        for (Map.Entry<String, Boolean> entry : questionsList.get(position).getAnswers().entrySet()) {
-            answers.get(position).setText(entry.getKey());
-            answers.get(position).setTextColor(Color.RED);
-            if (entry.getValue()) {
-                answers.get(position).setTextColor(Color.GREEN);
-            }
-        }
+		answersMap = questionsList.get(position).getAnswers();
+		holder.question.setText(questionsList.get(position).getQuestion());
+		int answersPosition = 0;
+		for (Map.Entry<String, Boolean> entry : answersMap.entrySet()) {
+			answers.get(answersPosition).setText(entry.getKey());
+			answers.get(answersPosition).setTextColor(Color.RED);
+			if (entry.getValue()) {
+				answers.get(answersPosition).setTextColor(Color.GREEN);
+			}
+			answersPosition++;
+		}
 
+	}
 
-    }
+	@Override
+	public int getItemCount() {
+		return questionsList.size();
+	}
 
-    @Override
-    public int getItemCount() {
-        return questionsList.size();
-    }
+	public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+		TextView question, answer1, answer2, answer3, answer4;
 
-        TextView question, answer1, answer2, answer3, answer4;
+		ViewHolder(View itemView) {
+			super(itemView);
+			question = itemView.findViewById(R.id.question);
+			answer1 = itemView.findViewById(R.id.answer1);
+			answer2 = itemView.findViewById(R.id.answer2);
+			answer3 = itemView.findViewById(R.id.answer3);
+			answer4 = itemView.findViewById(R.id.answer4);
+			answers.add(answer1);
+			answers.add(answer2);
+			answers.add(answer3);
+			answers.add(answer4);
+			itemView.setOnClickListener(this);
+		}
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            question = itemView.findViewById(R.id.question);
-            answer1 = itemView.findViewById(R.id.answer1);
-            answer2 = itemView.findViewById(R.id.answer2);
-            answer3 = itemView.findViewById(R.id.answer3);
-            answer4 = itemView.findViewById(R.id.answer4);
-            answers.add(answer1);
-            answers.add(answer2);
-            answers.add(answer3);
-            answers.add(answer4);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
-    }
-
-
-    Question getItem(int id) {
-        return questionsList.get(id);
-    }
+		@Override
+		public void onClick(View view) {
+			if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+		}
+	}
 
 
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
+	Question getItem(int id) {
+		return questionsList.get(id);
+	}
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
+
+	void setClickListener(ItemClickListener itemClickListener) {
+		this.mClickListener = itemClickListener;
+	}
+
+	public interface ItemClickListener {
+		void onItemClick(View view, int position);
+	}
 }
 
