@@ -1,9 +1,12 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,12 +27,16 @@ import com.example.kotu9.gpsgame.model.QRcodeType;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.WriterException;
 
+import java.io.File;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import androidmads.library.qrgenearator.QRGSaver;
 
 public class CreateEventQRcode extends Fragment implements View.OnClickListener {
     private static final String TAG = Activity.class.getSimpleName();
+    private static final int REQUEST_PERMISSIONS_CODE_WRITE_STORAGE = 112;
+
 
     private Button btnSubmitQRcode, btnGenerateQRcode, btnSendEmail, btnDownloadQRcode;
     private EditText editTextMessageQRcode;
@@ -39,7 +46,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
     private Bitmap bitmap;
     private FirebaseAuth mAuth;
     private QRGEncoder qrgEncoder;
-    private String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/";
+    private String savePath = getString(R.string.app_name) + "/QRCode/";
 
     public CreateEventQRcode() {
 
@@ -95,6 +102,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
                 sendEmailQR();
                 break;
             case R.id.downloadQR:
+                createMediaFile();
                 downloadQR();
                 break;
         }
@@ -113,12 +121,25 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         return editTextMessageQRcode.getText().toString().trim();
     }
 
-    private void downloadQR(){
-        try {
-            QRGSaver.save(savePath, event.name, bitmap, QRGContents.ImageType.IMAGE_JPEG);
-        } catch (WriterException e) {
-            e.printStackTrace();
+    private void downloadQR() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS_CODE_WRITE_STORAGE
+            );
+        } else {
+            boolean save;
+            String result;
+            try {
+                save = QRGSaver.save(createMediaFile(), getQRcodeName(), bitmap, QRGContents.ImageType.IMAGE_JPEG);
+                result = save ? "QRcode Saved" : "QRcode Not Saved";
+                Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
         }
+
+
     }
 
     //TODO mail https://stackoverflow.com/questions/6078099/android-intent-for-sending-email-with-attachment
@@ -126,19 +147,20 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
     }
 
     private String generateMessage() {
-        StringBuilder message = null;
+        StringBuilder message = new StringBuilder();
         message.append("Message from ").append(event.name).append(" : ").append(getMessageFormEditText());
         return message.toString();
     }
 
     private void generateQRcode() {
-
-        qrgEncoder = new QRGEncoder(generateMessage(), null, QRGContents.Type.TEXT, 300);
-        try {
-            bitmap = qrgEncoder.encodeAsBitmap();
-            mQRcodeView.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            Log.v(TAG, e.toString());
+        if (!editTextMessageQRcode.getText().toString().isEmpty()) {
+            qrgEncoder = new QRGEncoder(generateMessage(), null, QRGContents.Type.TEXT, 400);
+            try {
+                bitmap = qrgEncoder.encodeAsBitmap();
+                mQRcodeView.setImageBitmap(bitmap);
+            } catch (WriterException e) {
+                Log.v(TAG, e.toString());
+            }
         }
     }
 
@@ -149,7 +171,36 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         navController.navigate(R.id.createEventMarker, eventBundle);
     }
 
-    private void setQRcode(){
+    private void setQRcode() {
 
     }
+
+    private String createMediaFile() {
+        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + savePath;
+        File mediaStorageDir = new File(folderPath);
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return mediaStorageDir.getAbsolutePath();
+            }
+        }
+        return folderPath;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSIONS_CODE_WRITE_STORAGE) {
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                downloadQR();
+            }
+        }
+    }
+
+    private String getQRcodeName() {
+        String fileName;
+        fileName = "QR_" + event.name + "_" + event.hashCode();
+        return fileName;
+    }
+
 }
