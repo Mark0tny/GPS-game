@@ -15,8 +15,11 @@ import lombok.NonNull;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class PhotoCompareType extends Event implements Serializable {
+
 	public String photoURL;
-	public boolean status;
+	public String photoDirectory;
+	public Boolean status;
+
 
 	public PhotoCompareType(Event event) {
 		super(event.name, event.description, event.hintList, event.difficulty, event.eventType, event.active, event.distance, event.rating, event.time, event.userList);

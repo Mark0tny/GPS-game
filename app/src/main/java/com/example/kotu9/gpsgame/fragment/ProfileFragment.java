@@ -41,8 +41,6 @@ import lombok.NonNull;
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "ProfileFragment";
 
     private static final int CHOOSE_IMAGE = 101;
@@ -53,17 +51,12 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
 
-    private String mParam1;
-    private String mParam2;
-
     public ProfileFragment() {
     }
 
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,8 +65,6 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
