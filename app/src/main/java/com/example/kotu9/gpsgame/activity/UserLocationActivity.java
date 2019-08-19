@@ -133,6 +133,7 @@ public class UserLocationActivity extends ActivityManagePermission
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        setProfileInfoInNavHeader();
         return true;
     }
 

@@ -64,9 +64,12 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         return fragment;
     }
 
+    //TODO jak wraca zeby zostawal wygenerowany kod w imageView to samo w photo jeden task
+    // sprawdzac czy istnieje plik i wczytywć znowu ?
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         mAuth = FirebaseAuth.getInstance();
         savePath = "/" + getString(R.string.app_name) + "/QRCode/";
         event = new QRcodeType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));

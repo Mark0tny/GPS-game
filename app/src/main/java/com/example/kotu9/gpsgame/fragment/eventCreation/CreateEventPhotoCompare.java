@@ -66,6 +66,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         mAuth = FirebaseAuth.getInstance();
         savePath = "/" + getString(R.string.app_name) + "/PhotoCompare/";
         if (getArguments() != null) {
@@ -112,6 +113,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
     }
 
     private void submitPhoto() {
+        //TODO Sprawdzać czy image view nie jest puste bez tego nie submitować
         setPhoto();
         Bundle eventBundle = new Bundle();
         eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);

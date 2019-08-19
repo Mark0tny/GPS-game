@@ -50,6 +50,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		hintList = new Hint();
 		hintList.hints = new ArrayList<>();
 		event = ((Event) getArguments().get(String.valueOf(R.string.eventBundle)));

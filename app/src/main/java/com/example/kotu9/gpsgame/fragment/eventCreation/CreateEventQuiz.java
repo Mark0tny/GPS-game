@@ -59,6 +59,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		question = new Question();
 		question.answers = new HashMap<>();
 		questions = new ArrayList<>();

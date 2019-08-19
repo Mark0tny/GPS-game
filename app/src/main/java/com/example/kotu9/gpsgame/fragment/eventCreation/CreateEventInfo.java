@@ -51,6 +51,7 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         event = new Event();
     }
 
