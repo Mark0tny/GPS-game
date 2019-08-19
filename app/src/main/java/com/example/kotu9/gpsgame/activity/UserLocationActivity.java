@@ -15,11 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.fragment.ProfileFragment;
 import com.example.kotu9.gpsgame.fragment.SettingsFragment;
 import com.example.kotu9.gpsgame.fragment.UserLocationFragment;
 import com.example.kotu9.gpsgame.model.User;
-import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +34,7 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 
 
 public class UserLocationActivity extends ActivityManagePermission
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = UserLocationActivity.class.getSimpleName();
     private FirebaseAuth mAuth;
@@ -171,5 +171,4 @@ public class UserLocationActivity extends ActivityManagePermission
         }
 
     }
-
 }

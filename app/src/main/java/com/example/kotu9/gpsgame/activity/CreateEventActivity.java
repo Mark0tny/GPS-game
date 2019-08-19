@@ -9,8 +9,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventInfo;
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventInfo;
 
 public class CreateEventActivity extends AppCompatActivity implements CreateEventInfo.SpinnerListener {
 

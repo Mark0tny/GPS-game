@@ -8,6 +8,11 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="action_createEventMarker_to_createEventHints">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="createEventHints">
                     <value>
                       <LayoutPositions>
@@ -206,18 +211,6 @@
                               </value>
                             </entry>
                           </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="userLocationActivity">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-448" />
-                            <option name="y" value="35" />
-                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

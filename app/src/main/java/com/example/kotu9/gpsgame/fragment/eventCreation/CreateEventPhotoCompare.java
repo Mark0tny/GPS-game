@@ -1,18 +1,15 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +28,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
 
 public class CreateEventPhotoCompare extends Fragment implements View.OnClickListener {
-    private static final String TAG = Activity.class.getSimpleName();
-    private static final int CHOOSE_IMAGE = 101;
+    private static final int CHOOSE_IMAGE = 12;
+    private static final int TAKE_PHOTO = 13;
     private static final int MY_CAMERA_REQUEST_CODE = 111;
-    private static final int TAKE_PHOTO = 102;
+    private static final int REQUEST_PERMISSIONS_CODE_WRITE_STORAGE = 112;
+
 
     private Button btnSubmitPhoto;
     private ImageButton btnPhotoGallery, btnTakePhoto;
@@ -68,14 +68,17 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         savePath = "/" + getString(R.string.app_name) + "/PhotoCompare/";
-        event = new PhotoCompareType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
+        if (getArguments() != null) {
+            event = new PhotoCompareType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
+        } else {
+            Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_photo_compare, container, false);
-
         setupViews(view);
         return view;
     }
@@ -112,7 +115,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
         setPhoto();
         Bundle eventBundle = new Bundle();
         eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
-        navController.navigate(R.id.createEventMarker, eventBundle);
+        navController.navigate(R.id.createEventHints, eventBundle);
     }
 
     private void setPhoto() {
@@ -126,6 +129,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
         File mediaStorageDir = new File(folderPath);
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
+                Toast.makeText(getContext(), folderPath, Toast.LENGTH_SHORT).show();
                 return mediaStorageDir.getAbsolutePath();
             }
         }
@@ -143,6 +147,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Image"), CHOOSE_IMAGE);
+
     }
 
     public void takePhoto() {
@@ -152,14 +157,15 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
                     MY_CAMERA_REQUEST_CODE
             );
         }
-        if (Build.VERSION.SDK_INT >= 21 &&
-                ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS_CODE_WRITE_STORAGE
+            );
         } else {
-            uriPhoto = Uri.fromFile(new File(createMediaFile()));
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivityForResult(intent, TAKE_PHOTO);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, TAKE_PHOTO);
             }
         }
     }
@@ -170,25 +176,54 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
         if (requestCode == CHOOSE_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             uriPhoto = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriPhoto);
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriPhoto);
                 mPhotoView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (requestCode == TAKE_PHOTO && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            mPhotoView.setImageBitmap(photo);
-            Toast.makeText(getActivity(), uriPhoto.toString(),
-                    Toast.LENGTH_LONG).show();
+        if (requestCode == TAKE_PHOTO && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                bitmap = (Bitmap) extras.get("data");
+                createMediaFile();
+                saveBitmap(bitmap);
+                mPhotoView.setImageBitmap(bitmap);
+            }
 
         }
+
     }
 
+    private File saveBitmap(Bitmap bmp) {
+
+        OutputStream outStream = null;
+        File file = new File(createMediaFile(), getPhotoName() + ".jpeg");
+        if (file.exists()) {
+            file.delete();
+            file = new File(createMediaFile(), getPhotoName() + ".jpeg");
+        }
+        try {
+            outStream = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return file;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            }
+        }
+        if (requestCode == REQUEST_PERMISSIONS_CODE_WRITE_STORAGE) {
             if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 takePhoto();

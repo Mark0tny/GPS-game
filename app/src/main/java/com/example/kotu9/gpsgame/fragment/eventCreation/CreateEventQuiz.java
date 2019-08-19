@@ -235,7 +235,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 			setEventQuiz();
 			Bundle eventBundle = new Bundle();
 			eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
-			navController.navigate(R.id.createEventMarker, eventBundle);
+			navController.navigate(R.id.createEventHints, eventBundle);
 		} else
 			Toast.makeText(getContext(), "Please add " + countQuestionToAdd() + " more questions to quiz", Toast.LENGTH_SHORT).show();
 	}

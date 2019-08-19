@@ -2,7 +2,6 @@ package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -187,7 +186,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         setQRcode();
         Bundle eventBundle = new Bundle();
         eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
-        navController.navigate(R.id.createEventMarker, eventBundle);
+        navController.navigate(R.id.createEventHints, eventBundle);
     }
 
     private void setQRcode() {

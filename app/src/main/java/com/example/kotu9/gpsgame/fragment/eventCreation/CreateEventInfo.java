@@ -17,10 +17,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.CreateEventActivity;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.EventType;
-import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.utils.EventDifficulty;
 import com.example.kotu9.gpsgame.utils.EventTypes;
 

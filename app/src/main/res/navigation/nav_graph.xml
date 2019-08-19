@@ -148,12 +148,6 @@
             />
     </fragment>
 
-    <activity
-        android:id="@+id/userLocationActivity"
-        android:name="com.example.kotu9.gpsgame.activity.CreateEventActivity"
-        android:label="activity_user_location"
-        tools:layout="@layout/activity_create_event"/>
-
     <action
         android:id="@+id/action_createEventMarker_to_createEventHints"
         app:destination="@id/createEventHints"
