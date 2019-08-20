@@ -64,6 +64,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 		question.answers = new HashMap<>();
 		questions = new ArrayList<>();
 		event = new QuizType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));
+		event.questionsList =  new ArrayList<>();
 		Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
 
 	}
@@ -231,9 +232,8 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 
 
 	private void submitQuiz() {
-
-		if (checkSizeOfQuestions()) {
 			setEventQuiz();
+		if (checkSizeOfQuestions()) {
 			Bundle eventBundle = new Bundle();
 			eventBundle.putSerializable(String.valueOf(R.string.eventBundle), event);
 			navController.navigate(R.id.createEventHints, eventBundle);
@@ -243,9 +243,9 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 
 	private int countQuestionToAdd() {
 		if (event.questionsList != null) {
-			if (!event.questionsList.isEmpty())
-				return (QUESTIONS_LIMIT - event.questionsList.size());
-			else return QUESTIONS_LIMIT;
+			if (event.questionsList.size() == 0)
+				return QUESTIONS_LIMIT;
+			else return (QUESTIONS_LIMIT - event.questionsList.size());
 		}
 		return QUESTIONS_LIMIT;
 
@@ -257,7 +257,7 @@ public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 
 	private boolean checkSizeOfQuestions() {
 		if (event.questionsList != null) {
-			return event.questionsList.size() > 0 && event.questionsList.size() <= QUESTIONS_LIMIT;
+			return event.questionsList.size() == QUESTIONS_LIMIT;
 		}
 		return false;
 	}

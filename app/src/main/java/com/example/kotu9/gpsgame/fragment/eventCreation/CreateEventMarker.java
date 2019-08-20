@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.activity.UserLocationActivity;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.LocationType;
 import com.example.kotu9.gpsgame.model.User;
@@ -54,7 +56,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.GeoPoint;
 
 
 public class CreateEventMarker extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
@@ -100,7 +101,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             event = (Event) getArguments().get(String.valueOf(R.string.eventBundle));
             if (event != null) {
                 setGeofanceRadius(event);
-
             }
         }
     }
@@ -173,7 +173,9 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 startGeofence();
             }
         });
+
     }
+
 
     public void setupMapView() {
         UiSettings settings = mMap.getUiSettings();
@@ -190,14 +192,20 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.submitLocation:
+            case R.id.submitMarker:
                 checkLatLangFields();
                 submitMarker();
+                //moveToUserLocation();
                 break;
             case R.id.imageButtonMarker:
                 changeMarkerPosition(getPositionEditText());
                 break;
         }
+    }
+
+    private void moveToUserLocation() {
+        Intent intent = new Intent(getContext(), UserLocationActivity.class);
+        startActivity(intent);
     }
 
     private LatLng getPositionEditText() {
@@ -289,7 +297,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 .build();
         mDb.setFirestoreSettings(settings);
         DocumentReference newUserRef = mDb
-                .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString());
+                .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document();
         newUserRef.set(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@lombok.NonNull Task<Void> task) {
@@ -304,29 +312,40 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
 
     }
 
-    private boolean checkGeofaceLocation() {
-        //TODO dodać event do firebase
-        return true;
+    private boolean checkFindPleaceMarkerLocation() {
+        if (checkEventType(event) == EventTypes.Location) {
+            return calculateDistance(addLocationMarker(), myEventLoc);
+        } else return true;
+    }
+
+    private boolean calculateDistance(Marker mLocation, Marker mEvent) {
+        float[] distance = new float[10];
+        Location.distanceBetween(mLocation.getPosition().latitude, mLocation.getPosition().longitude,
+                mEvent.getPosition().latitude, mEvent.getPosition().longitude, distance);
+        if (distance[0] > radius) {
+            return false;
+        } else return true;
     }
 
     private void submitMarker() {
-        if (checkGeofaceLocation()) {
+        if (checkFindPleaceMarkerLocation()) {
             setEventNullValues();
             addEventFirebase();
         } else {
-            Toast.makeText(getContext(), "Pleace to find must be inside radius", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }
     }
 
 
-    private void addLocationMarker() {
+    private Marker addLocationMarker() {
         if (checkEventType(event) == EventTypes.Location) {
             LocationType locationType = (LocationType) event;
-            mMap.addMarker(new MarkerOptions()
+            Marker pleaceToFind = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(locationType.getLocation().getLatitude(), locationType.getLocation().getLongitude()))
                     .title("Pleace to find"));
+            return pleaceToFind;
         }
-
+        return null;
     }
 
     private float setGeofanceRadius(Event event) {
@@ -461,4 +480,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }

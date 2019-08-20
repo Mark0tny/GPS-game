@@ -84,7 +84,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 
 
 	private void addHintToList() {
-		if (!TextUtils.isEmpty(getHintFromEditText()) && getHintFromEditText().length() >= 3)
+		if (!TextUtils.isEmpty(getHintFromEditText()) && getHintFromEditText().length() > 3)
 			hintList.hints.add(getHintFromEditText());
 		adapter.notifyDataSetChanged();
 		editTextHints.setText("");

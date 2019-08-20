@@ -16,6 +16,7 @@ import lombok.NonNull;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class Event implements Serializable {
+
     public String name;
     public String description;
     public Hint hintList;

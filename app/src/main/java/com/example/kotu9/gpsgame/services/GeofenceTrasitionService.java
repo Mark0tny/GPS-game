@@ -8,7 +8,6 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -36,23 +35,23 @@ public class GeofenceTrasitionService extends IntentService {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         // Handling errors
-        if ( geofencingEvent.hasError() ) {
-            String errorMsg = getErrorString(geofencingEvent.getErrorCode() );
-            Log.e( TAG, errorMsg );
+        if (geofencingEvent.hasError()) {
+            String errorMsg = getErrorString(geofencingEvent.getErrorCode());
+            Log.e(TAG, errorMsg);
             return;
         }
 
         // Retrieve GeofenceTrasition
         int geoFenceTransition = geofencingEvent.getGeofenceTransition();
         // Check if the transition type
-        if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ) {
+        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
+                geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             // Get the geofence that were triggered
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
             // Create a detail message with Geofences received
-            String geofenceTransitionDetails = getGeofenceTrasitionDetails(geoFenceTransition, triggeringGeofences );
+            String geofenceTransitionDetails = getGeofenceTrasitionDetails(geoFenceTransition, triggeringGeofences);
             // Send notification details as a String
-            sendNotification( geofenceTransitionDetails );
+            sendNotification(geofenceTransitionDetails);
         }
     }
 
@@ -60,22 +59,21 @@ public class GeofenceTrasitionService extends IntentService {
     private String getGeofenceTrasitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
         // get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
-        for ( Geofence geofence : triggeringGeofences ) {
-            triggeringGeofencesList.add( geofence.getRequestId() );
+        for (Geofence geofence : triggeringGeofences) {
+            triggeringGeofencesList.add(geofence.getRequestId());
         }
 
         String status = null;
-        if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
+        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
             status = "Entering ";
-        else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
+        else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
             status = "Exiting ";
-        return status + TextUtils.join( ", ", triggeringGeofencesList);
+        return status + TextUtils.join(", ", triggeringGeofencesList);
     }
 
     // Send a notification
-    private void sendNotification( String msg ) {
-        Log.i(TAG, "sendNotification: " + msg );
-
+    private void sendNotification(String msg) {
+        Log.i(TAG, "sendNotification: " + msg);
 
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -84,7 +82,7 @@ public class GeofenceTrasitionService extends IntentService {
 
         // Creating and sending Notification
         NotificationManager notificatioMng =
-                (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificatioMng.notify(
                 GEOFENCE_NOTIFICATION_ID,
                 createNotification(msg, notificationPendingIntent));
