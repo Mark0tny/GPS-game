@@ -24,6 +24,7 @@ public class Event implements Serializable {
     public boolean active;
     public double distance;
     public double rating;
+    public float geofanceRadius;
     public Long time;
     public List<User> userList;
 }

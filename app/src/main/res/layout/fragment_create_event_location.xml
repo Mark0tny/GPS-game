@@ -52,6 +52,8 @@
                                 android:id="@+id/eventLocLatitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
                                 android:textColorHint="@color/colorAccent"/>
@@ -71,6 +73,8 @@
                                 android:id="@+id/eventLocLongitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
                                 android:textColorHint="@color/colorAccent"/>

@@ -20,7 +20,7 @@ public class LocationType extends Event implements Serializable {
     public GeoPoint location;
 
     public LocationType(Event event) {
-        super(event.name, event.description, event.hintList, event.difficulty, event.eventType, event.active, event.distance, event.rating, event.time, event.userList);
+        super(event.name, event.description, event.hintList, event.difficulty, event.eventType, event.active, event.distance, event.rating,event.geofanceRadius, event.time, event.userList);
 
     }
 }

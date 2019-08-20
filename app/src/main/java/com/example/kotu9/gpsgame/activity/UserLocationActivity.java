@@ -1,5 +1,6 @@
 package com.example.kotu9.gpsgame.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +43,8 @@ public class UserLocationActivity extends ActivityManagePermission
     private View header;
     private TextView username, email;
     private CircleImageView circleImageView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
