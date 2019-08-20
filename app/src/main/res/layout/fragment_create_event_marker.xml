@@ -40,6 +40,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:orientation="vertical"
                             >
 
@@ -52,8 +54,6 @@
                                 android:id="@+id/eventLocLatitudeMarker"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:focusable="true"
-                                android:focusableInTouchMode="true"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
                                 android:textColorHint="@color/colorAccent" />
@@ -62,6 +62,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:orientation="vertical">
 
                             <TextView
@@ -73,8 +75,6 @@
                                 android:id="@+id/eventLocLongitudeMarker"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:focusable="true"
-                                android:focusableInTouchMode="true"
                                 android:inputType="numberDecimal"
                                 android:paddingBottom="15dp"
                                 android:textColorHint="@color/colorAccent" />

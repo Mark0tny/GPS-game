@@ -15,6 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:orientation="vertical">
 
 
@@ -23,8 +25,7 @@
             style="@style/Theme.AppCompat.Light.DarkActionBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+
             android:fontFamily="sans-serif"
             android:hint="Event name"
             android:paddingBottom="15dp"/>
@@ -35,8 +36,7 @@
             style="@style/Widget.AppCompat.AutoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+
             android:fontFamily="sans-serif"
             android:hint="Event description"
             android:lines="4"

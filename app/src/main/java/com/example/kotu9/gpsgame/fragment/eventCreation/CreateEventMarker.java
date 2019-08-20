@@ -2,14 +2,15 @@ package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -22,24 +23,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.LocationType;
+import com.example.kotu9.gpsgame.model.PhotoCompareType;
+import com.example.kotu9.gpsgame.model.QRcodeType;
 import com.example.kotu9.gpsgame.model.User;
-import com.example.kotu9.gpsgame.services.GeofenceTrasitionService;
 import com.example.kotu9.gpsgame.utils.EventTypes;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,35 +43,34 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+
+import lombok.NonNull;
 
 
-public class CreateEventMarker extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+public class CreateEventMarker extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
-    private static final long GEO_DURATION = 60 * 60 * 1000;
-    private final int GEOFENCE_REQ_CODE = 0;
     private static final String TAG = Activity.class.getSimpleName();
     private Button btnSubmit;
     private ImageButton addLocation;
     private EditText latitude, longitude;
     private GoogleMap mMap;
     private MapView mapView;
-
     public Event event;
     private FirebaseFirestore mDb;
     public static User user;
-    private FirebaseAuth mAuth;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     private Marker myEventLoc;
-    private NavController navController;
-    private GoogleApiClient googleApiClient;
-    private PendingIntent geoFencePendingIntent;
     private Circle geoFenceLimits;
     private float radius;
 
@@ -96,7 +88,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        createGoogleApi();
         if (getArguments() != null) {
             event = (Event) getArguments().get(String.valueOf(R.string.eventBundle));
             if (event != null) {
@@ -106,25 +97,9 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        googleApiClient.connect();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        googleApiClient.disconnect();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_marker, container, false);
-
-        Toast.makeText(getContext(), event.toString(), Toast.LENGTH_LONG).show();
-
-        mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         user = new User();
         setupView(view, savedInstanceState);
@@ -136,12 +111,10 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         addLocation = view.findViewById(R.id.imageButtonMarker);
         latitude = view.findViewById(R.id.eventLocLatitudeMarker);
         longitude = view.findViewById(R.id.eventLocLongitudeMarker);
-        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         mapView = view.findViewById(R.id.markerMap);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         btnSubmit.setOnClickListener(this);
         addLocation.setOnClickListener(this);
     }
@@ -154,6 +127,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         }
         mMap.setMyLocationEnabled(true);
         setupMapView();
+        setCameraView();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -170,12 +144,23 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 }
                 latitude.setText(String.valueOf(latLng.latitude));
                 longitude.setText(String.valueOf(latLng.longitude));
-                startGeofence();
+                drawGeofence();
             }
         });
-
     }
 
+
+    private void setCameraView() {
+        LocationManager mng = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = mng.getLastKnownLocation(mng.getBestProvider(new Criteria(), false));
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15);
+        mMap.animateCamera(cameraUpdate);
+    }
 
     public void setupMapView() {
         UiSettings settings = mMap.getUiSettings();
@@ -195,7 +180,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             case R.id.submitMarker:
                 checkLatLangFields();
                 submitMarker();
-                //moveToUserLocation();
                 break;
             case R.id.imageButtonMarker:
                 changeMarkerPosition(getPositionEditText());
@@ -203,7 +187,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         }
     }
 
-    private void moveToUserLocation() {
+    private void moveToUserLocationActivity() {
         Intent intent = new Intent(getContext(), UserLocationActivity.class);
         startActivity(intent);
     }
@@ -226,12 +210,11 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 myEventLoc = mMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title("Event position"));
-
             } else {
                 myEventLoc.setPosition(latLng);
             }
         }
-        startGeofence();
+        drawGeofence();
     }
 
 
@@ -291,13 +274,12 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     }
 
     private void addEventFirebase() {
-
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setSslEnabled(true)
                 .build();
         mDb.setFirestoreSettings(settings);
         DocumentReference newUserRef = mDb
-                .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document();
+                .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document(event.name + event.hashCode());
         newUserRef.set(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@lombok.NonNull Task<Void> task) {
@@ -308,9 +290,79 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 }
             }
         });
-
-
     }
+
+    private void addPictureFirebase() {
+        Uri imageUri = null;
+
+        if (checkEventType(event) == EventTypes.PhotoCompare) {
+            PhotoCompareType photoCompareType = (PhotoCompareType) event;
+            imageUri = Uri.fromFile(new File(photoCompareType.imageDirectoryPhone + event.name + event.hashCode() + ".jpg"));
+            if (imageUri != null) {
+                uploadImageToFirebaseStorage(imageUri, EventTypes.PhotoCompare);
+            }
+        }
+        if (checkEventType(event) == EventTypes.QRcode) {
+            QRcodeType mQRcodeType = (QRcodeType) event;
+            imageUri = Uri.fromFile(new File(mQRcodeType.imageDirectoryPhone + mQRcodeType.fileName + ".png"));
+            if (imageUri != null) {
+                uploadImageToFirebaseStorage(imageUri, EventTypes.QRcode);
+            }
+        }
+    }
+
+    private void uploadImageToFirebaseStorage(Uri imageUri, EventTypes eventType) {
+        final StorageReference ImageURI =
+                FirebaseStorage.getInstance().getReference();
+        final StorageReference referenceChild = ImageURI.child(eventType.toString() + "/" + event.name + event.hashCode());
+        if (imageUri != null) {
+            UploadTask uploadTask = referenceChild.putFile(imageUri);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return referenceChild.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                         @Override
+                                         public void onComplete(@NonNull Task<Uri> task) {
+                                             if (task.isSuccessful()) {
+                                                 Uri taskResult = task.getResult();
+                                                 DocumentReference newUserRef = mDb
+                                                         .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document(event.name + event.hashCode());
+                                                 newUserRef.update(
+                                                         "imageURLfirebase", taskResult.toString()
+                                                 ).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                     @Override
+                                                     public void onComplete(@lombok.NonNull Task<Void> task) {
+                                                         if (task.isSuccessful()) {
+                                                             Toast.makeText(getActivity(), "Image Successful uploaded", Toast.LENGTH_SHORT).show();
+                                                             moveToUserLocationActivity();
+                                                         }
+                                                     }
+                                                 }).addOnFailureListener(new OnFailureListener() {
+                                                     @Override
+                                                     public void onFailure(@android.support.annotation.NonNull Exception e) {
+                                                         Toast.makeText(getActivity(), "Image save Failure", Toast.LENGTH_SHORT).show();
+                                                         Log.i("Image upload: ", e.getMessage());
+                                                     }
+                                                 });
+
+                                             }
+                                         }
+                                     }
+            ).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@android.support.annotation.NonNull Exception e) {
+                    Toast.makeText(getActivity(), "Image save Failure", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
+    }
+
 
     private boolean checkFindPleaceMarkerLocation() {
         if (checkEventType(event) == EventTypes.Location) {
@@ -331,6 +383,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         if (checkFindPleaceMarkerLocation()) {
             setEventNullValues();
             addEventFirebase();
+            addPictureFirebase();
         } else {
             Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }
@@ -341,7 +394,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         if (checkEventType(event) == EventTypes.Location) {
             LocationType locationType = (LocationType) event;
             Marker pleaceToFind = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(locationType.getLocation().getLatitude(), locationType.getLocation().getLongitude()))
+                    .position(new LatLng(locationType.getPointLocation().getLatitude(), locationType.getPointLocation().getLongitude()))
                     .title("Pleace to find"));
             return pleaceToFind;
         }
@@ -362,18 +415,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         }
     }
 
-
-    private void createGoogleApi() {
-        Log.d(TAG, "createGoogleApi()");
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(getContext())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-    }
-
     private void markerForGeofence(LatLng latLng) {
         Log.i(TAG, "markerForGeofence(" + latLng + ")");
         String title = latLng.latitude + ", " + latLng.longitude;
@@ -386,64 +427,13 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 myEventLoc.remove();
             }
             myEventLoc = mMap.addMarker(markerOptions);
-            setMarkerIcon(myEventLoc);
-        }
-    }
-
-    private Geofence createGeofence(LatLng latLng, float radius) {
-        Log.d(TAG, "createGeofence");
-        return new Geofence.Builder()
-                .setRequestId(event.name)
-                .setCircularRegion(latLng.latitude, latLng.longitude, radius)
-                .setExpirationDuration(GEO_DURATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                        | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build();
-    }
-
-    private GeofencingRequest createGeofenceRequest(Geofence geofence) {
-        Log.d(TAG, "createGeofenceRequest");
-        return new GeofencingRequest.Builder()
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                .addGeofence(geofence)
-                .build();
-    }
-
-    private PendingIntent createGeofencePendingIntent() {
-        Log.d(TAG, "createGeofencePendingIntent");
-        if (geoFencePendingIntent != null)
-            return geoFencePendingIntent;
-
-        Intent intent = new Intent(getActivity(), GeofenceTrasitionService.class);
-        return PendingIntent.getService(
-                getContext(), GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    private void addGeofence(GeofencingRequest request) {
-        Log.d(TAG, "addGeofence");
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        LocationServices.GeofencingApi.addGeofences(
-                googleApiClient,
-                request,
-                createGeofencePendingIntent()
-        ).setResultCallback(this);
-    }
-
-    @Override
-    public void onResult(@NonNull Status status) {
-        Log.i(TAG, "onResult: " + status);
-        if (status.isSuccess()) {
             drawGeofence();
-        } else {
-            // inform about fail
+            setMarkerIcon(myEventLoc);
         }
     }
 
     private void drawGeofence() {
         Log.d(TAG, "drawGeofence()");
-
         if (geoFenceLimits != null)
             geoFenceLimits.remove();
 
@@ -454,32 +444,5 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 .radius(radius);
         geoFenceLimits = mMap.addCircle(circleOptions);
     }
-
-    private void startGeofence() {
-        Log.i(TAG, "startGeofence()");
-        if (myEventLoc != null) {
-            Geofence geofence = createGeofence(myEventLoc.getPosition(), radius);
-            GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
-            addGeofence(geofenceRequest);
-        } else {
-            Log.e(TAG, "Geofence marker is null");
-        }
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
 
 }

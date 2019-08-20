@@ -121,8 +121,8 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
     }
 
     private void setPhoto() {
-        event.photoDirectory = createMediaFile();
-        event.photoURL = null;
+        event.imageDirectoryPhone = createMediaFile();
+        event.imageURLfirebase = null;
         event.status = false;
     }
 
