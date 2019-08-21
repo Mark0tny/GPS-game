@@ -80,6 +80,7 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
             }
         });
         return view;
+
     }
 
     private void updateDifficulty(int progress) {
@@ -189,6 +190,12 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
         event.setDescription(eventDescription.getText().toString().trim());
         int i = 0;
 
+        if (seekBarDiff.getProgress() == 0) event.setDifficulty(EventDifficulty.Easy);
+        if (spinnerPosition == 0) {
+            ((TextView) spinnerEvent.getSelectedView()).setError("Please select event type");
+            i++;
+            return;
+        }
         if (TextUtils.isEmpty(event.getName())) {
             eventName.setError("Please enter event name");
             eventName.requestFocus();

@@ -77,9 +77,6 @@ public class LocationService extends Service {
     }
 
     private void getLocation() {
-
-        // ---------------------------------- LocationRequest ------------------------------------
-        // Create the location request to start receiving updates
         LocationRequest mLocationRequestHighAccuracy = new LocationRequest();
         mLocationRequestHighAccuracy.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequestHighAccuracy.setInterval(UPDATE_INTERVAL);
@@ -106,7 +103,7 @@ public class LocationService extends Service {
                         }
                     }
                 },
-                Looper.myLooper()); // Looper.myLooper tells this to repeat forever until thread is destroyed
+                Looper.myLooper());
     }
 
     private void saveUserLocation(final User user){

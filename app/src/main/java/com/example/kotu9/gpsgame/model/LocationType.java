@@ -13,14 +13,20 @@ import lombok.NonNull;
 
 @EqualsAndHashCode(callSuper = false)
 @NonNull
-@Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class LocationType extends Event implements Serializable {
+    public GeoPoint getPointLocation() {
+        return pointLocation;
+    }
+
+    public void setPointLocation(GeoPoint pointLocation) {
+        this.pointLocation = pointLocation;
+    }
+
     public GeoPoint pointLocation;
 
     public LocationType(Event event) {
-        super(event.name, event.description, event.hintList, event.difficulty, event.eventType, event.active, event.distance, event.rating,event.geofanceRadius, event.time, event.userList);
-
+        super(event.id,event.name, event.description, event.hintList, event.difficulty, event.eventType, event.active, event.distance, event.rating,event.geofanceRadius, event.time, event.userList);
     }
 }

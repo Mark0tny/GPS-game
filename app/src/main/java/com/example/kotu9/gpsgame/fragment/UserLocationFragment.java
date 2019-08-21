@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -78,6 +79,11 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private ClusterManagerRenderer mClusterManagerRenderer;
     private ArrayList<ClusterMarker> mClusterMarkers;
 
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable;
+    private static final int LOCATION_UPDATE_INTERVAL = 10000;
+
+
     public UserLocationFragment() {
     }
 
@@ -121,6 +127,23 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 getLocationPermission();
             }
         }
+        startDistanceRunnable();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        stopDistanceUpdates();
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -421,6 +444,57 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 mClusterMarkers = new ArrayList<>();
             }
         }
+    }
+
+    private void startDistanceRunnable() {
+        Log.d(TAG, "startUserLocationsRunnable: starting runnable for retrieving updated locations.");
+        mHandler.postDelayed(mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                calulateDistanceMarkers();
+                mHandler.postDelayed(mRunnable, LOCATION_UPDATE_INTERVAL);
+            }
+        }, LOCATION_UPDATE_INTERVAL);
+    }
+
+    private void stopDistanceUpdates() {
+        mHandler.removeCallbacks(mRunnable);
+    }
+
+    private double calculateDistance(User user, ClusterMarker mEvent) {
+        float[] distance = new float[10];
+        Location.distanceBetween(user.getLocation().getLatitude(), user.getLocation().getLongitude(),
+                mEvent.getPosition().latitude, mEvent.getPosition().longitude, distance);
+        return distance[0];
+    }
+
+    private void calulateDistanceMarkers() {
+        try {
+            for (final ClusterMarker clusterMarker : mClusterMarkers) {
+
+                clusterMarker.getEvent().distance = calculateDistance(user, clusterMarker);
+
+                DocumentReference distanceRef = FirebaseFirestore.getInstance()
+                        .collection(getString(R.string.collection_markers))
+                        .document(clusterMarker.getEvent().id);
+
+                distanceRef.update("distance",clusterMarker.getEvent().distance).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                        Log.d(TAG, clusterMarker.getEvent().name + " distance: " + clusterMarker.getEvent().distance);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+                        Log.d(TAG, e.getMessage());
+
+                    }
+                });
+            }
+        } catch (IllegalStateException e) {
+            Log.e(TAG, "Fragment was destroyed during Firestore query. Ending query." + e.getMessage());
+        }
+
     }
 
 

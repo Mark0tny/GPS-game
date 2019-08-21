@@ -1,16 +1,19 @@
 package com.example.kotu9.gpsgame.utils;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public enum EventDifficulty {
-	Easy(Color.GREEN),Medium(Color.YELLOW),Hard(Color.RED);
+public enum EventDifficulty  {
+    Easy(Color.GREEN), Medium(Color.YELLOW), Hard(Color.RED);
 
-	private int colorId;
+    private int colorId;
 
-	public int getColor() {
-		return this.colorId;
-	}
-	EventDifficulty(int color) {
-		this.colorId= color;
-	}
+    public int getColor() {
+        return this.colorId;
+    }
+
+    EventDifficulty(int color) {
+        this.colorId = color;
+    }
 }
