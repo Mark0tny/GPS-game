@@ -50,7 +50,7 @@ public class UserLocationActivity extends ActivityManagePermission
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_location);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbarMap);
         setSupportActionBar(toolbar);
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
@@ -86,24 +86,7 @@ public class UserLocationActivity extends ActivityManagePermission
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.user_location, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_mapView) {
-            return true;
-        }
-        if (id == R.id.action_listView) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

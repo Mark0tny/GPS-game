@@ -22,9 +22,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.kotu9.gpsgame.R;
@@ -89,7 +91,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private RecyclerView mMarkerListRecyclerView;
     private MarkerRecyclerViewAdapter markerRecyclerViewAdapter;
-    private RelativeLayout mMapContainer;
+    private View fragmentMap;
 
 
     public UserLocationFragment() {
@@ -112,7 +114,8 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
+        fragmentMap = rootView.findViewById(R.id.map);
+        setHasOptionsMenu(true);
         mMarkerListRecyclerView = rootView.findViewById(R.id.markerRecyclerview);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mAuth = FirebaseAuth.getInstance();
@@ -121,11 +124,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         resetMap();
         getMapMarkersListDB();
 
-        View fragmentMap = rootView.findViewById(R.id.map);
-        fragmentMap.setVisibility(View.INVISIBLE);
-
-        View fragmentMap2 = rootView.findViewById(R.id.markerRecyclerview);
-        fragmentMap2.setVisibility(View.VISIBLE);
 
         return rootView;
     }
@@ -144,11 +142,35 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         startDistanceRunnable();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.user_location, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_mapView) {
+            mMarkerListRecyclerView.setVisibility(View.GONE);
+            fragmentMap.setVisibility(View.VISIBLE);
+            return true;
+        }
+        if (id == R.id.action_listView) {
+            fragmentMap.setVisibility(View.GONE);
+            mMarkerListRecyclerView.setVisibility(View.VISIBLE);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void initMarkerListRecyclerView() {
         markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers);
         mMarkerListRecyclerView.setAdapter(markerRecyclerViewAdapter);
         mMarkerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMarkerListRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -333,7 +355,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         }
     }
 
-
     private void setupMapView() {
         UiSettings settings = mMap.getUiSettings();
         settings.setAllGesturesEnabled(true);
@@ -376,7 +397,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             }
         }
     }
-
 
     private boolean isLocationServiceRunning() {
         try {
