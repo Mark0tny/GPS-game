@@ -54,11 +54,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import lombok.NonNull;
 
@@ -99,6 +101,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             event = (Event) getArguments().get(String.valueOf(R.string.eventBundle));
             if (event != null) {
                 setGeofanceRadius(event);
+
             }
         }
     }
@@ -111,6 +114,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         eventCreator = new User();
+        eventCreator.createdEvents = new ArrayList<>();
         setupView(view, savedInstanceState);
         loadUserInformation();
         return view;
@@ -269,6 +273,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         event.setActive(true);
         event.geofanceRadius = radius;
         event.eventType.points += calculatePointByDifficulty();
+        eventCreator.createdEvents = new ArrayList<>();
         eventCreator.createdEvents.add(event);
     }
 
@@ -291,7 +296,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 .build();
         mDb.setFirestoreSettings(settings);
         DocumentReference newUserRef = mDb
-                .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document(event.name + event.hashCode());
+                .collection(getString(R.string.collection_events)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document(event.name + event.hashCode());
         newUserRef.set(event).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@lombok.NonNull Task<Void> task) {
@@ -343,7 +348,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                                              if (task.isSuccessful()) {
                                                  Uri taskResult = task.getResult();
                                                  DocumentReference newUserRef = mDb
-                                                         .collection(getString(R.string.collection_event)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document(event.name + event.hashCode());
+                                                         .collection(getString(R.string.collection_events)).document(event.eventType.eventType.toString()).collection(event.name + event.hashCode()).document(event.name + event.hashCode());
                                                  newUserRef.update(
                                                          "imageURLfirebase", taskResult.toString()
                                                  ).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -375,9 +380,11 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     }
 
     private void setEventMarker() {
-        eventMarker.setPosition(myEventLoc.getPosition());
+        //eventMarker.setPosition(myEventLoc.getPosition());
+        eventMarker.setPosition(null);
+        eventMarker.setPosition2(new GeoPoint(myEventLoc.getPosition().latitude, myEventLoc.getPosition().longitude));
         eventMarker.setTitle(event.name);
-        eventMarker.setSnippet("");
+        eventMarker.setSnippet(event.eventType.eventType.toString());
         eventMarker.setIconPicture(setMarkerIcon(myEventLoc));
         eventMarker.setEvent(event);
         eventMarker.setOwner(eventCreator);
@@ -385,13 +392,12 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
 
     private void addMarkerFirebase() {
         DocumentReference newUserRef = mDb
-                .collection(getString(R.string.collection_marker)).document("marker_" + event.name + event.hashCode());
+                .collection(getString(R.string.collection_markers)).document("marker_" + event.name + event.hashCode());
         newUserRef.set(eventMarker).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@lombok.NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Saving event in database successfuly", Toast.LENGTH_SHORT).show();
-                    moveToUserLocationActivity();
                 } else {
                     Toast.makeText(getContext(), "Could not save event in database", Toast.LENGTH_SHORT).show();
                 }
@@ -443,6 +449,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             addPictureFirebase();
             setEventMarker();
             addMarkerFirebase();
+            moveToUserLocationActivity();
         } else {
             Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }

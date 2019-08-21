@@ -1,6 +1,7 @@
 package com.example.kotu9.gpsgame.model;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.clustering.ClusterItem;
 
 import lombok.AccessLevel;
@@ -21,7 +22,7 @@ public class ClusterMarker implements ClusterItem {
     private int iconPicture;
     private Event event;
     private User owner;
-
+    private GeoPoint position2;
 
     @Override
     public LatLng getPosition() {
@@ -37,4 +38,6 @@ public class ClusterMarker implements ClusterItem {
     public String getSnippet() {
         return snippet;
     }
+
+
 }

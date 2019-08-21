@@ -23,9 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.model.ClusterMarker;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.services.LocationService;
+import com.example.kotu9.gpsgame.utils.ClusterManagerRenderer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -35,11 +37,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,7 +50,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.clustering.ClusterManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import lombok.NonNull;
@@ -57,7 +64,7 @@ import static com.example.kotu9.gpsgame.utils.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-public class UserLocationFragment extends Fragment implements OnMapReadyCallback {
+public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private static final String TAG = "UserLocationActivity";
     private FirebaseAuth mAuth;
@@ -67,6 +74,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     public static User user;
     private FirebaseFirestore mDb;
 
+    private ClusterManager<ClusterMarker> mClusterManager;
+    private ClusterManagerRenderer mClusterManagerRenderer;
+    private ArrayList<ClusterMarker> mClusterMarkers;
+
     public UserLocationFragment() {
     }
 
@@ -74,6 +85,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -86,10 +98,14 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         user = new User();
+        mClusterMarkers = new ArrayList<>();
+        resetMap();
+        getMapMarkersListDB();
 
         return rootView;
     }
@@ -117,8 +133,8 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
-        LatLng userLocation = new LatLng(54,19);
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon36_camera));
+
+
     }
 
     private boolean checkMapServices() {
@@ -337,4 +353,79 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
 
+    private void addMapMarkers(List<ClusterMarker> mClusterMarkers1) {
+        if (mMap != null) {
+            if (mClusterManager == null) {
+                mClusterManager = new ClusterManager<ClusterMarker>(getActivity().getApplicationContext(), mMap);
+            }
+            if (mClusterManagerRenderer == null) {
+                mClusterManagerRenderer = new ClusterManagerRenderer(
+                        getActivity(),
+                        mMap,
+                        mClusterManager
+                );
+                mClusterManager.setRenderer(mClusterManagerRenderer);
+            }
+            mMap.setOnInfoWindowClickListener(this);
+
+            for (ClusterMarker clusterMarker : mClusterMarkers1) {
+                clusterMarker.setIconPicture(clusterMarker.getIconPicture());
+                if (clusterMarker.getEvent().active) {
+                    mClusterManager.addItem(clusterMarker);
+                } else {
+                    Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
+                }
+            }
+            mClusterManager.cluster();
+            setCameraView();
+        } else {
+            Toast.makeText(getContext(), "Google map error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getMapMarkersListDB() {
+        mDb.collection(getString(R.string.collection_markers)).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.d(TAG, "onSuccess: LIST EMPTY");
+                            return;
+                        } else {
+                            List<ClusterMarker> clusterMarkerList = documentSnapshots.toObjects(ClusterMarker.class);
+                            mClusterMarkers.addAll(clusterMarkerList);
+                            for (ClusterMarker clusterMarker : mClusterMarkers) {
+                                clusterMarker.setPosition(new LatLng(clusterMarker.getPosition2().getLatitude(), clusterMarker.getPosition2().getLongitude()));
+                            }
+                            Log.d(TAG, "onSuccess: " + mClusterMarkers);
+                            addMapMarkers(mClusterMarkers);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@android.support.annotation.NonNull Exception e) {
+                Toast.makeText(getContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
+                Log.i(TAG, e.getMessage());
+            }
+        });
+    }
+
+    private void resetMap() {
+        if (mMap != null) {
+            mMap.clear();
+            if (mClusterManager != null) {
+                mClusterManager.clearItems();
+            }
+            if (mClusterMarkers.size() > 0) {
+                mClusterMarkers.clear();
+                mClusterMarkers = new ArrayList<>();
+            }
+        }
+    }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+    }
 }
