@@ -18,13 +18,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.adapters.MarkerRecyclerViewAdapter;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.services.LocationService;
@@ -83,6 +87,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private Runnable mRunnable;
     private static final int LOCATION_UPDATE_INTERVAL = 10000;
 
+    private RecyclerView mMarkerListRecyclerView;
+    private MarkerRecyclerViewAdapter markerRecyclerViewAdapter;
+    private RelativeLayout mMapContainer;
+
 
     public UserLocationFragment() {
     }
@@ -91,7 +99,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mClusterMarkers = new ArrayList<>();
     }
 
     @Override
@@ -105,13 +113,19 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             mapFragment.getMapAsync(this);
         }
 
+        mMarkerListRecyclerView = rootView.findViewById(R.id.markerRecyclerview);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         user = new User();
-        mClusterMarkers = new ArrayList<>();
         resetMap();
         getMapMarkersListDB();
+
+        View fragmentMap = rootView.findViewById(R.id.map);
+        fragmentMap.setVisibility(View.INVISIBLE);
+
+        View fragmentMap2 = rootView.findViewById(R.id.markerRecyclerview);
+        fragmentMap2.setVisibility(View.VISIBLE);
 
         return rootView;
     }
@@ -128,6 +142,13 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             }
         }
         startDistanceRunnable();
+    }
+
+
+    private void initMarkerListRecyclerView() {
+        markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers);
+        mMarkerListRecyclerView.setAdapter(markerRecyclerViewAdapter);
+        mMarkerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override
@@ -156,8 +177,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
-
-
     }
 
     private boolean checkMapServices() {
@@ -422,6 +441,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                             }
                             Log.d(TAG, "onSuccess: " + mClusterMarkers);
                             addMapMarkers(mClusterMarkers);
+                            initMarkerListRecyclerView();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -478,7 +498,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                         .collection(getString(R.string.collection_markers))
                         .document(clusterMarker.getEvent().id);
 
-                distanceRef.update("distance",clusterMarker.getEvent().distance).addOnCompleteListener(new OnCompleteListener<Void>() {
+                distanceRef.update("distance", clusterMarker.getEvent().distance).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                         Log.d(TAG, clusterMarker.getEvent().name + " distance: " + clusterMarker.getEvent().distance);

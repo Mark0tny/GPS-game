@@ -272,6 +272,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         event.id = getEventID();
         event.setActive(true);
         event.geofanceRadius = radius;
+        event.rating = 0;
         event.time = 0;
         event.eventType.points += calculatePointByDifficulty();
         eventCreator.createdEvents = new ArrayList<>();

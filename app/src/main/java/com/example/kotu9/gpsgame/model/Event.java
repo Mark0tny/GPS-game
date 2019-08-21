@@ -28,7 +28,7 @@ public class Event implements Serializable, Parcelable {
     public EventType eventType;
     public boolean active;
     public double distance;
-    public double rating;
+    public float rating;
     public float geofanceRadius;
     public long time;
     public List<User> userList;
@@ -41,7 +41,7 @@ public class Event implements Serializable, Parcelable {
         hintList = in.readParcelable(Hint.class.getClassLoader());
         active = in.readByte() != 0;
         distance = in.readDouble();
-        rating = in.readDouble();
+        rating = in.readFloat();
         geofanceRadius = in.readFloat();
         time = in.readLong();
 
@@ -73,7 +73,7 @@ public class Event implements Serializable, Parcelable {
         dest.writeString(difficulty.name());
         dest.writeString(String.valueOf(eventType));
         dest.writeDouble(this.distance);
-        dest.writeDouble(this.rating);
+        dest.writeFloat(this.rating);
         dest.writeFloat(this.geofanceRadius);
         dest.writeLong(this.time);
         dest.writeList(this.userList);
