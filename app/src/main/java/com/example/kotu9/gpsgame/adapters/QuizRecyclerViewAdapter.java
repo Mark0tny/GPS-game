@@ -95,5 +95,7 @@ public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerVi
 	public interface ItemClickListener {
 		void onItemClick(View view, int position);
 	}
+
+	//TODO USUWANIE ELEMENTOW Z LISTY PO SWIPE/LONGCLICK
 }
 

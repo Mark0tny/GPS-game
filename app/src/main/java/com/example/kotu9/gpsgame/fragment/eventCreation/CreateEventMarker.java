@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
+import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.LocationType;
 import com.example.kotu9.gpsgame.model.PhotoCompareType;
@@ -47,7 +48,10 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.storage.FirebaseStorage;
@@ -69,10 +73,13 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     private MapView mapView;
     public Event event;
     private FirebaseFirestore mDb;
-    public static User user;
+    private User eventCreator;
     private Marker myEventLoc;
     private Circle geoFenceLimits;
     private float radius;
+
+    private FirebaseAuth mAuth;
+    private ClusterMarker eventMarker = new ClusterMarker();
 
     public CreateEventMarker() {
     }
@@ -100,9 +107,12 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_event_marker, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
-        user = new User();
+        eventCreator = new User();
         setupView(view, savedInstanceState);
+        loadUserInformation();
         return view;
     }
 
@@ -237,27 +247,29 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         return event.eventType.eventType;
     }
 
-    private void setMarkerIcon(Marker marker) {
+    private int setMarkerIcon(Marker marker) {
         switch (checkEventType(event)) {
             case Location:
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon36_location));
-                break;
+                return R.drawable.icon36_location;
             case Quiz:
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icons36_question));
-                break;
+                return R.drawable.icons36_question;
             case QRcode:
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon36_qr_code));
-                break;
+                return R.drawable.icon36_qr_code;
             case PhotoCompare:
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon36_camera));
-                break;
+                return R.drawable.icon36_camera;
         }
+        return 1;
     }
 
     private void setEventNullValues() {
         event.setActive(true);
         event.geofanceRadius = radius;
         event.eventType.points += calculatePointByDifficulty();
+        eventCreator.createdEvents.add(event);
     }
 
     private double calculatePointByDifficulty() {
@@ -284,7 +296,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             @Override
             public void onComplete(@lombok.NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Saving event in database successfuly", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getContext(), "Saving event in database successfuly", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Could not save event in database", Toast.LENGTH_SHORT).show();
                 }
@@ -339,7 +351,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                                                      public void onComplete(@lombok.NonNull Task<Void> task) {
                                                          if (task.isSuccessful()) {
                                                              Toast.makeText(getActivity(), "Image Successful uploaded", Toast.LENGTH_SHORT).show();
-                                                             moveToUserLocationActivity();
                                                          }
                                                      }
                                                  }).addOnFailureListener(new OnFailureListener() {
@@ -363,6 +374,52 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         }
     }
 
+    private void setEventMarker() {
+        eventMarker.setPosition(myEventLoc.getPosition());
+        eventMarker.setTitle(event.name);
+        eventMarker.setSnippet("");
+        eventMarker.setIconPicture(setMarkerIcon(myEventLoc));
+        eventMarker.setEvent(event);
+        eventMarker.setOwner(eventCreator);
+    }
+
+    private void addMarkerFirebase() {
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_marker)).document("marker_" + event.name + event.hashCode());
+        newUserRef.set(eventMarker).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@lombok.NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Saving event in database successfuly", Toast.LENGTH_SHORT).show();
+                    moveToUserLocationActivity();
+                } else {
+                    Toast.makeText(getContext(), "Could not save event in database", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void loadUserInformation() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            eventCreator = task.getResult().toObject(User.class);
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+    }
 
     private boolean checkFindPleaceMarkerLocation() {
         if (checkEventType(event) == EventTypes.Location) {
@@ -384,6 +441,8 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             setEventNullValues();
             addEventFirebase();
             addPictureFirebase();
+            setEventMarker();
+            addMarkerFirebase();
         } else {
             Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }
