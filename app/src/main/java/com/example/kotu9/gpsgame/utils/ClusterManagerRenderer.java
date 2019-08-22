@@ -5,10 +5,11 @@ import android.graphics.Bitmap;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
@@ -36,7 +37,7 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
 
     @Override
     protected boolean shouldRenderAsCluster(Cluster<ClusterMarker> cluster) {
-        return cluster.getSize() > 1;
+        return cluster.getSize() > 5;
     }
 
     @Override
@@ -46,9 +47,18 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(item.getTitle());
     }
 
-    // grupowanie clusterow w grupy
     @Override
     protected void onBeforeClusterRendered(Cluster<ClusterMarker> cluster, MarkerOptions markerOptions) {
         super.onBeforeClusterRendered(cluster, markerOptions);
+    }
+
+    @Override
+    protected void onClusterRendered(Cluster<ClusterMarker> cluster, Marker marker) {
+        super.onClusterRendered(cluster, marker);
+    }
+
+    @Override
+    protected void onClusterItemRendered(ClusterMarker clusterItem, Marker marker) {
+        super.onClusterItemRendered(clusterItem, marker);
     }
 }

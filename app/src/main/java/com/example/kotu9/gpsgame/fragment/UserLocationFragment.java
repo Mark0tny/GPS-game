@@ -462,6 +462,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
                 }
             }
+            mMap.setOnCameraIdleListener(mClusterManager);
             mClusterManager.cluster();
             setCameraView();
         }
