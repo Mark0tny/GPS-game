@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (task.isSuccessful()) {
                             User user = new User(username, email, password,
                                     null, FirebaseAuth.getInstance().getCurrentUser().getUid(), USER_ROLE_USER,
-                                    0, getCurrentDate(), new GeoPoint(0, 0), null, null);
+                                    0, getCurrentDate(), new GeoPoint(0, 0), null, null,null);
                             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                                     .setSslEnabled(true)
                                     .build();

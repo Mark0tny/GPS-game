@@ -32,6 +32,7 @@ public class Event implements Serializable, Parcelable {
     public float geofanceRadius;
     public long time;
     public List<User> userList;
+    public List<Comment> comments;
 
 
     protected Event(Parcel in) {
@@ -77,5 +78,6 @@ public class Event implements Serializable, Parcelable {
         dest.writeFloat(this.geofanceRadius);
         dest.writeLong(this.time);
         dest.writeList(this.userList);
+        dest.writeList(this.comments);
     }
 }

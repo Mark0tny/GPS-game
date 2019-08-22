@@ -262,6 +262,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         event.eventType.points += calculatePointByDifficulty();
         eventCreator.createdEvents = new ArrayList<>();
         eventCreator.createdEvents.add(event);
+        event.comments = new ArrayList<>();
     }
 
     private String getEventID() {
