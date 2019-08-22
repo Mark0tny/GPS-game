@@ -19,9 +19,8 @@ import java.util.List;
 
 public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecyclerViewAdapter.ViewHolder> {
 
-    List<ClusterMarker> markers = new ArrayList<>();
+    private List<ClusterMarker> markers = new ArrayList<>();
     private LayoutInflater mInflater;
-    private QuizRecyclerViewAdapter.ItemClickListener mClickListener;
 
     public MarkerRecyclerViewAdapter(Context context, List<ClusterMarker> data) {
         this.mInflater = LayoutInflater.from(context);
@@ -41,7 +40,7 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
         viewHolder.eName.setText(markers.get(position).getEvent().name);
         viewHolder.eType.setText(markers.get(position).getEvent().eventType.eventType.name());
         viewHolder.eDifficulty.setText(markers.get(position).getEvent().getDifficulty().name());
-        viewHolder.eDistance.setText(String.format("%.2f",markers.get(position).getEvent().distance));
+        viewHolder.eDistance.setText(String.format("%.2f", markers.get(position).getEvent().distance));
         viewHolder.icon.setImageResource(markers.get(position).getIconPicture());
         viewHolder.eRatingValue.setText(String.valueOf(markers.get(position).getEvent().rating));
         viewHolder.ratingEvent.setRating(markers.get(position).getEvent().rating);
@@ -69,17 +68,12 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
             ratingEvent = itemView.findViewById(R.id.ratingEvent);
             icon = itemView.findViewById(R.id.markerIcon);
             eRatingValue = itemView.findViewById(R.id.textRatingValue);
-            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
 
         }
-    }
-
-    void setClickListener(QuizRecyclerViewAdapter.ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
     }
 
 

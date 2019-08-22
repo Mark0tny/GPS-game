@@ -30,8 +30,7 @@ public class Event implements Serializable, Parcelable {
     public double distance;
     public float rating;
     public float geofanceRadius;
-    public long time;
-    public List<User> userList;
+    public List<User> ranking;
     public List<Comment> comments;
 
 
@@ -44,8 +43,6 @@ public class Event implements Serializable, Parcelable {
         distance = in.readDouble();
         rating = in.readFloat();
         geofanceRadius = in.readFloat();
-        time = in.readLong();
-
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -76,8 +73,7 @@ public class Event implements Serializable, Parcelable {
         dest.writeDouble(this.distance);
         dest.writeFloat(this.rating);
         dest.writeFloat(this.geofanceRadius);
-        dest.writeLong(this.time);
-        dest.writeList(this.userList);
+        dest.writeList(this.ranking);
         dest.writeList(this.comments);
     }
 }

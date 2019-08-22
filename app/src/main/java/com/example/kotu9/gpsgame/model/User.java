@@ -26,7 +26,8 @@ public class User {
     public double score;
     public Date regDate;
     public GeoPoint location;
-    public List<Event> completeEvents;
+
+    public List<Statistics> completeEvents;
     public List<Event> createdEvents;
     public List<Message> messages;
 

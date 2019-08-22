@@ -258,11 +258,29 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         event.setActive(true);
         event.geofanceRadius = radius;
         event.rating = 0;
-        event.time = 0;
         event.eventType.points += calculatePointByDifficulty();
+        event.comments = new ArrayList<>();
+        event.ranking = new ArrayList<>();
         eventCreator.createdEvents = new ArrayList<>();
         eventCreator.createdEvents.add(event);
-        event.comments = new ArrayList<>();
+    }
+
+    private void updateUserCreatedEvents() {
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+        newUserRef.update("createdEvents", eventCreator.createdEvents).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                Log.i("updateUserEvents: ", "SUCCESS");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@android.support.annotation.NonNull Exception e) {
+                Log.i("update created events", e.getMessage());
+            }
+        });
+
+
     }
 
     private String getEventID() {
@@ -439,6 +457,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     private void submitMarker() {
         if (checkFindPleaceMarkerLocation()) {
             setEventNullValues();
+            updateUserCreatedEvents();
             addEventFirebase();
             addPictureFirebase();
             setEventMarker();

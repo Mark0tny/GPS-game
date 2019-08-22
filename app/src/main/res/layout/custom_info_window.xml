@@ -1,59 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_marginBottom="@dimen/_16dp"
+    android:layout_height="?android:attr/listPreferredItemHeightLarge">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textEventName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_toEndOf="@+id/markerIcon"
+        android:text="Eventname" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="#000"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/snippet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="10"
-            android:textColor="#000"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textEventType"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_below="@+id/textEventName"
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:layout_toEndOf="@+id/markerIcon"
+        android:text="Event Type" />
 
+    <TextView
+        android:id="@+id/textEventDifficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textEventType"
+        android:layout_alignEnd="@id/textEventName"
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:layout_toEndOf="@+id/markerIcon"
+        android:text="Difficulty" />
 
-        <Button
-            android:id="@+id/button"
-            android:background="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Navigate"
-            android:layout_marginRight="5dp"/>
+    <TextView
+        android:id="@+id/textDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30dp"
+        android:layout_toEndOf="@+id/textEventName"
+        android:text="Distance:" />
 
-        <Button
-            android:id="@+id/button2"
-            android:background="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Details" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textDistanceValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
+        android:layout_marginStart="@dimen/_5dp"
+        android:layout_toEndOf="@+id/textDistance"
+        android:text="DistanceValue" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textDistance"
+        android:layout_marginStart="70dp"
+        android:layout_toEndOf="@+id/textEventDifficulty"
+        android:text="Rating: " />
+
+    <TextView
+        android:id="@+id/textRatingValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textDistance"
+        android:layout_marginStart="@dimen/_5dp"
+        android:layout_toEndOf="@+id/textRating"
+        android:text="RatingValue" />
+
+    <RatingBar
+        android:id="@+id/ratingEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textRating"
+        android:layout_marginStart="@dimen/_10dp"
+        android:numStars="5"
+        android:stepSize=".5"
+        android:isIndicator="true"
+        android:layout_toEndOf="@+id/textEventDifficulty" />
+
+</RelativeLayout>
