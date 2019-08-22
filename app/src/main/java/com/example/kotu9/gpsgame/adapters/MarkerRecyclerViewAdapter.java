@@ -1,5 +1,6 @@
 package com.example.kotu9.gpsgame.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -33,17 +34,17 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
         return new ViewHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
         viewHolder.eName.setText(markers.get(position).getEvent().name);
         viewHolder.eType.setText(markers.get(position).getEvent().eventType.eventType.name());
         viewHolder.eDifficulty.setText(markers.get(position).getEvent().getDifficulty().name());
-        viewHolder.eDistance.setText(String.valueOf(markers.get(position).getEvent().distance));
+        viewHolder.eDistance.setText(String.format("%.2f",markers.get(position).getEvent().distance));
         viewHolder.icon.setImageResource(markers.get(position).getIconPicture());
         viewHolder.eRatingValue.setText(String.valueOf(markers.get(position).getEvent().rating));
         viewHolder.ratingEvent.setRating(markers.get(position).getEvent().rating);
-
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.kotu9.gpsgame.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
@@ -87,7 +88,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable;
-    private static final int LOCATION_UPDATE_INTERVAL = 10000;
+    private static final int DISTANCE_UPDATE_INTERVAL = 20000;
 
     private RecyclerView mMarkerListRecyclerView;
     private MarkerRecyclerViewAdapter markerRecyclerViewAdapter;
@@ -123,7 +124,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         user = new User();
         resetMap();
         getMapMarkersListDB();
-
 
         return rootView;
     }
@@ -167,10 +167,18 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
 
     private void initMarkerListRecyclerView() {
-        markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers);
-        mMarkerListRecyclerView.setAdapter(markerRecyclerViewAdapter);
-        mMarkerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mMarkerListRecyclerView.setVisibility(View.GONE);
+        if (getContext() != null) {
+            markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers);
+            mMarkerListRecyclerView.setAdapter(markerRecyclerViewAdapter);
+            mMarkerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mMarkerListRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    private List<ClusterMarker> updateMarkers(List<ClusterMarker> clusterMarkers) {
+        //TODO update zrobic/ dodawac do adaptera i addMarka
+
+        return clusterMarkers;
     }
 
     @Override
@@ -187,6 +195,20 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            Activity activity;
+            activity = (Activity) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override
@@ -369,16 +391,18 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private void setCameraView() {
         if (user != null) {
-            double bottomBoundary = user.getLocation().getLatitude() - .1;
-            double leftBoundary = user.getLocation().getLongitude() - .1;
-            double topBoundary = user.getLocation().getLatitude() + .1;
-            double rightBoundary = user.getLocation().getLongitude() + .1;
+            if (user.location != null) {
+                double bottomBoundary = user.location.getLatitude() - .1;
+                double leftBoundary = user.location.getLongitude() - .1;
+                double topBoundary = user.location.getLatitude() + .1;
+                double rightBoundary = user.location.getLongitude() + .1;
 
-            LatLngBounds mMapBoundary = new LatLngBounds(
-                    new LatLng(bottomBoundary, leftBoundary),
-                    new LatLng(topBoundary, rightBoundary)
-            );
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 10));
+                LatLngBounds mMapBoundary = new LatLngBounds(
+                        new LatLng(bottomBoundary, leftBoundary),
+                        new LatLng(topBoundary, rightBoundary)
+                );
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary, 10));
+            }
         } else {
             Log.d(TAG, "setCameraView user null");
             Toast.makeText(getContext(), "setCameraView user null", Toast.LENGTH_SHORT).show();
@@ -440,8 +464,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             }
             mClusterManager.cluster();
             setCameraView();
-        } else {
-            Toast.makeText(getContext(), "Google map error", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -492,9 +514,9 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void run() {
                 calulateDistanceMarkers();
-                mHandler.postDelayed(mRunnable, LOCATION_UPDATE_INTERVAL);
+                mHandler.postDelayed(mRunnable, DISTANCE_UPDATE_INTERVAL);
             }
-        }, LOCATION_UPDATE_INTERVAL);
+        }, DISTANCE_UPDATE_INTERVAL);
     }
 
     private void stopDistanceUpdates() {
@@ -511,17 +533,14 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private void calulateDistanceMarkers() {
         try {
             for (final ClusterMarker clusterMarker : mClusterMarkers) {
-
                 clusterMarker.getEvent().distance = calculateDistance(user, clusterMarker);
-
                 DocumentReference distanceRef = FirebaseFirestore.getInstance()
                         .collection(getString(R.string.collection_markers))
-                        .document(clusterMarker.getEvent().id);
-
+                        .document("marker_" + clusterMarker.getEvent().id);
                 distanceRef.update("distance", clusterMarker.getEvent().distance).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                        Log.d(TAG, clusterMarker.getEvent().name + " distance: " + clusterMarker.getEvent().distance);
+                        //Log.d(TAG, clusterMarker.getEvent().name + " distance: " + clusterMarker.getEvent().distance);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

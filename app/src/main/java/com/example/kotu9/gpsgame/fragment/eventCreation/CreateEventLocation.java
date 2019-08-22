@@ -158,10 +158,13 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
             return;
         }
         Location location = mng.getLastKnownLocation(mng.getBestProvider(new Criteria(), false));
-        double lat = location.getLatitude();
-        double lon = location.getLongitude();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15);
-        mMap.animateCamera(cameraUpdate);
+        if (location != null) {
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15);
+            mMap.animateCamera(cameraUpdate);
+        }
+
     }
 
     @Override

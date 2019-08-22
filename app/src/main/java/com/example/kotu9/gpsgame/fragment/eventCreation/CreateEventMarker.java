@@ -2,13 +2,10 @@ package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -140,7 +137,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         }
         mMap.setMyLocationEnabled(true);
         setupMapView();
-        setCameraView();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -162,18 +158,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         });
     }
 
-
-    private void setCameraView() {
-        LocationManager mng = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = mng.getLastKnownLocation(mng.getBestProvider(new Criteria(), false));
-        double lat = location.getLatitude();
-        double lon = location.getLongitude();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon), 15);
-        mMap.animateCamera(cameraUpdate);
-    }
 
     public void setupMapView() {
         UiSettings settings = mMap.getUiSettings();
@@ -226,8 +210,9 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             } else {
                 myEventLoc.setPosition(latLng);
             }
+            drawGeofence();
         }
-        drawGeofence();
+
     }
 
 
@@ -470,6 +455,9 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             Marker pleaceToFind = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(locationType.getPointLocation().getLatitude(), locationType.getPointLocation().getLongitude()))
                     .title("Pleace to find"));
+
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(locationType.getPointLocation().getLatitude(), locationType.getPointLocation().getLongitude()), 15);
+            mMap.animateCamera(cameraUpdate);
             return pleaceToFind;
         }
         return null;
