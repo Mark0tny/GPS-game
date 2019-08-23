@@ -5,10 +5,231 @@
     android:layout_height="match_parent"
     tools:context=".fragment.EventDetails">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/eventMap"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="2" />
+
+            <LinearLayout
+                android:id="@+id/eventInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventMap"
+                android:layout_marginTop="@dimen/_10dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textEventNameD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eventname"
+                    android:textSize="@dimen/_25dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/moreInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textEventTypeD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Event Type" />
+
+                    <TextView
+                        android:id="@+id/textEventDifficultyD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Difficulty" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textEventDifficultyD"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textDistanceD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Distance: " />
+
+                    <TextView
+                        android:id="@+id/textDistanceValueD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="DistanceValue" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/owner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textOwnerD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Owner: " />
+
+                    <TextView
+                        android:id="@+id/textOwnerValueD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="OwnerValue" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rating"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/owner"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textRatingD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rating: " />
+
+                    <TextView
+                        android:id="@+id/textRatingValueD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="RatingValue" />
+                </LinearLayout>
+
+
+                <RatingBar
+                    android:id="@+id/ratingEventD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="-60dp"
+                    android:layout_marginBottom="-25dp"
+                    android:numStars="5"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:stepSize=".5"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="0dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventInfo"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/hintListName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="Hints"
+                        android:textSize="@dimen/_18dp"
+                        android:textStyle="bold" />
+
+                    <ListView
+                        android:id="@+id/hintList"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone">
+
+                    </ListView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/commentListName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="Comments"
+                        android:textSize="@dimen/_18dp"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerComments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true"
+                        android:scrollbars="vertical"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/rankingListName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="Ranking"
+                        android:textSize="@dimen/_18dp"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerRanking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="true"
+                        android:scrollbars="vertical"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
 </FrameLayout>
