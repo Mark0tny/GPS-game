@@ -46,7 +46,7 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
         viewHolder.icon.setImageResource(markers.get(position).getIconPicture());
         viewHolder.eRatingValue.setText(String.valueOf(markers.get(position).getEvent().rating));
         viewHolder.ratingEvent.setRating(markers.get(position).getEvent().rating);
-        
+
     }
 
     @Override
