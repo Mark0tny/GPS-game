@@ -1,6 +1,5 @@
 package com.example.kotu9.gpsgame.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,14 +10,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.fragment.MessagesFragment;
 import com.example.kotu9.gpsgame.fragment.ProfileFragment;
-import com.example.kotu9.gpsgame.fragment.SettingsFragment;
 import com.example.kotu9.gpsgame.fragment.UserLocationFragment;
 import com.example.kotu9.gpsgame.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +41,6 @@ public class UserLocationActivity extends ActivityManagePermission
     private View header;
     private TextView username, email;
     private CircleImageView circleImageView;
-
 
 
     @Override
@@ -82,10 +79,13 @@ public class UserLocationActivity extends ActivityManagePermission
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            UserLocationFragment userLocationFragment = new UserLocationFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container, userLocationFragment);
+            fragmentTransaction.commit();
         }
-    }
 
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -105,10 +105,11 @@ public class UserLocationActivity extends ActivityManagePermission
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_container, userLocationFragment);
             fragmentTransaction.commit();
-        } else if (id == R.id.nav_settings) {
-            SettingsFragment settingsFragment = new SettingsFragment();
+        } else if (id == R.id.nav_messages) {
+            MessagesFragment messagesFragment = new MessagesFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_container, settingsFragment);
+            fragmentTransaction.replace(R.id.frame_container, messagesFragment);
+
             fragmentTransaction.commit();
         } else if (id == R.id.nav_addMark) {
             Intent intent = new Intent(getApplicationContext(), CreateEventActivity.class);

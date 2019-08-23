@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +39,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class EventDetails extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+import static java.lang.String.valueOf;
+
+public class EventDetails extends Fragment implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
 
-    TextView eName, eType, eDifficulty, eDistance, eRatingValue, eLatValue, eLngValue, eOwnerName, hintListExp, commentsListExp, rankingListExp;
+    TextView eName, eType, eDifficulty, eDistance, eRatingValue, eLatValue,
+            eLngValue, eOwnerName, hintListExp, commentsListExp, rankingListExp;
     RatingBar ratingEvent;
 
     ClusterMarker clusterMarker;
@@ -78,16 +82,19 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
-            clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundle));
+            clusterMarker = new ClusterMarker();
             users = new ArrayList<>();
-            users = (ArrayList<User>) clusterMarker.getEvent().ranking;
             comments = new ArrayList<>();
-            comments = (ArrayList<Comment>) clusterMarker.getEvent().comments;
             hintList = new Hint();
             hintList.hints = new ArrayList<>();
-            hintList.hints = clusterMarker.getEvent().hintList.hints;
-
+            clusterMarker = (ClusterMarker) getArguments().get(valueOf(R.string.markerBundle));
+            clusterMarker.setPosition(new LatLng((double) getArguments().get(valueOf(R.string.latitude)),(double) getArguments().get(valueOf(R.string.longitude))));
+            if (clusterMarker != null) {
+                Log.i("clusterMarkerBundle", clusterMarker.toString());
+                users = (ArrayList<User>) clusterMarker.getEvent().getRanking();
+                comments = (ArrayList<Comment>) clusterMarker.getEvent().getComments();
+                hintList.hints = clusterMarker.getEvent().getHintList().getHints();
+            }
         }
     }
 
@@ -107,12 +114,13 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eName.setText(clusterMarker.getEvent().name);
         eType.setText(clusterMarker.getEvent().eventType.eventType.name());
         eDifficulty.setText(clusterMarker.getEvent().difficulty.name());
-        eDistance.setText(String.valueOf(clusterMarker.getEvent().distance));
+        eDistance.setText(String.format("%.2f", clusterMarker.getEvent().distance));
         ratingEvent.setRating(clusterMarker.getEvent().rating);
-        eRatingValue.setText(String.valueOf(clusterMarker.getEvent().rating));
-        eLatValue.setText(String.valueOf(clusterMarker.getPosition().latitude));
-        eLngValue.setText(String.valueOf(clusterMarker.getPosition().longitude));
+        eRatingValue.setText(valueOf(clusterMarker.getEvent().rating));
+        eLatValue.setText(String.format("%.2f", clusterMarker.getPosition().latitude));
+        eLngValue.setText(String.format("%.2f", clusterMarker.getPosition().longitude));
         eOwnerName.setText(clusterMarker.getOwner().username);
+
     }
 
     private void setupViews(View view, Bundle savedInstanceState) {
@@ -137,9 +145,12 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         mapView.onResume();
         mapView.getMapAsync(this);
 
-        mAdapterHints = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, hintList.hints);
-        listView.setAdapter(mAdapterHints);
+        if (hintList.hints != null) {
+            mAdapterHints = new ArrayAdapter<String>(getContext(),
+                    android.R.layout.simple_list_item_1, hintList.hints);
+            listView.setAdapter(mAdapterHints);
+        }
+
     }
 
     private void initCommentsListRecyclerView() {
@@ -171,10 +182,6 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
             case R.id.rankingListName:
                 mRecyclerViewRanking.setVisibility(View.VISIBLE);
                 break;
-            case R.id.detailMap:
-                Intent intent = new Intent(getContext(), UserLocationActivity.class);
-                startActivity(intent);
-                break;
         }
 
     }
@@ -186,10 +193,11 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mMap.setMyLocationEnabled(true);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.setOnMapClickListener(this);
         addLocationMarker(clusterMarker.getPosition());
     }
 
@@ -224,8 +232,16 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
             }
             myEventLoc = mMap.addMarker(markerOptions);
             setMarkerIcon(myEventLoc);
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(myEventLoc.getPosition().latitude, myEventLoc.getPosition().longitude), 7);
-            mMap.animateCamera(cameraUpdate);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(myEventLoc.getPosition().latitude, myEventLoc.getPosition().longitude), 15);
+            mMap.moveCamera(cameraUpdate);
         }
     }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Intent intent = new Intent(getContext(), UserLocationActivity.class);
+        startActivity(intent);
+    }
+
+
 }

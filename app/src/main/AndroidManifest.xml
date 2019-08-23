@@ -30,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.EventGameActivity"></activity>
+        <activity android:name=".activity.EventGameActivity" />
         <activity
             android:name=".activity.CreateEventActivity"
             android:label="@string/title_activity_create_event" />

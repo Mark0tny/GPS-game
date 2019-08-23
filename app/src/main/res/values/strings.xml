@@ -98,11 +98,12 @@
     <string name="markerLocalization">Enter Marker Localization on Map</string>
     <string name="submitInfo">Submit</string>
     <string name="eventBundle">eventBundle</string>
+    <string name="markerBundle">markerBundle</string>
     <string name="emailBundle">emailBundle</string>
     <string name="submitQuestion">Submit Question</string>
     <string name="generate">Generate QRcode</string>
     <string name="QRmessage">QR code message</string>
-    <string name="markerBundle">markerBundle</string>
+    <string name="menu_messages">Messages</string>
 
 
 </resources>

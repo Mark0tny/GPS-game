@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,6 +60,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
@@ -92,6 +94,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private RecyclerView mMarkerListRecyclerView;
     private MarkerRecyclerViewAdapter markerRecyclerViewAdapter;
     private View fragmentMap;
+    private ClusterMarker clickedClusterMarker;
 
 
     public UserLocationFragment() {
@@ -168,7 +171,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private void initMarkerListRecyclerView() {
         if (getContext() != null) {
-            markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers,this);
+            markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers, this);
             mMarkerListRecyclerView.setAdapter(markerRecyclerViewAdapter);
             mMarkerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mMarkerListRecyclerView.setVisibility(View.GONE);
@@ -462,6 +465,13 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
                 }
             }
+            mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<ClusterMarker>() {
+                @Override
+                public boolean onClusterClick(Cluster<ClusterMarker> cluster) {
+                    clickedClusterMarker = (ClusterMarker) cluster;
+                    return false;
+                }
+            });
             mClusterManager.cluster();
             setCameraView();
         }
@@ -558,23 +568,33 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onInfoWindowClick(final Marker marker) {
-        generateEventClickDialog();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(String.valueOf(R.string.markerBundle), clickedClusterMarker);
+        Log.i("BUNDLE_INFOWINDOW", clickedClusterMarker.toString());
+        generateEventClickDialog(bundle);
     }
 
-    private void generateEventClickDialog() {
+    private void generateEventClickDialog(final Bundle bundle) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         builder.setMessage("What you want to do ?\nMove to Details or Start event")
                 .setCancelable(true)
                 .setPositiveButton("Start event game", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        //TODO Intenty do Start Event
+                        Log.i("Start_event_game", "CLICKED");
                         dialog.dismiss();
                     }
                 })
                 .setNeutralButton("Show event details", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO Intenty do Details
+                        Fragment detailsFragment = new EventDetails();
+                        detailsFragment.setArguments(bundle);
+                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.frame_container, detailsFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                        dialog.dismiss();
                     }
                 });
         final AlertDialog alert = builder.create();
@@ -587,8 +607,11 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onMarkerListClick(int position) {
-        //mClusterMarkers.get(position).getEvent();
-        generateEventClickDialog();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(String.valueOf(R.string.markerBundle), mClusterMarkers.get(position));
+        bundle.putSerializable(String.valueOf(R.string.latitude), mClusterMarkers.get(position).getPosition().latitude);
+        bundle.putSerializable(String.valueOf(R.string.longitude), mClusterMarkers.get(position).getPosition().longitude);
+        generateEventClickDialog(bundle);
     }
 }
 

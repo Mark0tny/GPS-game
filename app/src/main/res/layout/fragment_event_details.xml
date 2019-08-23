@@ -159,6 +159,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="-60dp"
                     android:layout_marginBottom="-25dp"
+                    android:isIndicator="true"
+                    android:focusable="false"
                     android:numStars="5"
                     android:scaleX=".5"
                     android:scaleY=".5"
