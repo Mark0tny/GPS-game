@@ -102,6 +102,7 @@
     <string name="submitQuestion">Submit Question</string>
     <string name="generate">Generate QRcode</string>
     <string name="QRmessage">QR code message</string>
+    <string name="markerBundle">markerBundle</string>
 
 
 </resources>

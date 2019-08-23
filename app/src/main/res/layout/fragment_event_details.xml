@@ -15,7 +15,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/eventMap"
+                android:id="@+id/detailMap"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_weight="2" />
@@ -24,7 +24,7 @@
                 android:id="@+id/eventInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/eventMap"
+                android:layout_below="@id/detailMap"
                 android:layout_marginTop="@dimen/_10dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
@@ -191,7 +191,7 @@
                         android:textStyle="bold" />
 
                     <ListView
-                        android:id="@+id/hintList"
+                        android:id="@+id/hintListD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
