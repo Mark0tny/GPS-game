@@ -104,6 +104,7 @@
     <string name="generate">Generate QRcode</string>
     <string name="QRmessage">QR code message</string>
     <string name="menu_messages">Messages</string>
+    <string name="welcome">Welcome</string>
 
 
 </resources>

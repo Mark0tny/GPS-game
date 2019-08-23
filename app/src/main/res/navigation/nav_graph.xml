@@ -55,7 +55,7 @@
             />
         <action
             android:id="@+id/action_createEventHints_to_createEventQRcode"
-            app:destination="@id/createEventQRcode"
+            app:destination="@+id/createEventQRcode"
             app:enterAnim="@anim/fui_slide_out_left"
 
             />

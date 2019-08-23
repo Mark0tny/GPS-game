@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.eventGame.StartGameFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/welcomeWindow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/startWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome"
+                android:textSize="@dimen/_30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/startWelcomeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UsernameValue"
+                android:textSize="@dimen/_25dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/eventStartInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_50dp"
+            android:layout_below="@+id/welcomeWindow"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/aaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome"
+                android:textSize="@dimen/_30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bbb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COS DAC TERAZ NIEWAZNE"
+                android:textSize="@dimen/_25dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/startEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_50dp"
+            android:text="Start"
+            android:textSize="@dimen/_30dp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -6,4 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".activity.EventGameActivity">
 
+
+    <fragment
+        android:id="@+id/nav_host_fragment_start_game"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/start_game" />
+
 </android.support.constraint.ConstraintLayout>

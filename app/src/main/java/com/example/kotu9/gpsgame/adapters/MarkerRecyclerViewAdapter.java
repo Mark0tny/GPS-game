@@ -40,6 +40,7 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
         viewHolder.eName.setText(markers.get(position).getEvent().name);
+        viewHolder.eDescriptionValue.setText(markers.get(position).getEvent().description);
         viewHolder.eType.setText(markers.get(position).getEvent().eventType.eventType.name());
         viewHolder.eDifficulty.setText(markers.get(position).getEvent().getDifficulty().name());
         viewHolder.eDistance.setText(String.format("%.2f", markers.get(position).getEvent().distance));
@@ -56,7 +57,7 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView eName, eType, eDifficulty, eDistance, eRatingValue;
+        TextView eName, eType, eDifficulty, eDistance, eRatingValue, eDescriptionValue;
         RatingBar ratingEvent;
         ImageView icon;
         OnMarkerClickListener mOnMarkerClickListener;
@@ -69,6 +70,7 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
             eDifficulty = itemView.findViewById(R.id.textEventDifficulty);
             eDistance = itemView.findViewById(R.id.textDistanceValue);
             ratingEvent = itemView.findViewById(R.id.ratingEvent);
+            eDescriptionValue = itemView.findViewById(R.id.textDescriptionValueD);
             icon = itemView.findViewById(R.id.markerIcon);
             eRatingValue = itemView.findViewById(R.id.textRatingValue);
             itemView.setOnClickListener(this);

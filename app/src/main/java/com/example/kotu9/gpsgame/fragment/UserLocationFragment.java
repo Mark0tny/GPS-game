@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.activity.EventGameActivity;
 import com.example.kotu9.gpsgame.adapters.MarkerRecyclerViewAdapter;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.User;
@@ -569,7 +570,9 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 .setCancelable(true)
                 .setPositiveButton("Start event game", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        Log.i("Start_event_game", "CLICKED");
+                        Intent intent = new Intent(getContext(), EventGameActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                         dialog.dismiss();
                     }
                 })
