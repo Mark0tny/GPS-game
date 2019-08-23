@@ -9,18 +9,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.model.Event;
+import com.example.kotu9.gpsgame.model.Statistics;
 import com.example.kotu9.gpsgame.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class RankingRecyclerViewAdapter extends RecyclerView.Adapter<RankingRecyclerViewAdapter.ViewHolder> {
 
-    List<User> userList;
+    private Event event;
+    private List<Statistics> statistics;
+    private List<User> ranking;
     private LayoutInflater mInflater;
 
-    public RankingRecyclerViewAdapter(Context context, List<User> data) {
+    public RankingRecyclerViewAdapter(Context context, Event data) {
         this.mInflater = LayoutInflater.from(context);
-        this.userList = data;
+        this.event = data;
     }
 
     @NonNull
@@ -32,26 +37,38 @@ public class RankingRecyclerViewAdapter extends RecyclerView.Adapter<RankingRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.eName.setText("");
 
+        SimpleDateFormat dt = new SimpleDateFormat("mm:ss");
+        ranking = event.getRanking();
+
+        for (User user : ranking) {
+            statistics = user.getCompleteEvents();
+
+            for (Statistics statistic : statistics) {
+                if (statistic.eventID.equals(event.id)) {
+                    viewHolder.rUsername.setText(user.username);
+                    viewHolder.rPoints.setText(statistic.eventID);
+                    viewHolder.rTime.setText(dt.format(statistic.getTime()));
+                }
+            }
+        }
     }
-
 
     @Override
     public int getItemCount() {
-        return userList.size();
+        return 1;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView eName, eType, eDifficulty;
+        TextView rUsername, rPoints, rTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            eName = itemView.findViewById(R.id.textEventName);
-            eType = itemView.findViewById(R.id.textEventType);
-            eDifficulty = itemView.findViewById(R.id.textEventDifficulty);
+            rUsername = itemView.findViewById(R.id.rUsername);
+            rPoints = itemView.findViewById(R.id.rPoints);
+            rTime = itemView.findViewById(R.id.rTime);
 
         }
 

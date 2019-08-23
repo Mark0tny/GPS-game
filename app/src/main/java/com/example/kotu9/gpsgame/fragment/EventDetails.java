@@ -25,7 +25,6 @@ import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Comment;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.Hint;
-import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.utils.EventTypes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,7 +57,7 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     private RecyclerView mRecyclerViewRanking;
     private RankingRecyclerViewAdapter mAdapterRanking;
 
-    private ArrayList<User> users;
+    private Event event;
     private ArrayList<Comment> comments;
     private Hint hintList;
 
@@ -83,14 +82,14 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             clusterMarker = new ClusterMarker();
-            users = new ArrayList<>();
+            event = new Event();
             comments = new ArrayList<>();
             hintList = new Hint();
             hintList.hints = new ArrayList<>();
             clusterMarker = (ClusterMarker) getArguments().get(valueOf(R.string.markerBundle));
             if (clusterMarker != null) {
                 Log.i("clusterMarkerBundle", clusterMarker.toString());
-                users = (ArrayList<User>) clusterMarker.getEvent().getRanking();
+                event = clusterMarker.getEvent();
                 comments = (ArrayList<Comment>) clusterMarker.getEvent().getComments();
                 hintList.hints = clusterMarker.getEvent().getHintList().getHints();
             }
@@ -132,12 +131,16 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eLatValue = view.findViewById(R.id.textLatD);
         eLngValue = view.findViewById(R.id.textLngD);
         eOwnerName = view.findViewById(R.id.textOwnerD);
-        hintListExp = view.findViewById(R.id.hintListName);
-        commentsListExp = view.findViewById(R.id.commentListName);
-        rankingListExp = view.findViewById(R.id.rankingListName);
         listView = view.findViewById(R.id.hintListD);
         mRecyclerViewComments = view.findViewById(R.id.recyclerComments);
         mRecyclerViewRanking = view.findViewById(R.id.recyclerRanking);
+
+        hintListExp = view.findViewById(R.id.hintListName);
+        hintListExp.setOnClickListener(this);
+        commentsListExp = view.findViewById(R.id.commentListName);
+        commentsListExp.setOnClickListener(this);
+        rankingListExp = view.findViewById(R.id.rankingListName);
+        rankingListExp.setOnClickListener(this);
 
         mapView = view.findViewById(R.id.detailMap);
         mapView.onCreate(savedInstanceState);
@@ -145,6 +148,10 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         mapView.getMapAsync(this);
 
         if (hintList.hints != null) {
+            if (hintList.hints.isEmpty()) {
+                hintListExp.setEnabled(false);
+            } else hintListExp.setEnabled(true);
+
             mAdapterHints = new ArrayAdapter<String>(getContext(),
                     android.R.layout.simple_list_item_1, hintList.hints);
             listView.setAdapter(mAdapterHints);
@@ -154,6 +161,10 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
 
     private void initCommentsListRecyclerView() {
         if (getContext() != null) {
+            if (comments != null) {
+                commentsListExp.setEnabled(false);
+            } else commentsListExp.setEnabled(true);
+
             mAdapterComments = new CommentsRecyclerViewAdapter(getContext(), comments);
             mRecyclerViewComments.setAdapter(mAdapterComments);
             mRecyclerViewComments.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -161,8 +172,12 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     }
 
     private void initRankingListRecyclerView() {
-        if (getContext() != null) {
-            mAdapterRanking = new RankingRecyclerViewAdapter(getContext(), users);
+        if (getContext() != null && event != null) {
+            if (event.getRanking() != null) {
+                rankingListExp.setEnabled(false);
+            } else rankingListExp.setEnabled(true);
+
+            mAdapterRanking = new RankingRecyclerViewAdapter(getContext(), event);
             mRecyclerViewRanking.setAdapter(mAdapterRanking);
             mRecyclerViewRanking.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
@@ -173,16 +188,15 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.hintListName:
-                listView.setVisibility(View.VISIBLE);
+                listView.setVisibility(listView.isShown() ? View.GONE : View.VISIBLE);
                 break;
             case R.id.commentListName:
-                mRecyclerViewComments.setVisibility(View.VISIBLE);
+                mRecyclerViewComments.setVisibility(mRecyclerViewComments.isShown() ? View.GONE : View.VISIBLE);
                 break;
             case R.id.rankingListName:
-                mRecyclerViewRanking.setVisibility(View.VISIBLE);
+                mRecyclerViewRanking.setVisibility(mRecyclerViewRanking.isShown() ? View.GONE : View.VISIBLE);
                 break;
         }
-
     }
 
     @Override
