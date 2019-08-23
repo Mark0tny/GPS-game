@@ -63,6 +63,7 @@ public class CreateEventHints extends Fragment implements View.OnClickListener, 
 
 		View view = inflater.inflate(R.layout.fragment_create_event_hints, container, false);
 		setupViews(view);
+
 		adapter = new ArrayAdapter<String>(getContext(),
 				android.R.layout.simple_list_item_1, hintList.hints);
 		listView.setAdapter(adapter);

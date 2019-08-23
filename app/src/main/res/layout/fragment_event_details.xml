@@ -38,6 +38,30 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
+                    android:id="@+id/position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textLatD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Lat" />
+
+                    <TextView
+                        android:id="@+id/textLngD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Lng" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/moreInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

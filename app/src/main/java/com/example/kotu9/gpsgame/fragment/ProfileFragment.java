@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
     private static final int CHOOSE_IMAGE = 101;
     private CircleImageView circleImageView;
-    private TextView regDate, score, latitudeText, longitude, username, emaiil;
+    private TextView regDate, score, latitudeText, longitude, username, email;
     private ProgressBar progressBar;
     private Uri uriProfileImage;
     FirebaseAuth mAuth;
@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
             latitudeText = view.findViewById(R.id.latitudeDisplay);
             longitude = view.findViewById(R.id.longitudeDisplay);
             username = view.findViewById(R.id.profUsername);
-            emaiil = view.findViewById(R.id.profEmail);
+            email = view.findViewById(R.id.profEmail);
         } catch (Exception e) {
             Log.d("Exception ProfileFrag", e.getMessage());
         }
@@ -130,7 +130,7 @@ public class ProfileFragment extends Fragment {
         latitudeText.setText(Double.toString(user.getLocation().getLatitude()));
         longitude.setText(Double.toString(user.getLocation().getLongitude()));
         username.setText(user.getUsername());
-        emaiil.setText(user.getEmail());
+        email.setText(user.getEmail());
     }
 
 
