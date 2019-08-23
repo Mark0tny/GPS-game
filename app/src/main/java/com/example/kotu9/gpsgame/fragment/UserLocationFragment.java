@@ -60,7 +60,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
@@ -94,8 +93,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private RecyclerView mMarkerListRecyclerView;
     private MarkerRecyclerViewAdapter markerRecyclerViewAdapter;
     private View fragmentMap;
-    private ClusterMarker clickedClusterMarker;
-
 
     public UserLocationFragment() {
     }
@@ -105,7 +102,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mClusterMarkers = new ArrayList<>();
-
     }
 
     @Override
@@ -465,13 +461,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
                 }
             }
-            mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<ClusterMarker>() {
-                @Override
-                public boolean onClusterClick(Cluster<ClusterMarker> cluster) {
-                    clickedClusterMarker = (ClusterMarker) cluster;
-                    return false;
-                }
-            });
+
             mClusterManager.cluster();
             setCameraView();
         }
@@ -569,8 +559,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(final Marker marker) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(String.valueOf(R.string.markerBundle), clickedClusterMarker);
-        Log.i("BUNDLE_INFOWINDOW", clickedClusterMarker.toString());
+        bundle.putSerializable(String.valueOf(R.string.markerBundle), mClusterManagerRenderer.getClusterItem(marker));
         generateEventClickDialog(bundle);
     }
 
@@ -609,8 +598,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     public void onMarkerListClick(int position) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(String.valueOf(R.string.markerBundle), mClusterMarkers.get(position));
-        bundle.putSerializable(String.valueOf(R.string.latitude), mClusterMarkers.get(position).getPosition().latitude);
-        bundle.putSerializable(String.valueOf(R.string.longitude), mClusterMarkers.get(position).getPosition().longitude);
         generateEventClickDialog(bundle);
     }
 }

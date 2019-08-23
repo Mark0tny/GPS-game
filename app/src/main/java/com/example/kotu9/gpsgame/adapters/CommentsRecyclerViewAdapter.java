@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.Comment;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRecyclerViewAdapter.ViewHolder> {
@@ -26,18 +27,17 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = mInflater.inflate(R.layout.event_rec_view, viewGroup, false);
+        View view = mInflater.inflate(R.layout.comment_rec_view, viewGroup, false);
         return new CommentsRecyclerViewAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
-//        viewHolder.eName.setText();
-//        viewHolder.eType.setText();
-//        viewHolder.eDifficulty.setText();
-
-
+        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
+        viewHolder.cUsername.setText(commentList.get(position).username);
+        viewHolder.cDate.setText(dt.format(commentList.get(position).commentDate));
+        viewHolder.eBody.setText(commentList.get(position).body);
     }
 
     @Override
@@ -47,17 +47,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<CommentsRe
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView eName, eType, eDifficulty;
-
+        TextView cUsername, cDate, eBody;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            eName = itemView.findViewById(R.id.textEventName);
-            eType = itemView.findViewById(R.id.textEventType);
-            eDifficulty = itemView.findViewById(R.id.textEventDifficulty);
-
+            cUsername = itemView.findViewById(R.id.comUsername);
+            cDate = itemView.findViewById(R.id.comDate);
+            eBody = itemView.findViewById(R.id.comBody);
         }
-
     }
 }

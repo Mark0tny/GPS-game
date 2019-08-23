@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
@@ -22,7 +20,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 
-public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker> implements ClusterManager.OnClusterClickListener<ClusterMarker> {
+public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker> {
 
     private final IconGenerator iconGenerator;
     private ImageView imageView;
@@ -43,7 +41,6 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
         imageView.setPadding(padding, padding, padding, padding);
         iconGenerator.setContentView(imageView);
 
-        clusterManager.setOnClusterClickListener(this);
         mMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
         clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new CustomInfoWindowAdapter(context));
         mMap.setOnCameraIdleListener(clusterManager);
@@ -79,30 +76,15 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
     }
 
 
-    @Override
-    public boolean onClusterClick(Cluster<ClusterMarker> cluster) {
-        if (cluster == null) return false;
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (ClusterMarker clusterMarker : cluster.getItems())
-            builder.include(clusterMarker.getPosition());
-        LatLngBounds bounds = builder.build();
-        try {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 15));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+    public static class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         private final View mWindow;
         private Context mContext;
         ClusterMarker clusterMarkerInfo;
 
         public CustomInfoWindowAdapter(Context context) {
-            mContext = context;
-            mWindow = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
+            this.mContext = context;
+            this.mWindow = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
         }
 
         private void rendowWindowText(Marker marker, View view) {
@@ -113,7 +95,6 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
             TextView eDistance = view.findViewById(R.id.textDistanceValueW);
             RatingBar ratingEvent = view.findViewById(R.id.ratingEventW);
             TextView eRatingValue = view.findViewById(R.id.textRatingValueW);
-
 
             clusterMarkerInfo = (ClusterMarker) marker.getTag();
 
@@ -138,5 +119,7 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
             rendowWindowText(marker, mWindow);
             return mWindow;
         }
+
+
     }
 }

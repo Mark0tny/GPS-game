@@ -88,7 +88,6 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
             hintList = new Hint();
             hintList.hints = new ArrayList<>();
             clusterMarker = (ClusterMarker) getArguments().get(valueOf(R.string.markerBundle));
-            clusterMarker.setPosition(new LatLng((double) getArguments().get(valueOf(R.string.latitude)),(double) getArguments().get(valueOf(R.string.longitude))));
             if (clusterMarker != null) {
                 Log.i("clusterMarkerBundle", clusterMarker.toString());
                 users = (ArrayList<User>) clusterMarker.getEvent().getRanking();
