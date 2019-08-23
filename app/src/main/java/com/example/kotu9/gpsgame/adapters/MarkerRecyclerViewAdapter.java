@@ -21,16 +21,18 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
 
     private List<ClusterMarker> markers = new ArrayList<>();
     private LayoutInflater mInflater;
+    private OnMarkerClickListener mOnMarkerClickListener;
 
-    public MarkerRecyclerViewAdapter(Context context, List<ClusterMarker> data) {
+    public MarkerRecyclerViewAdapter(Context context, List<ClusterMarker> data, OnMarkerClickListener onMarkerClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.markers = data;
+        this.mOnMarkerClickListener = onMarkerClickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.event_rec_view, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mOnMarkerClickListener);
     }
 
     @SuppressLint("DefaultLocale")
@@ -44,7 +46,7 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
         viewHolder.icon.setImageResource(markers.get(position).getIconPicture());
         viewHolder.eRatingValue.setText(String.valueOf(markers.get(position).getEvent().rating));
         viewHolder.ratingEvent.setRating(markers.get(position).getEvent().rating);
-
+        
     }
 
     @Override
@@ -57,8 +59,9 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
         TextView eName, eType, eDifficulty, eDistance, eRatingValue;
         RatingBar ratingEvent;
         ImageView icon;
+        OnMarkerClickListener mOnMarkerClickListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnMarkerClickListener onMarkerClickListener) {
             super(itemView);
 
             eName = itemView.findViewById(R.id.textEventName);
@@ -68,18 +71,19 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
             ratingEvent = itemView.findViewById(R.id.ratingEvent);
             icon = itemView.findViewById(R.id.markerIcon);
             eRatingValue = itemView.findViewById(R.id.textRatingValue);
+            itemView.setOnClickListener(this);
+            this.mOnMarkerClickListener = onMarkerClickListener;
+
         }
 
         @Override
         public void onClick(View v) {
-
+            mOnMarkerClickListener.onMarkerListClick(getAdapterPosition());
         }
     }
 
-
-    //TODO przenosi do activity detailts i wysla dane pobrane event
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
+    public interface OnMarkerClickListener {
+        void onMarkerListClick(int position);
     }
 
 

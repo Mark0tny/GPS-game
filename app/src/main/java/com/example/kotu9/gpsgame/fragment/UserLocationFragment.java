@@ -72,7 +72,7 @@ import static com.example.kotu9.gpsgame.utils.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, MarkerRecyclerViewAdapter.OnMarkerClickListener {
 
     private static final String TAG = "UserLocationActivity";
     private FirebaseAuth mAuth;
@@ -168,7 +168,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private void initMarkerListRecyclerView() {
         if (getContext() != null) {
-            markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers);
+            markerRecyclerViewAdapter = new MarkerRecyclerViewAdapter(getContext(), mClusterMarkers,this);
             mMarkerListRecyclerView.setAdapter(markerRecyclerViewAdapter);
             mMarkerListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mMarkerListRecyclerView.setVisibility(View.GONE);
@@ -555,7 +555,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         }
 
     }
-    
+
     @Override
     public void onInfoWindowClick(final Marker marker) {
         generateEventClickDialog();
@@ -583,6 +583,12 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.WHITE);
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(Color.GRAY);
         alert.getButton(AlertDialog.BUTTON_NEUTRAL).setBackgroundColor(Color.GRAY);
+    }
+
+    @Override
+    public void onMarkerListClick(int position) {
+        //mClusterMarkers.get(position).getEvent();
+        generateEventClickDialog();
     }
 }
 
