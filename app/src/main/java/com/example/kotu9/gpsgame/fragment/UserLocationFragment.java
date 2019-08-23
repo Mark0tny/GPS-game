@@ -85,7 +85,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private ClusterManager<ClusterMarker> mClusterManager;
     private ClusterManagerRenderer mClusterManagerRenderer;
     private ArrayList<ClusterMarker> mClusterMarkers;
-
     private Handler mHandler = new Handler();
     private Runnable mRunnable;
     private static final int DISTANCE_UPDATE_INTERVAL = 20000;
@@ -103,6 +102,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mClusterMarkers = new ArrayList<>();
+
     }
 
     @Override
@@ -204,6 +204,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             Activity activity;
             activity = (Activity) context;
         }
+
     }
 
     @Override
@@ -221,6 +222,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(this);
     }
 
     private boolean checkMapServices() {
@@ -243,7 +245,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         final AlertDialog alert = builder.create();
         alert.show();
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
-
     }
 
     public boolean isMapsEnabled() {
@@ -439,7 +440,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
 
-    private void addMapMarkers(List<ClusterMarker> mClusterMarkers1) {
+    private void addMapMarkers(final List<ClusterMarker> mClusterMarkers1) {
         if (mMap != null) {
             if (mClusterManager == null) {
                 mClusterManager = new ClusterManager<ClusterMarker>(getActivity().getApplicationContext(), mMap);
@@ -452,7 +453,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 );
                 mClusterManager.setRenderer(mClusterManagerRenderer);
             }
-            mMap.setOnInfoWindowClickListener(this);
 
             for (ClusterMarker clusterMarker : mClusterMarkers1) {
                 clusterMarker.setIconPicture(clusterMarker.getIconPicture());
@@ -462,7 +462,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
                 }
             }
-            mMap.setOnCameraIdleListener(mClusterManager);
             mClusterManager.cluster();
             setCameraView();
         }
@@ -556,10 +555,36 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         }
 
     }
-
-
+    
     @Override
-    public void onInfoWindowClick(Marker marker) {
+    public void onInfoWindowClick(final Marker marker) {
+        generateEventClickDialog();
+    }
 
+    private void generateEventClickDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+        builder.setMessage("What you want to do ?\nMove to Details or Start event")
+                .setCancelable(true)
+                .setPositiveButton("Start event game", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        //TODO Intenty do Start Event
+                        dialog.dismiss();
+                    }
+                })
+                .setNeutralButton("Show event details", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO Intenty do Details
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
+        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.WHITE);
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(Color.GRAY);
+        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setBackgroundColor(Color.GRAY);
     }
 }
+
+
+

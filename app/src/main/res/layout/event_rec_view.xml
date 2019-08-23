@@ -85,6 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textRating"
         android:layout_marginStart="@dimen/_10dp"
+        android:focusable="false"
         android:numStars="5"
         android:stepSize=".5"
         android:isIndicator="true"
