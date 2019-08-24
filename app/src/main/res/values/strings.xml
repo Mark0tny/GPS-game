@@ -105,6 +105,8 @@
     <string name="QRmessage">QR code message</string>
     <string name="menu_messages">Messages</string>
     <string name="welcome">Welcome</string>
+    <string name="messageTimer">Game will start in</string>
+    <string name="markerBundleGame">markerBundleGame</string>
 
 
 </resources>

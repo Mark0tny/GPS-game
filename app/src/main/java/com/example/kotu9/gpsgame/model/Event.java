@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.kotu9.gpsgame.utils.EventDifficulty;
+import com.example.kotu9.gpsgame.utils.EventTypes;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,30 +34,6 @@ public class Event implements Serializable, Parcelable {
     public List<User> ranking;
     public List<Comment> comments;
 
-
-    protected Event(Parcel in) {
-        id = in.readString();
-        name = in.readString();
-        description = in.readString();
-        hintList = in.readParcelable(Hint.class.getClassLoader());
-        active = in.readByte() != 0;
-        distance = in.readDouble();
-        rating = in.readFloat();
-        geofanceRadius = in.readFloat();
-    }
-
-    public static final Creator<Event> CREATOR = new Creator<Event>() {
-        @Override
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -67,13 +44,42 @@ public class Event implements Serializable, Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.description);
-        dest.writeParcelable(hintList, flags);
-        dest.writeString(difficulty.name());
-        dest.writeString(String.valueOf(eventType));
+        dest.writeParcelable(this.hintList, flags);
+        dest.writeInt(this.difficulty == null ? -1 : this.difficulty.ordinal());
+        dest.writeParcelable(this.eventType, flags);
+        dest.writeByte(this.active ? (byte) 1 : (byte) 0);
         dest.writeDouble(this.distance);
         dest.writeFloat(this.rating);
         dest.writeFloat(this.geofanceRadius);
-        dest.writeList(this.ranking);
-        dest.writeList(this.comments);
+        dest.writeTypedList(this.ranking);
+        dest.writeTypedList(this.comments);
     }
+
+    protected Event(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+        this.description = in.readString();
+        this.hintList = in.readParcelable(Hint.class.getClassLoader());
+        int tmpDifficulty = in.readInt();
+        this.difficulty = tmpDifficulty == -1 ? null : EventDifficulty.values()[tmpDifficulty];
+        this.eventType = in.readParcelable(EventType.class.getClassLoader());
+        this.active = in.readByte() != 0;
+        this.distance = in.readDouble();
+        this.rating = in.readFloat();
+        this.geofanceRadius = in.readFloat();
+        this.ranking = in.createTypedArrayList(User.CREATOR);
+        this.comments = in.createTypedArrayList(Comment.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 }

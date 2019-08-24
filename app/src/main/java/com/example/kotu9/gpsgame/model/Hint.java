@@ -3,6 +3,7 @@ package com.example.kotu9.gpsgame.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -15,26 +16,10 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class Hint implements Parcelable {
+public class Hint implements Serializable, Parcelable {
 
     public List<String> hints;
 
-
-    protected Hint(Parcel in) {
-        hints = in.createStringArrayList();
-    }
-
-    public static final Creator<Hint> CREATOR = new Creator<Hint>() {
-        @Override
-        public Hint createFromParcel(Parcel in) {
-            return new Hint(in);
-        }
-
-        @Override
-        public Hint[] newArray(int size) {
-            return new Hint[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -45,4 +30,20 @@ public class Hint implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringList(this.hints);
     }
+
+    protected Hint(Parcel in) {
+        this.hints = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<Hint> CREATOR = new Parcelable.Creator<Hint>() {
+        @Override
+        public Hint createFromParcel(Parcel source) {
+            return new Hint(source);
+        }
+
+        @Override
+        public Hint[] newArray(int size) {
+            return new Hint[size];
+        }
+    };
 }

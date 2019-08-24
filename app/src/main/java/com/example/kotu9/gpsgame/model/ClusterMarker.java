@@ -30,42 +30,6 @@ public class ClusterMarker implements ClusterItem, Serializable, Parcelable {
     private GeoPoint position2;
 
 
-    protected ClusterMarker(Parcel in) {
-        title = in.readString();
-        snippet = in.readString();
-        iconPicture = in.readInt();
-        event = in.readParcelable(Event.class.getClassLoader());
-        owner = in.readParcelable(User.class.getClassLoader());
-    }
-
-    public static final Creator<ClusterMarker> CREATOR = new Creator<ClusterMarker>() {
-        @Override
-        public ClusterMarker createFromParcel(Parcel in) {
-            return new ClusterMarker(in);
-        }
-
-        @Override
-        public ClusterMarker[] newArray(int size) {
-            return new ClusterMarker[size];
-        }
-    };
-
-    @Override
-    public LatLng getPosition() {
-        return position;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public String getSnippet() {
-        return snippet;
-    }
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -75,8 +39,28 @@ public class ClusterMarker implements ClusterItem, Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.title);
         dest.writeString(this.snippet);
-        dest.writeInt(iconPicture);
-        dest.writeParcelable(event, flags);
-        dest.writeParcelable(owner, flags);
+        dest.writeInt(this.iconPicture);
+        dest.writeParcelable(this.event, flags);
+        dest.writeParcelable(this.owner, flags);
     }
+
+    protected ClusterMarker(Parcel in) {
+        this.title = in.readString();
+        this.snippet = in.readString();
+        this.iconPicture = in.readInt();
+        this.event = in.readParcelable(Event.class.getClassLoader());
+        this.owner = in.readParcelable(User.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ClusterMarker> CREATOR = new Parcelable.Creator<ClusterMarker>() {
+        @Override
+        public ClusterMarker createFromParcel(Parcel source) {
+            return new ClusterMarker(source);
+        }
+
+        @Override
+        public ClusterMarker[] newArray(int size) {
+            return new ClusterMarker[size];
+        }
+    };
 }

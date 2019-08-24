@@ -24,7 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User implements Serializable,Parcelable {
+public class User implements Serializable, Parcelable {
 
     public String username, email, password, imageUrl, id, role;
     public double score;
@@ -35,29 +35,6 @@ public class User implements Serializable,Parcelable {
     public List<Event> createdEvents;
     public List<Message> messages;
 
-
-    protected User(Parcel in) {
-        username = in.readString();
-        email = in.readString();
-        password = in.readString();
-        imageUrl = in.readString();
-        id = in.readString();
-        role = in.readString();
-        score = in.readDouble();
-        createdEvents = in.createTypedArrayList(Event.CREATOR);
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -72,8 +49,37 @@ public class User implements Serializable,Parcelable {
         dest.writeString(this.imageUrl);
         dest.writeString(this.id);
         dest.writeString(this.role);
-        dest.writeList(this.completeEvents);
-        dest.writeList(this.createdEvents);
-        dest.writeList(this.messages);
+        dest.writeDouble(this.score);
+        dest.writeLong(this.regDate != null ? this.regDate.getTime() : -1);
+        dest.writeTypedList(this.completeEvents);
+        dest.writeTypedList(this.createdEvents);
+        dest.writeTypedList(this.messages);
     }
+
+    protected User(Parcel in) {
+        this.username = in.readString();
+        this.email = in.readString();
+        this.password = in.readString();
+        this.imageUrl = in.readString();
+        this.id = in.readString();
+        this.role = in.readString();
+        this.score = in.readDouble();
+        long tmpRegDate = in.readLong();
+        this.regDate = tmpRegDate == -1 ? null : new Date(tmpRegDate);
+        this.completeEvents = in.createTypedArrayList(Statistics.CREATOR);
+        this.createdEvents = in.createTypedArrayList(Event.CREATOR);
+        this.messages = in.createTypedArrayList(Message.CREATOR);
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

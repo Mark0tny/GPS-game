@@ -561,6 +561,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     public void onInfoWindowClick(final Marker marker) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(String.valueOf(R.string.markerBundle), mClusterManagerRenderer.getClusterItem(marker));
+        bundle.putDouble("lat", mClusterManagerRenderer.getClusterItem(marker).getPosition().latitude);
+        bundle.putDouble("lng", mClusterManagerRenderer.getClusterItem(marker).getPosition().longitude);
+
+
         generateEventClickDialog(bundle);
     }
 
@@ -571,7 +575,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 .setPositiveButton("Start event game", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         Intent intent = new Intent(getContext(), EventGameActivity.class);
-                        intent.putExtras(bundle);
+                        intent.putExtra(String.valueOf(R.string.markerBundle), bundle);
                         startActivity(intent);
                         dialog.dismiss();
                     }
