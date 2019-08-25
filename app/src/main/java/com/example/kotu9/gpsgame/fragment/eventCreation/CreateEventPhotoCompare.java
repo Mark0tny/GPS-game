@@ -34,7 +34,6 @@ import java.io.OutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
-
 public class CreateEventPhotoCompare extends Fragment implements View.OnClickListener {
     private static final int CHOOSE_IMAGE = 12;
     private static final int TAKE_PHOTO = 13;

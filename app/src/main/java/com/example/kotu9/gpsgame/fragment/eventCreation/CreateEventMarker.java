@@ -1,7 +1,6 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
@@ -64,7 +65,7 @@ import lombok.NonNull;
 
 public class CreateEventMarker extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
-    private static final String TAG = Activity.class.getSimpleName();
+    private static final String TAG = AppCompatActivity.class.getSimpleName();
     private Button btnSubmit;
     private ImageButton addLocation;
     private EditText latitude, longitude;
@@ -486,13 +487,13 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     private float setGeofanceRadius(Event event) {
         switch (event.getDifficulty().ordinal()) {
             case 0:
-                return radius = 300f;
+                return radius = 200f;
             case 1:
-                return radius = 500f;
+                return radius = 350f;
             case 2:
-                return radius = 700f;
+                return radius = 500f;
             default:
-                return radius = 300f;
+                return radius = 200f;
 
         }
     }

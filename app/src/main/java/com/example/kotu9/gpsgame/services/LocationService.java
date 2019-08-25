@@ -38,7 +38,7 @@ public class LocationService extends Service {
 
     private static final String TAG = "LocationService";
     private FusedLocationProviderClient mFusedLocationClient;
-    private final static long UPDATE_INTERVAL = 200 * 1000;  /* 4 secs */
+    private final static long UPDATE_INTERVAL = 4 * 1000;  /* 4 secs */
     private final static long FASTEST_INTERVAL = 200 * 1000; /* 2 sec */
 
     @Nullable

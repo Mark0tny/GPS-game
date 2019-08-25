@@ -1,8 +1,8 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +14,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.model.Event;
-import com.example.kotu9.gpsgame.model.Hint;
-import com.example.kotu9.gpsgame.R;
-
-import java.util.ArrayList;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
+import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.model.Event;
+import com.example.kotu9.gpsgame.model.Hint;
+
+import java.util.ArrayList;
 
 
 public class CreateEventHints extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-	private static final String TAG = Activity.class.getSimpleName();
+	private static final String TAG = AppCompatActivity.class.getSimpleName();
 	private Button btnSubmitHints, btnAddHint;
 	private EditText editTextHints;
 	private Hint hintList;

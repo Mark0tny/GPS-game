@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.LoginActivity;
 import com.example.kotu9.gpsgame.model.User;
-import com.example.kotu9.gpsgame.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.NonNull;
 
 import static android.app.Activity.RESULT_OK;
+
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";

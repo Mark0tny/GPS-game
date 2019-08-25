@@ -1,9 +1,9 @@
 package com.example.kotu9.gpsgame.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +18,10 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +40,10 @@ import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.services.LocationService;
 import com.example.kotu9.gpsgame.utils.ClusterManagerRenderer;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,6 +53,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -56,6 +63,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,6 +87,7 @@ import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ENAB
 public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, MarkerRecyclerViewAdapter.OnMarkerClickListener {
 
     private static final String TAG = "UserLocationActivity";
+    private static final String KEY = "You";
     private FirebaseAuth mAuth;
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
@@ -87,6 +98,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private ClusterManager<ClusterMarker> mClusterManager;
     private ClusterManagerRenderer mClusterManagerRenderer;
     private ArrayList<ClusterMarker> mClusterMarkers;
+    private ClusterMarker clickedClusterMarker;
     private Handler mHandler = new Handler();
     private Runnable mRunnable;
     private static final int DISTANCE_UPDATE_INTERVAL = 20000;
@@ -94,6 +106,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private RecyclerView mMarkerListRecyclerView;
     private MarkerRecyclerViewAdapter markerRecyclerViewAdapter;
     private View fragmentMap;
+
+    private DatabaseReference geoDB;
+    private GeoFire geoFire;
+    private LatLng globalPostition = new LatLng(50, 50);
 
     public UserLocationFragment() {
     }
@@ -124,8 +140,29 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         user = new User();
         resetMap();
         getMapMarkersListDB();
+        settingGeoFire();
 
         return rootView;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setupMapView();
+        Context context = getActivity();
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(this);
+    }
+
+    private boolean checkMapServices() {
+        if (isServicesOK()) {
+            return isMapsEnabled();
+        }
+        return false;
     }
 
     @Override
@@ -200,9 +237,9 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Activity) {
-            Activity activity;
-            activity = (Activity) context;
+        if (context instanceof AppCompatActivity) {
+            AppCompatActivity activity;
+            activity = (AppCompatActivity) context;
         }
 
     }
@@ -212,25 +249,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         super.onDetach();
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        setupMapView();
-        Context context = getActivity();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnInfoWindowClickListener(this);
-    }
-
-    private boolean checkMapServices() {
-        if (isServicesOK()) {
-            return isMapsEnabled();
-        }
-        return false;
-    }
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
@@ -341,6 +359,14 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                     user.setLocation(geoPoint);
                     saveUserLocation();
+                    Log.d(TAG, "getLastKnownLocation:" + geoPoint.toString());
+                    geoFire.setLocation(KEY, new GeoLocation(location.getLatitude(), location.getLongitude()),new
+                            GeoFire.CompletionListener(){
+                                @Override
+                                public void onComplete(String key, DatabaseError error) {
+                                    Log.e(TAG, "GeoFire Complete");
+                                }
+                            });
                     startLocationService();
                 }
             }
@@ -366,6 +392,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: called.");
+        Log.d(TAG, "SERVICE CALLBACK");
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if (mLocationPermissionGranted) {
@@ -458,6 +485,8 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 clusterMarker.setIconPicture(clusterMarker.getIconPicture());
                 if (clusterMarker.getEvent().active) {
                     mClusterManager.addItem(clusterMarker);
+                    drawGeofence(clusterMarker);
+                    addGeofenceToMarkers(clusterMarker);
                 } else {
                     Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
                 }
@@ -560,11 +589,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onInfoWindowClick(final Marker marker) {
         Bundle bundle = new Bundle();
+        clickedClusterMarker = mClusterManagerRenderer.getClusterItem(marker);
         bundle.putSerializable(String.valueOf(R.string.markerBundle), mClusterManagerRenderer.getClusterItem(marker));
         bundle.putDouble("lat", mClusterManagerRenderer.getClusterItem(marker).getPosition().latitude);
         bundle.putDouble("lng", mClusterManagerRenderer.getClusterItem(marker).getPosition().longitude);
-
-
         generateEventClickDialog(bundle);
     }
 
@@ -604,9 +632,86 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMarkerListClick(int position) {
         Bundle bundle = new Bundle();
+        clickedClusterMarker = mClusterMarkers.get(position);
+
         bundle.putSerializable(String.valueOf(R.string.markerBundle), mClusterMarkers.get(position));
         generateEventClickDialog(bundle);
     }
+
+    private void createNotification(Context context, String locTransitionType, String locationDetails) {
+        String CHANNEL_ID = "GPSgame";
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.fui_ic_mail_white_24dp)
+                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                        .setContentTitle(locTransitionType)
+                        .setContentText(locationDetails)
+                        .setAutoCancel(true)
+                        .setCategory("Message")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+        builder.setAutoCancel(true);
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(0, builder.build());
+        Log.d("IntentServiceNoti", builder.build().toString());
+
+    }
+
+    private void drawGeofence(ClusterMarker clusterMarker) {
+        Log.d(TAG, "drawGeofence()");
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(clusterMarker.getPosition())
+                .strokeColor(Color.argb(50, 70, 70, 70))
+                .fillColor(Color.argb(100, 150, 150, 150))
+                .radius(clusterMarker.getEvent().geofanceRadius);
+        mMap.addCircle(circleOptions);
+
+    }
+
+    private void settingGeoFire() {
+        geoDB = FirebaseDatabase.getInstance().getReference("GeofenceMarkers");
+        geoFire = new GeoFire(geoDB);
+    }
+
+    private void addGeofenceToMarkers(ClusterMarker clusterMarker) {
+        GeoQuery geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius/1000));
+        Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius/1000);
+        geofence.addGeoQueryEventListener(new GeoQueryEventListener() {
+
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                //TODO wykrywanie który marker i elo po lokacji ?
+
+                // createNotification(getContext(), "GPSgame", key + "entered the " + clickedClusterMarker.getEvent().name + "area");
+                Toast.makeText(getContext(), "GEOFENCE Entered" + location.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                // createNotification(getContext(), "GPSgame", key + "e the " + clickedClusterMarker.getEvent().name + "area");
+                Toast.makeText(getContext(), "GEOFENCE Exited" + key, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                // createNotification(getContext(), "GPSgame", key + "are in " + clickedClusterMarker.getEvent().name + "area");
+                Toast.makeText(getContext(), "GEOFENCE Moved" + location.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                Log.i(TAG, "GeoQueryReady");
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }
 
 

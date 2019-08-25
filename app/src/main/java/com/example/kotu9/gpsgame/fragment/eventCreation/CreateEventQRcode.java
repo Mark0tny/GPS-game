@@ -1,7 +1,6 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +38,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import androidmads.library.qrgenearator.QRGSaver;
 
 public class CreateEventQRcode extends Fragment implements View.OnClickListener {
-    private static final String TAG = Activity.class.getSimpleName();
+    private static final String TAG = AppCompatActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_CODE_WRITE_STORAGE = 112;
 
 

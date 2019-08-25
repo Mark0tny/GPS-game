@@ -1,9 +1,9 @@
 package com.example.kotu9.gpsgame.fragment.eventCreation;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class CreateEventQuiz extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = Activity.class.getSimpleName();
+    private static final String TAG = AppCompatActivity.class.getSimpleName();
     private static final int QUESTIONS_LIMIT = 5;
     private static final int ANSWER_LIMIT = 4;
 

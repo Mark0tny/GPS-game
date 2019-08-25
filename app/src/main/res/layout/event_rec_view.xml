@@ -5,7 +5,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_marginBottom="@dimen/_16dp"
-    android:layout_height="?android:attr/listPreferredItemHeightLarge">
+    android:layout_height="?attr/listPreferredItemHeightLarge">
 
     <ImageView
         android:id="@+id/markerIcon"
