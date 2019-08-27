@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="buttonStyle">@style/Widget.AppCompat.Button.Colored.MyButtonStyle</item>
+        <item name="imageButtonStyle">@style/Widget.AppCompat.ImageButton.MyImageButton</item>
+        <item name="seekBarStyle">@style/Widget.AppCompat.SeekBar.Discrete.MySeekBar</item>
+        <item name="ratingBarStyle">@style/Widget.AppCompat.RatingBar.Indicator</item>
+        <item name="radioButtonStyle">@style/Widget.AppCompat.CompoundButton.RadioButton.MyRadio</item>
+
+        <item name="editTextStyle">@style/Widget.AppCompat.EditText</item>
+        <item name="android:textViewStyle">@style/Widget.AppCompat.TextView</item>
+
+
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -13,9 +24,54 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!--    Button-->
+    <style name="Widget.AppCompat.Button.Colored.MyButtonStyle">
+        <item name="android:background">@drawable/btn_rounded</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.AppCompat.ImageButton.MyImageButton">
+        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
+
+    </style>
+
+
+    <!--        TextView-->
+    <style name="Widget.AppCompat.EditText.MyTextView">
+        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
+
+    </style>
+
+    <!--        EditText-->
+
+    <style name="Widget.AppCompat.EditText.MyEditText">
+        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
+
+    </style>
+
+
+    <!--        Radio-->
+    <style name="Widget.AppCompat.CompoundButton.RadioButton.MyRadio">
+        <item name="android:color">@color/colorPrimaryDark</item>
+
+    </style>
+
+
+    <!--        SeekBar-->
+    <!--    https://stackoverflow.com/questions/41693154/custom-seekbar-thumb-size-color-and-background-->
+    <style name="Widget.AppCompat.SeekBar.Discrete.MySeekBar">
+        <item name="android:progressDrawable">@drawable/custom_seek</item>>
+        <item name="android:thumb">@drawable/seek_thumb</item>>
+    </style>
+
+
+    <!--        RatingBar-->
+    <!--    https://stackoverflow.com/questions/41693154/custom-seekbar-thumb-size-color-and-background-->
+    <style name="Widget.AppCompat.RatingBar.Indicator.MyRatingBar"></style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
 </resources>

@@ -34,7 +34,7 @@
                 android:fontFamily="sans-serif"
                 android:hint="question"
                 android:paddingBottom="15dp"
-                android:textColorHint="@color/colorAccent" />
+                android:textColorHint="@color/colorPrimary" />
 
         </LinearLayout>
 
@@ -62,7 +62,7 @@
                     android:fontFamily="sans-serif"
                     android:hint="select if answer is correct"
                     android:paddingBottom="15dp"
-                    android:textColorHint="@color/colorAccent" />
+                    android:textColorHint="@color/colorPrimary" />
 
                 <RadioButton
                     android:id="@+id/radioBtnAnswer"
