@@ -29,6 +29,13 @@
         <item name="android:paddingLeft">@dimen/_5dp</item>
     </style>
 
+    <style name="Widget.AppCompat.Button.Colored.QUIZ">
+        <item name="android:background">@drawable/btn_rounded</item>
+        <!--W Buttonie działą tu nie sprawedzić w apce po zainstalowaniu-->
+        <item name="android:paddingRight">@dimen/_5dp</item>
+        <item name="android:paddingLeft">@dimen/_5dp</item>
+    </style>
+
     <style name="Widget.AppCompat.ImageButton.MyImageButton">
         <item name="android:backgroundTint">@color/colorPrimaryDark</item>
 
