@@ -18,6 +18,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/_18dp"
                 android:text="@string/add_hint"
                 android:textAlignment="center"/>
 
@@ -28,7 +30,7 @@
                 android:fontFamily="sans-serif"
                 android:hint="Hint"
                 android:paddingBottom="15dp"
-                android:textColorHint="@color/colorAccent"/>
+              />
 
             <Button
                 android:id="@+id/buttonAddHint"

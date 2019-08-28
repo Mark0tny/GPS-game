@@ -33,8 +33,6 @@
             android:id="@+id/editEventDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:counterEnabled="true"
-            android:counterMaxLength="140"
             android:fontFamily="sans-serif"
             android:hint="Event description"
             android:lines="4"
