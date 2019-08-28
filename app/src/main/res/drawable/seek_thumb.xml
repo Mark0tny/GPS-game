@@ -1,13 +1,11 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval" >
-
-    <gradient
-        android:angle="270"
-        android:endColor="@color/colorPrimaryDark"
-        android:startColor="@color/colorPrimaryDark" />
-
-    <size
-        android:height="@dimen/_25dp"
-        android:width="@dimen/_25dp" />
-
-</shape>
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/colorPrimary"/>
+            <size
+                android:width="@dimen/_25dp"
+                android:height="@dimen/_25dp"/>
+        </shape>
+    </item>
+</layer-list>

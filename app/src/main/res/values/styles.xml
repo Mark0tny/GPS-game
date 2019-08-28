@@ -55,9 +55,8 @@
 
 
     <!--        SeekBar-->
-    <!--    https://stackoverflow.com/questions/41693154/custom-seekbar-thumb-size-color-and-background-->
     <style name="Widget.AppCompat.SeekBar.Discrete.MySeekBar">
-        <item name="android:progressDrawable">@drawable/custom_seek</item>>
+        <item name="android:progressDrawable">@drawable/seekbar_style</item>>
         <item name="android:thumb">@drawable/seek_thumb</item>>
     </style>
 
