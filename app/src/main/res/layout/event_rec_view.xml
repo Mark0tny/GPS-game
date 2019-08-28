@@ -1,94 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_marginBottom="@dimen/_16dp"
-    android:layout_height="?attr/listPreferredItemHeightLarge">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/markerIcon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="@dimen/_10dp"
-        android:layout_marginTop="@dimen/_18dp"
-        tools:srcCompat="@tools:sample/avatars[0]" />
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textEventName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10dp"
-        android:layout_toEndOf="@+id/markerIcon"
-        android:text="Eventname" />
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/listPreferredItemHeightLarge"
+            android:layout_marginBottom="@dimen/_16dp">
 
-    <TextView
-        android:id="@+id/textEventType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textEventName"
-        android:layout_marginStart="@dimen/_10dp"
-        android:layout_marginTop="@dimen/_5dp"
-        android:layout_toEndOf="@+id/markerIcon"
-        android:text="Event Type" />
+            <ImageView
+                android:id="@+id/markerIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_18dp"
+                tools:srcCompat="@tools:sample/avatars[0]" />
 
-    <TextView
-        android:id="@+id/textEventDifficulty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textEventType"
-        android:layout_alignEnd="@id/textEventName"
-        android:layout_marginStart="@dimen/_10dp"
-        android:layout_marginTop="@dimen/_5dp"
-        android:layout_toEndOf="@+id/markerIcon"
-        android:text="Difficulty" />
+            <RatingBar
+                android:id="@+id/ratingEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textRating"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_toEndOf="@+id/textEventDifficulty"
+                android:focusable="false"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize=".5" />
 
-    <TextView
-        android:id="@+id/textDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30dp"
-        android:layout_toEndOf="@+id/textEventName"
-        android:text="Distance:" />
+            <TextView
+                android:id="@+id/textEventType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textEventName"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_toEndOf="@+id/markerIcon"
+                android:text="Event Type" />
 
-    <TextView
-        android:id="@+id/textDistanceValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        
-        android:layout_marginStart="@dimen/_5dp"
-        android:layout_toEndOf="@+id/textDistance"
-        android:text="DistanceValue" />
+            <TextView
+                android:id="@+id/textEventDifficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textEventType"
+                android:layout_alignEnd="@id/textEventName"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_toEndOf="@+id/markerIcon"
+                android:text="Difficulty" />
 
-    <TextView
-        android:id="@+id/textRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textDistance"
-        android:layout_marginStart="70dp"
-        android:layout_toEndOf="@+id/textEventDifficulty"
-        android:text="Rating: " />
+            <TextView
+                android:id="@+id/textDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_30dp"
+                android:layout_toEndOf="@+id/textEventName"
+                android:text="Distance:" />
 
-    <TextView
-        android:id="@+id/textRatingValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textDistance"
-        android:layout_marginStart="@dimen/_5dp"
-        android:layout_toEndOf="@+id/textRating"
-        android:text="RatingValue" />
+            <TextView
+                android:id="@+id/textDistanceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-    <RatingBar
-        android:id="@+id/ratingEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textRating"
-        android:layout_marginStart="@dimen/_10dp"
-        android:focusable="false"
-        android:numStars="5"
-        android:stepSize=".5"
-        android:isIndicator="true"
-        android:layout_toEndOf="@+id/textEventDifficulty" />
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_toEndOf="@+id/textDistance"
+                android:text="DistanceValue" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/textRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textDistance"
+                android:layout_marginStart="70dp"
+                android:layout_toEndOf="@+id/textEventDifficulty"
+                android:text="Rating: " />
+
+            <TextView
+                android:id="@+id/textRatingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textDistance"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_toEndOf="@+id/textRating"
+                android:text="RatingValue" />
+
+            <TextView
+                android:id="@+id/textEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_toEndOf="@+id/markerIcon"
+                android:text="Eventname" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

@@ -67,7 +67,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/_10dp"
+            android:layout_marginBottom="25dp"
             android:text="@string/submitInfo" />
     </RelativeLayout>
 </FrameLayout>

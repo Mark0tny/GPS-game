@@ -16,5 +16,6 @@
     <dimen name="marker_padding">5dp</dimen>
     <dimen name="_25dp">25dp</dimen>
     <dimen name="_75dp">75dp</dimen>
+    <dimen name="_20dp">20dp</dimen>
 
 </resources>

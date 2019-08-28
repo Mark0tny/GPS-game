@@ -1,72 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relativeLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?attr/listPreferredItemHeightLarge"
-    android:layout_marginBottom="@dimen/_16dp">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:id="@+id/user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_30dp"
-        android:layout_marginTop="@dimen/_10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/comUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5dp"
-            android:text="User"
-            android:textSize="@dimen/_18dp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_30dp"
-        android:layout_marginTop="@dimen/_5dp"
-        android:layout_below="@id/user"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/comDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5dp"
-            android:layout_marginBottom="@dimen/_10dp"
-            android:text="Date"
-            android:textSize="@dimen/_18dp"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/body"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toEndOf="@id/user"
-        android:layout_marginLeft="@dimen/_18dp"
-        android:layout_marginRight="@dimen/_18dp"
-        android:layout_marginTop="@dimen/_10dp"
-        android:layout_marginBottom="@dimen/_10dp"
+        android:layout_height="wrap_content">
 
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/comBody"
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/time"
-            android:layout_marginLeft="@dimen/_5dp"
-            android:layout_marginTop="@dimen/_5dp"
-            android:text="Value"
-            android:textSize="@dimen/_18dp" />
-    </LinearLayout>
+            android:layout_height="?attr/listPreferredItemHeightLarge"
+            android:layout_marginBottom="@dimen/_16dp">
+
+            <LinearLayout
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user"
+                android:layout_marginLeft="@dimen/_30dp"
+                android:layout_marginTop="@dimen/_5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/comDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_marginBottom="@dimen/_10dp"
+                    android:text="Date"
+                    android:textSize="@dimen/_18dp"
+                    android:textStyle="bold" />
 
 
-</RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_30dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/comUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:text="User"
+                    android:textSize="@dimen/_18dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_18dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginRight="@dimen/_18dp"
+                android:layout_marginBottom="@dimen/_10dp"
+                android:layout_toEndOf="@id/user"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/comBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/time"
+                    android:layout_marginLeft="@dimen/_5dp"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:text="Value"
+                    android:textSize="@dimen/_18dp"
+                   />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
