@@ -45,7 +45,7 @@
     <!--        EditText-->
 
     <style name="Widget.AppCompat.EditText.MyEditText">
-        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
+        <item name="android:editTextPreferenceStyle">@drawable/edittext_selector</item>
 
     </style>
 

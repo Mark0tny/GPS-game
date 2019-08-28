@@ -21,6 +21,7 @@
             tools:src="@tools:sample/avatars" />
 
         <LinearLayout
+            android:id="@+id/buttonsPhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/imageViewphoto"
@@ -55,7 +56,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/_10dp"
+            android:layout_marginBottom="@dimen/_25dp"
             android:text="@string/submitInfo" />
+
     </RelativeLayout>
 </FrameLayout>

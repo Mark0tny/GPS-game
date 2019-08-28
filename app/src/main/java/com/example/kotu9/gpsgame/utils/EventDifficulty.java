@@ -2,8 +2,10 @@ package com.example.kotu9.gpsgame.utils;
 
 import android.graphics.Color;
 
+import com.example.kotu9.gpsgame.R;
+
 public enum EventDifficulty {
-    Easy(Color.GREEN), Medium(Color.YELLOW), Hard(Color.RED);
+    Easy(Color.parseColor(String.valueOf(R.color.diffGreen))), Medium(Color.parseColor(String.valueOf(R.color.diffYellow))), Hard(Color.parseColor(String.valueOf(R.color.diffRed)));
 
     private int colorId;
 

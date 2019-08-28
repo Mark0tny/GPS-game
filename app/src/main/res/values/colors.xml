@@ -4,5 +4,9 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#fdfdfd</color>
     <color name="btnLoginRef">#03460d</color>
-    <color name="green">#32CD32</color>
+
+
+    <color name="diffGreen">#3C8A40</color>
+    <color name="diffYellow">#FFC107</color>
+    <color name="diffRed">#C00F0F</color>
 </resources>
