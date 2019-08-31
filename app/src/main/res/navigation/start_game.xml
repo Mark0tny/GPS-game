@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/startGameFragment"
         android:name="com.example.kotu9.gpsgame.fragment.eventGame.StartGameFragment"
-        android:label="fragment_start_game"
-        tools:layout="@layout/fragment_start_game" >
+        tools:layout="@layout/fragment_start_game">
         <action
             android:id="@+id/action_startGameFragment_to_eventStartLocation"
             app:destination="@id/eventStartLocation"
@@ -38,8 +37,7 @@
     <fragment
         android:id="@+id/eventStartPhotoCompare"
         android:name="com.example.kotu9.gpsgame.fragment.eventGame.EventStartPhotoCompare"
-        android:label="fragment_event_start_photo_compare"
-        tools:layout="@layout/fragment_event_start_photo_compare" >
+        tools:layout="@layout/fragment_event_start_photo_compare">
         <action
             android:id="@+id/action_eventStartPhotoCompare_to_eventStartSummary"
             app:destination="@id/eventStartSummary"
@@ -50,8 +48,7 @@
     <fragment
         android:id="@+id/eventStartQRcode"
         android:name="com.example.kotu9.gpsgame.fragment.eventGame.EventStartQRcode"
-        android:label="fragment_event_start_qrcode"
-        tools:layout="@layout/fragment_event_start_qrcode" >
+        tools:layout="@layout/fragment_event_start_qrcode">
         <action
             android:id="@+id/action_eventStartQRcode_to_eventStartSummary"
             app:destination="@id/eventStartSummary"
@@ -62,8 +59,7 @@
     <fragment
         android:id="@+id/eventStartQuiz"
         android:name="com.example.kotu9.gpsgame.fragment.eventGame.EventStartQuiz"
-        android:label="fragment_event_start_quiz"
-        tools:layout="@layout/fragment_event_start_quiz" >
+        tools:layout="@layout/fragment_event_start_quiz">
         <action
             android:id="@+id/action_eventStartQuiz_to_eventStartSummary"
             app:destination="@id/eventStartSummary"
@@ -74,13 +70,11 @@
     <fragment
         android:id="@+id/eventStartSummary"
         android:name="com.example.kotu9.gpsgame.fragment.eventGame.EventStartSummary"
-        android:label="fragment_event_start_summary"
         tools:layout="@layout/fragment_event_start_summary" />
     <fragment
         android:id="@+id/eventStartLocation"
         android:name="com.example.kotu9.gpsgame.fragment.eventGame.EventStartLocation"
-        android:label="fragment_event_start_location"
-        tools:layout="@layout/fragment_event_start_location" >
+        tools:layout="@layout/fragment_event_start_location">
         <action
             android:id="@+id/action_eventStartLocation_to_eventStartSummary"
             app:destination="@id/eventStartSummary"

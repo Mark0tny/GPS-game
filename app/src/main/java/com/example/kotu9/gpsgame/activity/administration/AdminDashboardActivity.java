@@ -10,6 +10,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle(R.string.ac_admin);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 

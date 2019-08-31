@@ -26,6 +26,7 @@ public class EventStartQuiz extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.fr_start_quiz);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 

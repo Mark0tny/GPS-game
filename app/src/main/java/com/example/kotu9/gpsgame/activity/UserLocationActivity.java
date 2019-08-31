@@ -45,6 +45,7 @@ public class UserLocationActivity extends ActivityManagePermission
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle(R.string.ac_user_location);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_location);
         Toolbar toolbar = findViewById(R.id.toolbarMap);

@@ -45,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle(R.string.ac_register);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         findViewById(R.id.buttonSignUp).setOnClickListener(this);

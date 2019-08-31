@@ -25,6 +25,7 @@ public class EventStartQRcode extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(R.string.fr_start_QR);
         if (getArguments() != null) {
 
         }

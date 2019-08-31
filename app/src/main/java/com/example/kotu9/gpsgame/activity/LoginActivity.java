@@ -36,6 +36,7 @@ public class LoginActivity extends ActivityManagePermission implements View.OnCl
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle(R.string.ac_login);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupFirebaseAuth();

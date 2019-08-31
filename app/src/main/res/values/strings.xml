@@ -35,8 +35,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="MapView">Map view</string>
     <string name="listView">List View</string>
-    <string name="title_activity_navigation_maps">Map</string>
-    <string name="title_activity_user_location">UserLocationActivity</string>
+
 
     <!-- Firestore Strings -->
     <string name="collection_users">users</string>
@@ -109,6 +108,28 @@
     <string name="markerBundleGame">markerBundleGame</string>
 
 
+    <!--Fragment and Activity names-->
+    <string name="ac_login">Login</string>
+    <string name="ac_register">Register</string>
+    <string name="ac_user_location">User Location</string>
+    <string name="ac_start_game">Start Game</string>
+    <string name="fr_hints">Add Hints</string>
+    <string name="fr_add_pleace">Pleace to find</string>
+    <string name="fr_add_marker">Add Marker Location</string>
+    <string name="fr_add_photo_compare">Photo Compare</string>
+    <string name="fr_add_Qr">QR code</string>
+    <string name="fr_add_quiz">Quiz</string>
+    <string name="fr_event_details">Event Details</string>
+    <string name="fr_start_location">Find Hidden Location</string>
+    <string name="fr_start_QR">Find Hidden QR code</string>
+    <string name="fr_start_quiz">Solve Quiz</string>
+    <string name="fr_start_photo">Find This Object</string>
+    <string name="fr_start_summary">Game Summary</string>
+    <string name="fr_messages">Messages</string>
+    <string name="fr_profile">User Profile</string>
+    <string name="ac_admin">Admin Dashboard</string>
+    <string name="fr_navigation_maps">Map</string>
+    <string name="fr_add_basicInfo">Event Basic Info</string>
 
 
 </resources>

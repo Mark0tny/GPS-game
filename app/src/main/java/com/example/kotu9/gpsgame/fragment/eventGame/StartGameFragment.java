@@ -58,6 +58,7 @@ public class StartGameFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.ac_start_game);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             event = new Event();

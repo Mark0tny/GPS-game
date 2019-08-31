@@ -65,7 +65,6 @@
 
         <activity
             android:name=".activity.UserLocationActivity"
-            android:label="@string/title_activity_user_location"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service

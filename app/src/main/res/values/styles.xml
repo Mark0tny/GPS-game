@@ -24,14 +24,12 @@
     <style name="Widget.AppCompat.Button.Colored.MyButtonStyle">
         <item name="android:background">@drawable/btn_rounded</item>
         <item name="android:textColor">@color/colorAccent</item>
-        <!--W Buttonie działą tu nie sprawedzić w apce po zainstalowaniu-->
         <item name="android:paddingRight">@dimen/_5dp</item>
         <item name="android:paddingLeft">@dimen/_5dp</item>
     </style>
 
     <style name="Widget.AppCompat.Button.Colored.QUIZ">
         <item name="android:background">@drawable/btn_rounded</item>
-        <!--W Buttonie działą tu nie sprawedzić w apce po zainstalowaniu-->
         <item name="android:paddingRight">@dimen/_5dp</item>
         <item name="android:paddingLeft">@dimen/_5dp</item>
     </style>
@@ -43,7 +41,8 @@
 
     <!--        EditText-->
     <style name="Widget.AppCompat.EditText.MyEditText">
-        <item name="android:editTextPreferenceStyle">@drawable/edittext_selector</item>
+        <item name="android:backgroundTint">@color/normal</item>
+        <item name="backgroundTint">@color/active</item>>
         <item name="android:textColorHint">@color/colorPrimary</item>
     </style>
 

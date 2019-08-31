@@ -79,6 +79,7 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.fr_event_details);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             clusterMarker = new ClusterMarker();

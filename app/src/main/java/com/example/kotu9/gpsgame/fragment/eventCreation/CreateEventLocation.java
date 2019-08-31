@@ -67,6 +67,7 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(R.string.fr_add_pleace);
         setRetainInstance(true);
         if (getArguments() != null) {
             event = new LocationType((Event) getArguments().get(String.valueOf(R.string.eventBundle)));

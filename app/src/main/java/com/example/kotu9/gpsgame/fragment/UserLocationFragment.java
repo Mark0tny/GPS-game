@@ -109,7 +109,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private DatabaseReference geoDB;
     private GeoFire geoFire;
-    private LatLng globalPostition = new LatLng(50, 50);
 
     public UserLocationFragment() {
     }
@@ -118,6 +117,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(R.string.fr_navigation_maps);
         mClusterMarkers = new ArrayList<>();
     }
 
@@ -359,9 +359,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                     user.setLocation(geoPoint);
                     saveUserLocation();
+                    startLocationService();
                     Log.d(TAG, "getLastKnownLocation:" + geoPoint.toString());
-                    geoFire.setLocation(KEY, new GeoLocation(location.getLatitude(), location.getLongitude()),new
-                            GeoFire.CompletionListener(){
+                    geoFire.setLocation(KEY, new GeoLocation(location.getLatitude(), location.getLongitude()), new
+                            GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
                                     Log.e(TAG, "GeoFire Complete");
@@ -676,13 +677,20 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
     private void addGeofenceToMarkers(ClusterMarker clusterMarker) {
-        GeoQuery geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius/1000));
-        Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius/1000);
+        final GeoQuery geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius / 1000));
+        Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius / 1000);
         geofence.addGeoQueryEventListener(new GeoQueryEventListener() {
 
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
                 //TODO wykrywanie który marker i elo po lokacji ?
+                //GeoLocation location -> moja lokalizacja  <-liczyć distance
+                // KONWERTOWAC  geofence.getCenter() na LatLng i szukać markera i elo ;)
+                Log.i("mClusterMarkersListener", mClusterMarkers.toString());
+                LatLng meetLatLng2 = new LatLng( geofence.getCenter().latitude, geofence.getCenter().longitude);
+                Log.i("GEOcenterToLATLng", meetLatLng2.toString());
+                Log.i("ListenerGETCENER", "lat " + geofence.getCenter().latitude + " lng " + geofence.getCenter().longitude);
+
 
                 // createNotification(getContext(), "GPSgame", key + "entered the " + clickedClusterMarker.getEvent().name + "area");
                 Toast.makeText(getContext(), "GEOFENCE Entered" + location.toString(), Toast.LENGTH_LONG).show();

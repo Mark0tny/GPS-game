@@ -19,6 +19,7 @@ public class EventGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle(R.string.ac_start_game);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_game);
         setupNavigation();

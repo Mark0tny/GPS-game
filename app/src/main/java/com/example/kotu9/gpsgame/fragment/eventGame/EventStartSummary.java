@@ -26,6 +26,7 @@ public class EventStartSummary extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.fr_start_summary);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 

@@ -93,6 +93,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.fr_add_marker);
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         if (getArguments() != null) {

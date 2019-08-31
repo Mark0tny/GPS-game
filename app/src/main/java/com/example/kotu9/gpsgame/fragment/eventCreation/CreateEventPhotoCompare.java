@@ -64,6 +64,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.fr_add_photo_compare);
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mAuth = FirebaseAuth.getInstance();

@@ -8,45 +8,37 @@
     <fragment
         android:id="@+id/createEventInfo"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventInfo"
-        android:label="fragment_create_event_info"
         tools:layout="@layout/fragment_create_event_info">
         <action
             android:id="@+id/action_createEventInfo_to_createEventLocation"
             app:destination="@id/createEventLocation"
-            app:enterAnim="@anim/fui_slide_in_right"
-           />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventInfo_to_createEventPhotoCompare"
             app:destination="@id/createEventPhotoCompare"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventInfo_to_createEventQRcode"
             app:destination="@id/createEventQRcode"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventInfo_to_createEventQuiz"
             app:destination="@id/createEventQuiz"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
     </fragment>
     <fragment
         android:id="@+id/createEventHints"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventHints"
-        android:label="fragment_create_event_hints"
         tools:layout="@layout/fragment_create_event_hints">
 
         <action
             android:id="@+id/action_createEventHints_to_createEventMarker"
             app:destination="@id/createEventMarker"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventHints_to_createEventLocation"
             app:destination="@id/createEventLocation"
-            app:enterAnim="@anim/fui_slide_out_left"
-            />
+            app:enterAnim="@anim/fui_slide_out_left" />
         <action
             android:id="@+id/action_createEventHints_to_createEventPhotoCompare"
             app:destination="@id/createEventPhotoCompare"
@@ -69,31 +61,26 @@
     <fragment
         android:id="@+id/createEventLocation"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventLocation"
-        android:label="fragment_create_event_location"
         tools:layout="@layout/fragment_create_event_location">
 
         <action
             android:id="@+id/action_createEventLocation_to_createEventHints"
             app:destination="@id/createEventHints"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventLocation_to_createEventInfo"
             app:destination="@id/createEventInfo"
-            app:enterAnim="@anim/fui_slide_out_left"
-          />
+            app:enterAnim="@anim/fui_slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/createEventPhotoCompare"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventPhotoCompare"
-        android:label="fragment_create_event_photo_compare"
         tools:layout="@layout/fragment_create_event_photo_compare">
 
         <action
             android:id="@+id/action_createEventPhotoCompare_to_createEventHints"
             app:destination="@+id/createEventHints"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventPhotoCompare_to_createEventInfo"
             app:destination="@id/createEventInfo"
@@ -104,48 +91,40 @@
     <fragment
         android:id="@+id/createEventQRcode"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventQRcode"
-        android:label="fragment_create_event_qrcode"
         tools:layout="@layout/fragment_create_event_qrcode">
 
         <action
             android:id="@+id/action_createEventQRcode_to_createEventHints"
             app:destination="@id/createEventHints"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventQRcode_to_createEventInfo"
             app:destination="@id/createEventInfo"
-            app:enterAnim="@anim/fui_slide_out_left"
-            />
+            app:enterAnim="@anim/fui_slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/createEventQuiz"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventQuiz"
-        android:label="fragment_create_event_quiz"
         tools:layout="@layout/fragment_create_event_quiz">
 
         <action
             android:id="@+id/action_createEventQuiz_to_createEventHints"
             app:destination="@+id/createEventHints"
-            app:enterAnim="@anim/fui_slide_in_right"
-            />
+            app:enterAnim="@anim/fui_slide_in_right" />
         <action
             android:id="@+id/action_createEventQuiz_to_createEventInfo"
             app:destination="@id/createEventInfo"
-            app:enterAnim="@anim/fui_slide_out_left"
-            />
+            app:enterAnim="@anim/fui_slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/createEventMarker"
         android:name="com.example.kotu9.gpsgame.fragment.eventCreation.CreateEventMarker"
-        android:label="fragment_create_event_marker"
         tools:layout="@layout/fragment_create_event_marker">
 
         <action
             android:id="@+id/action_createEventMarker_to_createEventHints"
             app:destination="@id/createEventHints"
-            app:enterAnim="@anim/fui_slide_out_left"
-            />
+            app:enterAnim="@anim/fui_slide_out_left" />
     </fragment>
 
     <action

@@ -68,6 +68,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
     // sprawdzac czy istnieje plik i wczytywć znowu ?
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().setTitle(R.string.fr_add_Qr);
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mAuth = FirebaseAuth.getInstance();

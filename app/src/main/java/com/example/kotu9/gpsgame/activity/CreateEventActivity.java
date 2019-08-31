@@ -17,6 +17,7 @@ public class CreateEventActivity extends AppCompatActivity implements CreateEven
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle(R.string.fr_add_basicInfo);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
         setupNavigation();
