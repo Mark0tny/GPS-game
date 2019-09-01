@@ -16,12 +16,6 @@
                   <entry key="createEventHints">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="1052" />
-                            <option name="y" value="32" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventHints_to_createEventLocation">
@@ -57,12 +51,6 @@
                   <entry key="createEventInfo">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-117" />
-                            <option name="y" value="34" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventInfo_to_createEventLocation">
@@ -93,12 +81,6 @@
                   <entry key="createEventLocation">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="365" />
-                            <option name="y" value="-465" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventLocation_to_createEventHints">
@@ -119,12 +101,6 @@
                   <entry key="createEventMarker">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="1489" />
-                            <option name="y" value="42" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventMarker_to_createEventHints">
@@ -140,12 +116,6 @@
                   <entry key="createEventPhotoCompare">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="367" />
-                            <option name="y" value="-137" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventPhotoCompare_to_createEventHints">
@@ -166,12 +136,6 @@
                   <entry key="createEventQRcode">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="377" />
-                            <option name="y" value="302" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventQRcode_to_createEventHints">
@@ -192,12 +156,6 @@
                   <entry key="createEventQuiz">
                     <value>
                       <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="371" />
-                            <option name="y" value="697" />
-                          </Point>
-                        </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_createEventQuiz_to_createEventHints">
@@ -314,8 +272,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="500" />
-                            <option name="y" value="393" />
+                            <option name="x" value="627" />
+                            <option name="y" value="489" />
                           </Point>
                         </option>
                       </LayoutPositions>

@@ -43,7 +43,7 @@ import static java.lang.String.valueOf;
 public class EventDetails extends Fragment implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
 
-    TextView eName, eType, eDifficulty, eDistance, eRatingValue, eLatValue,
+    TextView eName, eType, eDifficulty, eDistance,eDescription, eRatingValue, eLatValue,
             eLngValue, eOwnerName, hintListExp, commentsListExp, rankingListExp;
     RatingBar ratingEvent;
 
@@ -116,6 +116,7 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eDistance.setText(String.format("%.2f", clusterMarker.getEvent().distance));
         ratingEvent.setRating(clusterMarker.getEvent().rating);
         eRatingValue.setText(valueOf(clusterMarker.getEvent().rating));
+        eDescription.setText(clusterMarker.getEvent().description);
         eLatValue.setText(String.format("%.2f", clusterMarker.getPosition().latitude));
         eLngValue.setText(String.format("%.2f", clusterMarker.getPosition().longitude));
         eOwnerName.setText(clusterMarker.getOwner().username);
@@ -131,7 +132,8 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eRatingValue = view.findViewById(R.id.textRatingValueD);
         eLatValue = view.findViewById(R.id.textLatD);
         eLngValue = view.findViewById(R.id.textLngD);
-        eOwnerName = view.findViewById(R.id.textOwnerD);
+        eOwnerName = view.findViewById(R.id.textOwnerValueD);
+        eDescription  = view.findViewById(R.id.textDescriptionValueD);
         listView = view.findViewById(R.id.hintListD);
         mRecyclerViewComments = view.findViewById(R.id.recyclerComments);
         mRecyclerViewRanking = view.findViewById(R.id.recyclerRanking);

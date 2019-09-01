@@ -150,23 +150,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5dp"
                         android:text="RatingValue" />
+
+                    <RatingBar
+                        android:id="@+id/ratingEventD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10dp"
+                        android:layout_marginEnd="-60dp"
+                        android:layout_marginBottom="-25dp"
+                        android:focusable="false"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:scaleX=".5"
+                        android:scaleY=".5"
+                        android:stepSize=".5"
+                        android:transformPivotX="0dp"
+                        android:transformPivotY="0dp" />
+
                 </LinearLayout>
 
 
-                <RatingBar
-                    android:id="@+id/ratingEventD"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="-60dp"
-                    android:layout_marginBottom="-25dp"
-                    android:focusable="false"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:scaleX=".5"
-                    android:scaleY=".5"
-                    android:stepSize=".5"
-                    android:transformPivotX="0dp"
-                    android:transformPivotY="0dp" />
             </LinearLayout>
 
             <LinearLayout
