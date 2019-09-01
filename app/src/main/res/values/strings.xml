@@ -130,6 +130,7 @@
     <string name="ac_admin">Admin Dashboard</string>
     <string name="fr_navigation_maps">Map</string>
     <string name="fr_add_basicInfo">Event Basic Info</string>
+    <string name="timerBundleGame">timerBundleGame</string>
 
 
 </resources>

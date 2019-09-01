@@ -221,6 +221,16 @@ public class CreateEventInfo extends Fragment implements View.OnFocusChangeListe
             return;
         }
         if (i % 4 == 0) checkFildsFilled = true;
+
+        event.setId(getEventID());
+    }
+
+
+    private String getEventID() {
+        if (event != null) {
+            return event.name + event.hashCode();
+        }
+        return "";
     }
 }
 

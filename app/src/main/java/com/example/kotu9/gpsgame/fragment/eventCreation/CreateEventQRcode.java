@@ -151,7 +151,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
     }
 
     private void generateQRcode() {
-            qrgEncoder = new QRGEncoder(event.name, null, QRGContents.Type.TEXT, 400);
+            qrgEncoder = new QRGEncoder(event.id, null, QRGContents.Type.TEXT, 400);
             try {
                 bitmap = qrgEncoder.encodeAsBitmap();
                 mQRcodeView.setImageBitmap(bitmap);
@@ -159,6 +159,7 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
                 Log.v(TAG, e.toString());
             }
     }
+
 
     private void submitQRcode() {
         setQRcode();

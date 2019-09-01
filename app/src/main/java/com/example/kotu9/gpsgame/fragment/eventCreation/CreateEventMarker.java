@@ -256,7 +256,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     }
 
     private void setEventNullValues() {
-        event.id = getEventID();
         event.setActive(true);
         event.geofanceRadius = radius;
         event.rating = 0;
@@ -283,13 +282,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         });
 
 
-    }
-
-    private String getEventID() {
-        if (event != null) {
-            return event.name + event.hashCode();
-        }
-        return "";
     }
 
     private double calculatePointByDifficulty() {
