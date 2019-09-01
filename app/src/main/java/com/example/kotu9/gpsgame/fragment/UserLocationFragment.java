@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,7 +101,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private ClusterManagerRenderer mClusterManagerRenderer;
     private ArrayList<ClusterMarker> mClusterMarkers;
     private ClusterMarker clickedClusterMarker;
-    private HashMap<String,Boolean> geoMap = new HashMap<>();
+    private HashMap<String, Boolean> geoMap = new HashMap<>();
     private Handler mHandler = new Handler();
     private Runnable mRunnable;
     private static final int DISTANCE_UPDATE_INTERVAL = 2000;
@@ -636,7 +637,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                         fragmentTransaction.replace(R.id.frame_container, detailsFragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
-
                         dialog.dismiss();
                     }
                 });
@@ -644,27 +644,18 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         alert.show();
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
         alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK);
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(Color.LTGRAY);
-        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setBackgroundColor(Color.LTGRAY);
 
-//        alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorPrimaryDark)));
-//        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setBackgroundColor(Color.parseColor(String.valueOf(R.color.colorPrimaryDark)));
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
+        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
 
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextSize(15);
-        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextSize(15);
-
-        if(clickedClusterMarker != null)
-            if(geoMap != null) {
+        if (clickedClusterMarker != null) {
+            if (geoMap != null) {
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(geoMap.get(clickedClusterMarker.getEvent().name));
-                alert.getButton(AlertDialog.BUTTON_POSITIVE).setFocusable(geoMap.get(clickedClusterMarker.getEvent().name));
-            }else {
-                Toast.makeText(getContext(), "You are not in " +clickedClusterMarker.getEvent().name + " play region", Toast.LENGTH_LONG).show();
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setError("You are not in " + clickedClusterMarker.getEvent().getName() + " Area");
             }
-
+        }
 
     }
-
-
 
 
     private void createNotification(Context context, String locTransitionType, String locationDetails) {
@@ -704,37 +695,43 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         geoFire = new GeoFire(geoDB);
     }
 
-    private void addGeofenceToMarkers(ClusterMarker clusterMarker) {
+    private void addGeofenceToMarkers(final ClusterMarker clusterMarker) {
         final GeoQuery geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius / 1000));
         Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius / 1000);
         geofence.addGeoQueryEventListener(new GeoQueryEventListener() {
 
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                createNotification(getContext(), "GPSgame", key + "e the " + clickedClusterMarker.getEvent().name + "area");
                 LatLng geoCeneter = new LatLng(geofence.getCenter().latitude, geofence.getCenter().longitude);
                 Log.e(TAG, "geoCenterDistanceM: " + calculateDistanceGeofence(user, geoCeneter));
 
+
+                for (ClusterMarker findMarker : mClusterMarkers) {
+                    if (findMarker.getPosition().equals(geoCeneter)) {
+                        createNotification(getContext(), "GPSgame ", key + " entered the " + findMarker.getEvent().name + " game area");
+
+                    }
+                }
+
                 for (ClusterMarker clusterMarker : mClusterMarkers) {
-                    if (calculateDistance(user,clusterMarker) <= calculateDistanceGeofence(user, geoCeneter)) {
-                        geoMap.put(clusterMarker.getEvent().name,true);
-                        Toast.makeText(getContext(), "DISTANCE TURE" + clusterMarker.getEvent().name + " " + ((calculateDistance(user,clusterMarker) - calculateDistanceGeofence(user, geoCeneter))), Toast.LENGTH_LONG).show();
+                    if (calculateDistance(user, clusterMarker) <= calculateDistanceGeofence(user, geoCeneter)) {
+                        geoMap.put(clusterMarker.getEvent().name, true);
+                        Toast.makeText(getContext(), "DISTANCE TURE" + clusterMarker.getEvent().name + " " + ((calculateDistance(user, clusterMarker) - calculateDistanceGeofence(user, geoCeneter))), Toast.LENGTH_LONG).show();
                     } else {
-                        geoMap.put(clusterMarker.getEvent().name,false);
-                        Toast.makeText(getContext(), "DISTANCE  FALSE " + clusterMarker.getEvent().name + " " + ((calculateDistance(user,clusterMarker) - calculateDistanceGeofence(user, geoCeneter))), Toast.LENGTH_LONG).show();
+                        geoMap.put(clusterMarker.getEvent().name, false);
+                        Toast.makeText(getContext(), "DISTANCE  FALSE " + clusterMarker.getEvent().name + " " + ((calculateDistance(user, clusterMarker) - calculateDistanceGeofence(user, geoCeneter))), Toast.LENGTH_LONG).show();
                     }
                 }
             }
 
             @Override
             public void onKeyExited(String key) {
-                createNotification(getContext(), "GPSgame", key + "e the " + clickedClusterMarker.getEvent().name + "area");
+                createNotification(getContext(), "GPSgame ", key + " exited the " + " game area");
                 Toast.makeText(getContext(), "GEOFENCE Exited" + key, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
-
 
             }
 
