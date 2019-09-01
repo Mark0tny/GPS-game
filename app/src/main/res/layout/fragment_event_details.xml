@@ -249,7 +249,7 @@
                         android:textSize="@dimen/_18dp"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerComments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -275,7 +275,7 @@
                         android:textSize="@dimen/_18dp"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerRanking"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

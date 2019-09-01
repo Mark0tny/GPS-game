@@ -15,15 +15,15 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -323,7 +323,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@android.support.annotation.NonNull Task<DocumentSnapshot> task) {
+                    public void onComplete(@androidx.annotation.NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
@@ -349,7 +349,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
             docRef.update("location", user.getLocation()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
-                public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                     Log.d(TAG, "saveUserLocation: location saved in DB");
                 }
             });
@@ -363,7 +363,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         }
         mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
-            public void onComplete(@android.support.annotation.NonNull Task<Location> task) {
+            public void onComplete(@androidx.annotation.NonNull Task<Location> task) {
                 if (task.isSuccessful()) {
                     Location location = task.getResult();
                     GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -529,7 +529,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@android.support.annotation.NonNull Exception e) {
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
                 Toast.makeText(getContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
                 Log.i(TAG, e.getMessage());
             }
@@ -580,12 +580,12 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                         .document("marker_" + clusterMarker.getEvent().id);
                 distanceRef.update("distance", clusterMarker.getEvent().distance).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                    public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                         //Log.d(TAG, clusterMarker.getEvent().name + " distance: " + clusterMarker.getEvent().distance);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+                    public void onFailure(@androidx.annotation.NonNull Exception e) {
                         Log.d(TAG, e.getMessage());
 
                     }

@@ -7,9 +7,9 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -272,12 +272,12 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
         newUserRef.update("createdEvents", eventCreator.createdEvents).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 Log.i("updateUserEvents: ", "SUCCESS");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@android.support.annotation.NonNull Exception e) {
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
                 Log.i("update created events", e.getMessage());
             }
         });
@@ -375,7 +375,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                                                      }
                                                  }).addOnFailureListener(new OnFailureListener() {
                                                      @Override
-                                                     public void onFailure(@android.support.annotation.NonNull Exception e) {
+                                                     public void onFailure(@androidx.annotation.NonNull Exception e) {
                                                          Toast.makeText(getActivity(), "Image save Failure", Toast.LENGTH_SHORT).show();
                                                          Log.i("Image upload: ", e.getMessage());
                                                      }
@@ -386,7 +386,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                                      }
             ).addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onFailure(@android.support.annotation.NonNull Exception e) {
+                public void onFailure(@androidx.annotation.NonNull Exception e) {
                     Toast.makeText(getActivity(), "Image save Failure", Toast.LENGTH_SHORT).show();
 
                 }

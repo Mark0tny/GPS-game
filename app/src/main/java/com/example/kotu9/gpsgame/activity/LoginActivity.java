@@ -2,7 +2,7 @@ package com.example.kotu9.gpsgame.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;

@@ -53,8 +53,7 @@
     <FrameLayout
         android:id="@+id/scanner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/startQRInfo"
+        android:layout_height="match_parent"
         android:layout_below="@id/gameTimer"
         android:layout_marginBottom="0dp">
 
@@ -67,7 +66,8 @@
         <View
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_75dp"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/rectangle">
 
         </View>
