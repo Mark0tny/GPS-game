@@ -18,14 +18,43 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/welcomeWindowEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_75dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/startWelcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/welcome"
-                android:textSize="@dimen/_30dp"
+                android:layout_marginRight="@dimen/_10dp"
+                android:textSize="@dimen/_25dp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/startWelcomeEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10dp"
+                android:text="Value"
+                android:textSize="@dimen/_25dp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/startWelcomeGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event"
+                android:layout_marginRight="@dimen/_10dp"
+                android:textSize="@dimen/_25dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
             <TextView
                 android:id="@+id/startWelcomeValue"
                 android:layout_width="wrap_content"
@@ -34,6 +63,7 @@
                 android:textSize="@dimen/_25dp" />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/eventStartInfo"
@@ -49,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/messageTimer"
-                android:textSize="@dimen/_30dp"
+                android:textSize="@dimen/_25dp"
                 android:textStyle="bold" />
 
             <TextView

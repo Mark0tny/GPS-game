@@ -89,7 +89,6 @@ import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ENAB
 public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, MarkerRecyclerViewAdapter.OnMarkerClickListener {
 
     private static final String TAG = "UserLocationActivity";
-    private static final String KEY = "You";
     private FirebaseAuth mAuth;
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted = false;
@@ -113,7 +112,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     private DatabaseReference geoDB;
     private GeoFire geoFire;
 
-    boolean detectGeofence = false;
 
     public UserLocationFragment() {
     }
@@ -143,6 +141,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         user = new User();
+        loadUserInformation();
         startDistanceRunnable();
         resetMap();
         getMapMarkersListDB();
@@ -176,8 +175,9 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         super.onResume();
         if (checkMapServices()) {
             if (mLocationPermissionGranted) {
-                getLastKnownLocation();
                 loadUserInformation();
+                getLastKnownLocation();
+
             } else {
                 getLocationPermission();
             }
@@ -371,7 +371,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     saveUserLocation();
                     startLocationService();
                     Log.d(TAG, "getLastKnownLocation:" + geoPoint.toString());
-                    geoFire.setLocation(KEY, new GeoLocation(location.getLatitude(), location.getLongitude()), new
+                    geoFire.setLocation(mAuth.getCurrentUser().getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()), new
                             GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
@@ -651,7 +651,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         if (clickedClusterMarker != null) {
             if (geoMap != null) {
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(geoMap.get(clickedClusterMarker.getEvent().name));
-                alert.getButton(AlertDialog.BUTTON_POSITIVE).setError("You are not in " + clickedClusterMarker.getEvent().getName() + " Area");
             }
         }
 
@@ -708,25 +707,22 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
                 for (ClusterMarker findMarker : mClusterMarkers) {
                     if (findMarker.getPosition().equals(geoCeneter)) {
-                        createNotification(getContext(), "GPSgame ", key + " entered the " + findMarker.getEvent().name + " game area");
+                        createNotification(getContext(), "GPSgame ",  "You have entered the " + findMarker.getEvent().name + " game area");
 
                     }
                 }
-
                 for (ClusterMarker clusterMarker : mClusterMarkers) {
                     if (calculateDistance(user, clusterMarker) <= calculateDistanceGeofence(user, geoCeneter)) {
                         geoMap.put(clusterMarker.getEvent().name, true);
-                        Toast.makeText(getContext(), "DISTANCE TURE" + clusterMarker.getEvent().name + " " + ((calculateDistance(user, clusterMarker) - calculateDistanceGeofence(user, geoCeneter))), Toast.LENGTH_LONG).show();
                     } else {
                         geoMap.put(clusterMarker.getEvent().name, false);
-                        Toast.makeText(getContext(), "DISTANCE  FALSE " + clusterMarker.getEvent().name + " " + ((calculateDistance(user, clusterMarker) - calculateDistanceGeofence(user, geoCeneter))), Toast.LENGTH_LONG).show();
                     }
                 }
             }
 
             @Override
             public void onKeyExited(String key) {
-                createNotification(getContext(), "GPSgame ", key + " exited the " + " game area");
+                createNotification(getContext(), "GPSgame ",  "You have exited the " + " game area");
                 Toast.makeText(getContext(), "GEOFENCE Exited" + key, Toast.LENGTH_LONG).show();
             }
 

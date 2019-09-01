@@ -35,7 +35,7 @@ import static java.lang.String.valueOf;
 public class StartGameFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "StartGameFragment";
 
-    private TextView username, timerText;
+    private TextView username, timerText,eventName;
     private Button startEvent, cancelEvent;
 
     public NavController navController;
@@ -122,6 +122,8 @@ public class StartGameFragment extends Fragment implements View.OnClickListener 
         username = view.findViewById(R.id.startWelcomeValue);
         startEvent = view.findViewById(R.id.startEvent);
         cancelEvent = view.findViewById(R.id.cancelEvent);
+        eventName =  view.findViewById(R.id.startWelcomeEventName);
+        eventName.setText(event.name);
         startEvent.setOnClickListener(this);
         cancelEvent.setOnClickListener(this);
     }

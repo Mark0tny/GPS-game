@@ -12,6 +12,7 @@
 
     <color name="normal">#11830D</color>
     <color name="active">#87D137</color>
+    <color name="userAC" >#8B008577</color>>
 
 
 </resources>
