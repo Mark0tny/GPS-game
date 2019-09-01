@@ -43,7 +43,6 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
 
 
     private Button btnSubmitQRcode, btnGenerateQRcode, btnSendEmail, btnDownloadQRcode;
-    private EditText editTextMessageQRcode;
     private ImageView mQRcodeView;
     private QRcodeType event;
     private NavController navController;
@@ -68,7 +67,6 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
     // sprawdzac czy istnieje plik i wczytywć znowu ?
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getActivity().setTitle(R.string.fr_add_Qr);
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mAuth = FirebaseAuth.getInstance();
@@ -92,7 +90,6 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
         btnDownloadQRcode = view.findViewById(R.id.downloadQR);
         btnSubmitQRcode = view.findViewById(R.id.submitQR);
         mQRcodeView = view.findViewById(R.id.QRcodeView);
-        editTextMessageQRcode = view.findViewById(R.id.QRcode_message);
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
         btnSubmitQRcode.setOnClickListener(this);
         btnDownloadQRcode.setOnClickListener(this);
@@ -107,7 +104,6 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
                 submitQRcode();
                 break;
             case R.id.generateQRcode:
-                checkMessage();
                 generateQRcode();
                 break;
             case R.id.sendEmailQR:
@@ -118,18 +114,6 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
                 downloadQR();
                 break;
         }
-    }
-
-    private void checkMessage() {
-        if (TextUtils.isEmpty(editTextMessageQRcode.getText().toString())) {
-            editTextMessageQRcode.setError("Please enter message");
-            editTextMessageQRcode.requestFocus();
-            return;
-        }
-    }
-
-    private String getMessageFormEditText() {
-        return editTextMessageQRcode.getText().toString().trim();
     }
 
     private void downloadQR() {
@@ -167,23 +151,14 @@ public class CreateEventQRcode extends Fragment implements View.OnClickListener 
 
     }
 
-
-    private String generateMessage() {
-        StringBuilder message = new StringBuilder();
-        message.append("Message from ").append(event.name).append(" : ").append(getMessageFormEditText());
-        return message.toString();
-    }
-
     private void generateQRcode() {
-        if (!editTextMessageQRcode.getText().toString().isEmpty()) {
-            qrgEncoder = new QRGEncoder(generateMessage(), null, QRGContents.Type.TEXT, 400);
+            qrgEncoder = new QRGEncoder(event.name, null, QRGContents.Type.TEXT, 400);
             try {
                 bitmap = qrgEncoder.encodeAsBitmap();
                 mQRcodeView.setImageBitmap(bitmap);
             } catch (WriterException e) {
                 Log.v(TAG, e.toString());
             }
-        }
     }
 
     private void submitQRcode() {

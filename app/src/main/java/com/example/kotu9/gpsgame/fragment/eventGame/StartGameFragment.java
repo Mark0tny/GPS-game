@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import androidx.navigation.NavController;
@@ -38,6 +39,7 @@ public class StartGameFragment extends Fragment implements View.OnClickListener 
     private TextView username, timerText,eventName;
     private Button startEvent, cancelEvent;
 
+    Chronometer chronometer;
     public NavController navController;
     private Event event;
     private ClusterMarker clusterMarker;
