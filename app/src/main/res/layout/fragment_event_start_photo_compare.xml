@@ -1,14 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.eventGame.EventStartPhotoCompare">
+    tools:context=".fragment.eventGame.EventStartQRcode">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
+        android:id="@+id/gameTimer"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/gameTimerName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Timer: "
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_20dp" />
+
+        <Chronometer
+            android:id="@+id/gameTimerValueQR"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_20dp" />
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mapQuiz"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_below="@id/gameTimer"
+        android:layout_marginBottom="0dp"
+        tools:context=".activity.UserLocationActivity" />
 
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/gamePhotoComapre"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/gameTimer"
+        android:layout_marginBottom="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/userAC100">
+
+
+            <LinearLayout
+                android:id="@+id/photosNew"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/buttonsPhoto"
+                android:orientation="vertical"
+                android:weightSum="2"
+                android:visibility="gone"
+              >
+                <TextView
+                    android:id="@+id/photoTagF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Your object"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_30dp"/>
+
+                <ImageView
+                    android:id="@+id/imageNew"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    tools:src="@tools:sample/avatars[2]"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/photosOld"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/buttonsPhoto"
+                android:orientation="vertical"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/photoTagP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Object to Find"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_30dp" />
+
+                <ImageView
+                    android:id="@+id/imageOld"
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    tools:src="@tools:sample/avatars[0]" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/buttonsPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/compareEvent"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imagePhotoGame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight=".5"
+                    app:srcCompat="@drawable/ic_add_a_photo_black_48dp" />
+
+                <ImageButton
+                    android:id="@+id/imageGalleryGame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:layout_weight=".5"
+                    app:srcCompat="@drawable/ic_sd_storage_black_24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/compareEvent"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/_10dp"
+                android:layout_marginBottom="@dimen/_30dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/photoMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Message"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_25dp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/photoSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_30dp"
+            android:layout_gravity="center"
+            android:text="Compare" />
+
+        <Button
+            android:id="@+id/photoSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/_5dp"
+            android:text="Switch photos" />
+
+
+    </LinearLayout>
+
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+
+</RelativeLayout>
