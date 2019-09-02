@@ -149,7 +149,6 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Image"), CHOOSE_IMAGE);
-
     }
 
     public void takePhoto() {

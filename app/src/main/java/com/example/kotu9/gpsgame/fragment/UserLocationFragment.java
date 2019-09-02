@@ -198,7 +198,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             mMarkerListRecyclerView.setVisibility(View.GONE);
             markerRecyclerViewAdapter.notifyDataSetChanged();
             fragmentMap.setVisibility(View.VISIBLE);
-
             return true;
         }
         if (id == R.id.action_listView) {

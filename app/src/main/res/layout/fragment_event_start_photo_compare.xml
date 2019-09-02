@@ -28,7 +28,7 @@
             android:textSize="@dimen/_20dp" />
 
         <Chronometer
-            android:id="@+id/gameTimerValueQR"
+            android:id="@+id/gameTimerValuePC"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_10dp"
@@ -51,7 +51,7 @@
         tools:context=".activity.UserLocationActivity" />
 
     <FrameLayout
-        android:id="@+id/gamePhotoComapre"
+        android:id="@+id/gamePhotoCompare"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/gameTimer"
@@ -164,6 +164,7 @@
                     android:gravity="center_horizontal"
                     android:text="Message"
                     android:textColor="@color/colorAccent"
+                    android:visibility="invisible"
                     android:textSize="@dimen/_25dp" />
 
 
@@ -174,7 +175,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/photoSubmit"
+            android:id="@+id/photoCompareGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_30dp"
@@ -182,7 +183,7 @@
             android:text="Compare" />
 
         <Button
-            android:id="@+id/photoSwitch"
+            android:id="@+id/photoSwitchGame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
