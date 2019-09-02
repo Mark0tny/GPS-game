@@ -3,10 +3,6 @@ package com.example.kotu9.gpsgame.fragment.eventGame;
 import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -16,6 +12,10 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
@@ -28,8 +28,6 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
-
-import static java.lang.Thread.sleep;
 
 public class EventStartQRcode extends Fragment implements PermissionListener, View.OnClickListener {
 
@@ -139,8 +137,8 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
                             mQRmessage.setVisibility(View.VISIBLE);
 
                             Bundle bundle = new Bundle();
-                            bundle.putParcelable(String.valueOf(R.string.markerBundleGame),clusterMarker);
-                            bundle.putLong(String.valueOf(R.string.timerBundleGame),timerValue);
+                            bundle.putParcelable(String.valueOf(R.string.markerBundleGame), clusterMarker);
+                            bundle.putLong(String.valueOf(R.string.timerBundleGame), timerValue);
                             completedGame(bundle);
                             qrEader.stop();
                             return;

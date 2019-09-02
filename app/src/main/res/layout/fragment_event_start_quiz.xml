@@ -59,7 +59,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/userAC">
+            android:background="@color/userAC100">
 
 
             <TextView
@@ -69,7 +69,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="@dimen/_50dp"
                 android:gravity="center_horizontal"
-                android:text="TextView"
+                android:text="Question"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/_30dp" />
 
@@ -117,15 +117,6 @@
                             android:textSize="@dimen/_30dp" />
 
                     </LinearLayout>
-
-                    <ProgressBar
-                        android:id="@+id/progressBarQuiz"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:max="5" />
 
                     <Button
                         android:id="@+id/btnAnswer1"

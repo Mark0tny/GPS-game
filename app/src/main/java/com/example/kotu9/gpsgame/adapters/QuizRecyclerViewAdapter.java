@@ -43,9 +43,9 @@ public class QuizRecyclerViewAdapter extends RecyclerView.Adapter<QuizRecyclerVi
         int answersPosition = 0;
         for (Map.Entry<String, Boolean> entry : answersMap.entrySet()) {
             answers.get(answersPosition).setText(entry.getKey());
-            answers.get(answersPosition).setTextColor(Color.parseColor(String.valueOf(R.color.diffRed)));
+            answers.get(answersPosition).setTextColor(Color.parseColor("#C00F0F"));
             if (entry.getValue()) {
-                answers.get(answersPosition).setTextColor(Color.parseColor(String.valueOf(R.color.diffGreen)));
+                answers.get(answersPosition).setTextColor(Color.parseColor("#3C8A40"));
             }
             answersPosition++;
         }

@@ -161,6 +161,7 @@ public class StartGameFragment extends Fragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.startEvent:
                 navigateRightEventHandler(clusterBundleGame);
+                timer.cancel();
                 break;
             case R.id.cancelEvent:
                 timer.cancel();
