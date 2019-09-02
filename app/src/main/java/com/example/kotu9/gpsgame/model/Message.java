@@ -18,9 +18,8 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class Message implements Serializable, Parcelable {
 
-    public String topic;
     public String body;
-    public Date commentDate;
+    public Date messageDate;
     public String username;
     public String eventName;
 
@@ -31,18 +30,16 @@ public class Message implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.topic);
         dest.writeString(this.body);
-        dest.writeLong(this.commentDate != null ? this.commentDate.getTime() : -1);
+        dest.writeLong(this.messageDate != null ? this.messageDate.getTime() : -1);
         dest.writeString(this.username);
         dest.writeString(this.eventName);
     }
 
     protected Message(Parcel in) {
-        this.topic = in.readString();
         this.body = in.readString();
         long tmpCommentDate = in.readLong();
-        this.commentDate = tmpCommentDate == -1 ? null : new Date(tmpCommentDate);
+        this.messageDate = tmpCommentDate == -1 ? null : new Date(tmpCommentDate);
         this.username = in.readString();
         this.eventName = in.readString();
     }
