@@ -58,7 +58,6 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
 
     //Data
     private Uri uriOldImage;
-    FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
     private ClusterMarker clusterMarker;
     private long timerValue;
@@ -106,6 +105,8 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_start_photo_compare, container, false);
+
+        mDb = FirebaseFirestore.getInstance();
         setupViews(view);
         setObjectToFind();
         eventTimer.start();
@@ -169,12 +170,12 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
 
     private void changeLayouts() {
         if(activeWindowOld){
-            mPhotoViewOld.setVisibility(View.VISIBLE);
-            mPhotoViewNew.setVisibility(View.GONE);
+            imageNew.setVisibility(View.VISIBLE);
+            imageOld.setVisibility(View.GONE);
             activeWindowOld=false;
         }else{
-            mPhotoViewOld.setVisibility(View.GONE);
-            mPhotoViewNew.setVisibility(View.VISIBLE);
+            imageNew.setVisibility(View.GONE);
+            imageOld.setVisibility(View.VISIBLE);
             activeWindowOld=true;
         }
 
@@ -192,8 +193,10 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     photoCompare = task.getResult().toObject(PhotoCompareType.class);
-                    Picasso.get().load(photoCompare.getImageURLfirebase())
+                    Picasso.get().load(photoCompare.getImageDirectoryPhone())
                             .into(mPhotoViewOld);
+//                    Picasso.get().load(photoCompare.getImageDirectoryPhone())
+//                            .into(mPhotoViewOld);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
