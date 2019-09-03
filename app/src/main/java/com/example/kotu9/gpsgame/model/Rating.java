@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,7 +21,7 @@ import lombok.NonNull;
 public class Rating implements Serializable, Parcelable {
 
     private float globalRating;
-    private float[] usersRating;
+    private List<Float> usersRating;
 
     @Override
     public int describeContents() {
@@ -29,12 +31,13 @@ public class Rating implements Serializable, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeFloat(this.globalRating);
-        dest.writeFloatArray(this.usersRating);
+        dest.writeList(this.usersRating);
     }
 
     protected Rating(Parcel in) {
         this.globalRating = in.readFloat();
-        this.usersRating = in.createFloatArray();
+        this.usersRating = new ArrayList<Float>();
+        in.readList(this.usersRating, Float.class.getClassLoader());
     }
 
     public static final Creator<Rating> CREATOR = new Creator<Rating>() {

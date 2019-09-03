@@ -162,7 +162,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextHint"
+                android:id="@+id/editComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="10"
