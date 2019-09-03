@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.eventGame.EventStartLocation">
+    tools:context=".fragment.eventGame.EventStartQRcode">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
+        android:id="@+id/gameTimer"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/gameTimerName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_marginRight="@dimen/_10dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="Timer: "
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_20dp" />
+
+        <Chronometer
+            android:id="@+id/gameTimerValueQR"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_20dp" />
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mapLocation"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_below="@id/gameTimer"
+        android:layout_marginBottom="0dp"
+        tools:context=".activity.UserLocationActivity" />
 
-</FrameLayout>
+
+</RelativeLayout>

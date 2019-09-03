@@ -18,7 +18,6 @@ import java.util.List;
 public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecyclerViewAdapter.ViewHolder> {
 
     private List<ClusterMarker> markers;
-
     private LayoutInflater mInflater;
     private OnMarkerClickListener mOnMarkerClickListener;
 

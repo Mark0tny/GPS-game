@@ -132,6 +132,10 @@
     <string name="fr_add_basicInfo">Event Basic Info</string>
     <string name="timerBundleGame">timerBundleGame</string>
     <string name="answersBundleGame">answersBundleGame</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="finished">You have finished event:</string>
+    <string name="statistics">Your score:</string>
+    <string name="comAndRate">Pleace comment and rate event</string>
 
 
 </resources>

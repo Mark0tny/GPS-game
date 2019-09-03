@@ -5,10 +5,198 @@
     android:layout_height="match_parent"
     tools:context=".fragment.eventGame.EventStartSummary">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:id="@+id/welcomeWindow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/welcomeWindowEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/startWelcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:text="@string/congratulations"
+                    android:textSize="@dimen/_20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/startWelcomeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UsernameValue"
+                    android:textSize="@dimen/_18dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/windowEventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/eventName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:text="@string/finished"
+                    android:textSize="@dimen/_20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/eventNameValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EventName"
+                    android:textSize="@dimen/_18dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/windowEventStatistics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/evenStatistics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:text="@string/statistics"
+                    android:textSize="@dimen/_20dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/windowEventTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/eventTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:text="Time:"
+                        android:textSize="@dimen/_20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/eventTimeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="value"
+                        android:textSize="@dimen/_18dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/windowEventPoints"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/eventPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:text="Points:"
+                        android:textSize="@dimen/_20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/eventPointsValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="value"
+                        android:textSize="@dimen/_18dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/welcomeWindow"
+            android:layout_marginTop="@dimen/_20dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/comAndRate"
+                android:textAlignment="center"
+                android:textSize="@dimen/_20dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:minLines="2"
+                android:layout_marginTop="@dimen/_10dp"
+                android:fontFamily="sans-serif"
+                android:hint="Your comment"
+                android:paddingBottom="15dp"
+                android:textSize="@dimen/_18dp" />
+
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/ratingEventSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/buttonFinish"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_50dp"
+            android:numStars="5"
+            android:scaleX="1.8"
+            android:scaleY="1.8"
+            android:stepSize=".5" />
+
+        <Button
+            android:id="@+id/buttonFinish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/_40dp"
+            android:text="Finish" />
+
+
+    </RelativeLayout>
 
 </FrameLayout>

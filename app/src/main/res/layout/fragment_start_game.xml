@@ -105,6 +105,7 @@
                 android:id="@+id/cancelEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_5dp"
                 android:text="CANCEL"
                 android:textSize="@dimen/_30dp"
                 android:textStyle="bold" />
@@ -113,6 +114,7 @@
                 android:id="@+id/startEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_5dp"
                 android:layout_marginLeft="@dimen/_50dp"
                 android:text="Start"
                 android:textSize="@dimen/_30dp"

@@ -30,6 +30,7 @@ public class Event implements Serializable, Parcelable {
     public boolean active;
     public double distance;
     public float rating;
+   // public  Rating rating;
     public float geofanceRadius;
     public List<User> ranking;
     public List<Comment> comments;
