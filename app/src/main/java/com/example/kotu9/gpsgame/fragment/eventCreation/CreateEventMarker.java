@@ -7,9 +7,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
@@ -320,9 +320,10 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         Uri imageUri = null;
 
         if (checkEventType(event) == EventTypes.PhotoCompare) {
-            PhotoCompareType photoCompareType = (PhotoCompareType) event;
-            imageUri = Uri.fromFile(new File(photoCompareType.imageDirectoryPhone + event.id + ".jpg"));
+            Toast.makeText(getContext(), "PhotoCompare upload", Toast.LENGTH_LONG).show();
+            imageUri = Uri.parse(((PhotoCompareType) event).imageDirectoryPhone);
             if (imageUri != null) {
+                Toast.makeText(getContext(), "PhotoCompare uploadURI: " + imageUri, Toast.LENGTH_LONG).show();
                 uploadImageToFirebaseStorage(imageUri, EventTypes.PhotoCompare);
             }
         }
@@ -404,6 +405,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             public void onComplete(@lombok.NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Saving event in database successfuly", Toast.LENGTH_SHORT).show();
+                    moveToUserLocationActivity();
                 } else {
                     Toast.makeText(getContext(), "Could not save event in database", Toast.LENGTH_SHORT).show();
                 }
@@ -456,7 +458,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             addPictureFirebase();
             setEventMarker();
             addMarkerFirebase();
-            moveToUserLocationActivity();
         } else {
             Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }

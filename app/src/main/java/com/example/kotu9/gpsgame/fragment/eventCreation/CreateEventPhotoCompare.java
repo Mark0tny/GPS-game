@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -121,10 +121,10 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
     }
 
     private void setPhoto() {
-        event.imageDirectoryPhone = createMediaFile();
         event.imageURLfirebase = null;
-        event.status = false;
+        event.fileName = getPhotoName();
     }
+
 
     private String createMediaFile() {
         String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + savePath;
@@ -179,6 +179,7 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriPhoto);
                 mPhotoView.setImageBitmap(bitmap);
+                event.imageDirectoryPhone = uriPhoto.toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -188,13 +189,14 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
             if (extras != null) {
                 bitmap = (Bitmap) extras.get("data");
                 createMediaFile();
-                saveBitmap(bitmap);
+                event.imageDirectoryPhone = Uri.fromFile(saveBitmap(bitmap)).toString();
                 mPhotoView.setImageBitmap(bitmap);
             }
 
         }
 
     }
+
 
     private File saveBitmap(Bitmap bmp) {
 

@@ -16,9 +16,9 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class PhotoCompareType extends Event implements Serializable {
 
+	public String fileName;
 	public String imageDirectoryPhone;
 	public String imageURLfirebase;
-	public Boolean status;
 
 
 	public PhotoCompareType(Event event) {

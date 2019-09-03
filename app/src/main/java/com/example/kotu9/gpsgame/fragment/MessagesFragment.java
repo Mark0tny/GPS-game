@@ -63,6 +63,7 @@ public class MessagesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
+        mRecyclerViewMessages = view.findViewById(R.id.recyclerMessage);
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         loadUserInformation();

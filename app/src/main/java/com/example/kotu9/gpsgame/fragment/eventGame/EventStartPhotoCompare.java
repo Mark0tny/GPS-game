@@ -202,7 +202,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "Get question list failure:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Get picture failure:" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
