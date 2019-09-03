@@ -1,11 +1,15 @@
 package com.example.kotu9.gpsgame.fragment.eventGame;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,17 +34,9 @@ import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.PhotoCompareType;
-import com.example.kotu9.gpsgame.model.QuizType;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -48,13 +44,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.squareup.picasso.Picasso;
 
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat;
+import org.opencv.core.MatOfInt;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 
 public class EventStartPhotoCompare extends Fragment implements View.OnClickListener {
+    static {
+        OpenCVLoader.initDebug();
+    }
 
     private static final String TAG = EventStartPhotoCompare.class.getSimpleName();
     private static final int CHOOSE_IMAGE = 12;
@@ -63,7 +74,11 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     private static final int REQUEST_PERMISSIONS_CODE_WRITE_STORAGE = 112;
 
     //Data
-    private Uri uriOldImage;
+    private Uri uriUsersPhoto;
+    private Uri uriToFind;
+    private String savePath;
+    private double compareResult;
+
     private FirebaseFirestore mDb;
     private ClusterMarker clusterMarker;
     private long timerValue;
@@ -84,6 +99,8 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     private boolean activeWindowOld = true;
     private boolean imagesMatch = false;
 
+    Mat imageMatFind = new Mat();
+    Mat imageMatUser = new Mat();
 
     public EventStartPhotoCompare() {
 
@@ -101,10 +118,13 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         getActivity().setTitle(R.string.fr_start_photo);
         super.onCreate(savedInstanceState);
+        OpenCVLoader.initDebug();
+
         if (getArguments() != null) {
             clusterMarker = new ClusterMarker();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
             photoCompare = new PhotoCompareType((Event) clusterMarker.getEvent());
+            savePath = "/" + getString(R.string.app_name) + "/OpenCV/";
         }
     }
 
@@ -167,25 +187,123 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     }
 
     private void compareImages() {
-        //TODO jakis czech czy sa oba
-        // No i lecimy OPEN CV ale to juz pozniej
-        if(imagesMatch){
+        if (checkIfbothImagesLoaded()) {
 
-            eventTimer.stop();
-        }else{
-            Toast.makeText(getContext(),"Images do not match. Please try again",Toast.LENGTH_LONG).show();
+            openCVcomparasion(uriToFind.getPath(), uriUsersPhoto.getPath());
+            if (imagesMatch) {
+                eventTimer.stop();
+                timerValue = eventTimer.getBase();
+                showDialog("Congratulations event finished" + "\nImages match in " + String.format("%.2f", compareResult) + " %");
+            } else {
+                Toast.makeText(getContext(), "Images do not match. Please try again", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(getContext(), "Pleace add picture to compare", Toast.LENGTH_LONG).show();
         }
     }
 
+    private boolean checkIfbothImagesLoaded() {
+        if (uriUsersPhoto != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private void showDialog(String Message) {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext())
+                .setTitle("Quiz")
+                .setCancelable(true)
+                .setMessage(Message);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                completedGame();
+            }
+        });
+        final AlertDialog alert = dialog.create();
+        alert.show();
+
+        new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                alert.dismiss();
+
+            }
+        }.start();
+    }
+
+
+    private void completedGame() {
+        deleteTempFile();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(String.valueOf(R.string.markerBundleGame), clusterMarker);
+        bundle.putLong(String.valueOf(R.string.timerBundleGame), timerValue);
+        navController.navigate(R.id.eventStartSummary, bundle);
+    }
+
+    private void deleteTempFile() {
+        File file = new File(uriUsersPhoto.getPath());
+        boolean deleted = file.delete();
+        if (deleted) Log.i(TAG, "TempFileDeleted");
+    }
+
+
+    private void openCVcomparasion(String toFind, String usersPhoto) {
+        imageMatFind = Imgcodecs.imread(toFind, 1);
+        imageMatUser = Imgcodecs.imread(usersPhoto, 1);
+
+        Mat hsvBase = new Mat(), hsvTest1 = new Mat();
+        Imgproc.cvtColor(imageMatFind, hsvBase, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(imageMatUser, hsvTest1, Imgproc.COLOR_RGB2HSV);
+
+        int hBins = 50, sBins = 60;
+        int[] histSize = {hBins, sBins};
+        // hue varies from 0 to 179, saturation from 0 to 255
+        float[] ranges = {0, 180, 0, 256};
+        // Use the 0-th and 1-st channels
+        int[] channels = {0, 1};
+        Mat histBase = new Mat(), histTest1 = new Mat();
+        List<Mat> hsvBaseList = Arrays.asList(hsvBase);
+        Imgproc.calcHist(hsvBaseList, new MatOfInt(channels), new Mat(), histBase, new MatOfInt(histSize), new MatOfFloat(ranges), false);
+        Core.normalize(histBase, histBase, 0, 1, Core.NORM_MINMAX);
+        List<Mat> hsvTest1List = Arrays.asList(hsvTest1);
+        Imgproc.calcHist(hsvTest1List, new MatOfInt(channels), new Mat(), histTest1, new MatOfInt(histSize), new MatOfFloat(ranges), false);
+        Core.normalize(histTest1, histTest1, 0, 1, Core.NORM_MINMAX);
+
+
+        double baseBase = Imgproc.compareHist(histBase, histBase, 0);
+        double baseTest1 = Imgproc.compareHist(histBase, histTest1, 0);
+        compareResult = (baseTest1 / baseBase) * 100;
+        if (compareResult > 40) {
+            imagesMatch = true;
+        } else {
+            imagesMatch = false;
+        }
+    }
+
+    //Method comparasion
+//        for (int compareMethod = 0; compareMethod < 4; compareMethod++) {
+//            double baseBase = Imgproc.compareHist(histBase, histBase, compareMethod);
+//            double baseTest1 = Imgproc.compareHist(histBase, histTest1, compareMethod);
+//            Toast.makeText(getContext(), "Method " + compareMethod + " Perfect, Base-Test(1)" + baseBase + " / " +
+//                    baseTest1, Toast.LENGTH_LONG).show();
+//        }
+
+
     private void changeLayouts() {
-        if(activeWindowOld){
+        if (activeWindowOld) {
             imageNew.setVisibility(View.VISIBLE);
             imageOld.setVisibility(View.GONE);
-            activeWindowOld=false;
-        }else{
+            activeWindowOld = false;
+        } else {
             imageNew.setVisibility(View.GONE);
             imageOld.setVisibility(View.VISIBLE);
-            activeWindowOld=true;
+            activeWindowOld = true;
         }
 
     }
@@ -205,6 +323,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
                     photoCompare = task.getResult().toObject(PhotoCompareType.class);
                     Picasso.get().load(photoCompare.getImageURLfirebase())
                             .into(mPhotoViewOld);
+                    uriToFind = Uri.parse(photoCompare.imageDirectoryPhone);
                     progressBar.setVisibility(View.INVISIBLE);
 //                    Picasso.get().load(photoCompare.getImageDirectoryPhone())
 //                            .into(mPhotoViewOld);
@@ -252,10 +371,13 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CHOOSE_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            uriOldImage = data.getData();
+            uriUsersPhoto = data.getData();
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriOldImage);
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uriUsersPhoto);
+                createMediaFile();
+                uriUsersPhoto = Uri.fromFile(saveBitmap(bitmap));
                 mPhotoViewNew.setImageBitmap(bitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -264,9 +386,48 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
             Bundle extras = data.getExtras();
             if (extras != null) {
                 bitmap = (Bitmap) extras.get("data");
+                createMediaFile();
+                uriUsersPhoto = Uri.fromFile(saveBitmap(bitmap));
                 mPhotoViewNew.setImageBitmap(bitmap);
             }
         }
+    }
+
+    private File saveBitmap(Bitmap bmp) {
+        OutputStream outStream = null;
+        File file = new File(createMediaFile(), getPhotoName() + ".jpeg");
+        if (file.exists()) {
+            file.delete();
+            file = new File(createMediaFile(), getPhotoName() + ".jpeg");
+        }
+        try {
+            outStream = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return file;
+    }
+
+    private String createMediaFile() {
+        String folderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + savePath;
+        File mediaStorageDir = new File(folderPath);
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Toast.makeText(getContext(), folderPath, Toast.LENGTH_SHORT).show();
+                return mediaStorageDir.getAbsolutePath();
+            }
+        }
+        return folderPath;
+    }
+
+    private String getPhotoName() {
+        String fileName;
+        fileName = "TEMP_" + photoCompare.name;
+        return fileName;
     }
 
 

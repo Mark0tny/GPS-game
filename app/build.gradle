@@ -69,8 +69,7 @@ dependencies {
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.github.nisrulz:qreader:2.1.2'
     implementation 'com.google.android.gms:play-services-vision:18.0.0'
-
-
+    implementation project(path: ':openCVLibrary341')
 
 
 }

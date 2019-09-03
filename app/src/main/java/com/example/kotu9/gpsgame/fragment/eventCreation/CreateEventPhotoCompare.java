@@ -199,7 +199,6 @@ public class CreateEventPhotoCompare extends Fragment implements View.OnClickLis
 
 
     private File saveBitmap(Bitmap bmp) {
-
         OutputStream outStream = null;
         File file = new File(createMediaFile(), getPhotoName() + ".jpeg");
         if (file.exists()) {

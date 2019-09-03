@@ -210,15 +210,12 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
                 .setTitle("Quiz")
                 .setCancelable(true)
                 .setMessage(Message);
-
-
         final AlertDialog alert = dialog.create();
         alert.show();
 
         new CountDownTimer(DIALOG_DISMISS_TIME, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
             }
 
             @Override
@@ -227,7 +224,6 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
             }
         }.start();
     }
-
 
     private Bundle endGame() {
         timerValue = eventTimer.getBase();
