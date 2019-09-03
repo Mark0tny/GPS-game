@@ -16,6 +16,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -70,6 +76,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     private ImageButton btnPhotoGallery, btnTakePhoto;
     private ImageView mPhotoViewOld, mPhotoViewNew;
     private TextView compareMessage;
+    private ProgressBar progressBar;
 
     private LinearLayout imageOld;
     private LinearLayout imageNew;
@@ -130,6 +137,8 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
         imageOld = view.findViewById(R.id.photosOld);
         imageNew = view.findViewById(R.id.photosNew);
 
+        progressBar = view.findViewById(R.id.uploadPhoto);
+
         btnPhotoGallery.setOnClickListener(this);
         btnTakePhoto.setOnClickListener(this);
 
@@ -181,6 +190,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
 
     }
 
+
     private void setObjectToFind() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setSslEnabled(true)
@@ -193,8 +203,9 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     photoCompare = task.getResult().toObject(PhotoCompareType.class);
-                    Picasso.get().load(photoCompare.getImageDirectoryPhone())
+                    Picasso.get().load(photoCompare.getImageURLfirebase())
                             .into(mPhotoViewOld);
+                    progressBar.setVisibility(View.INVISIBLE);
 //                    Picasso.get().load(photoCompare.getImageDirectoryPhone())
 //                            .into(mPhotoViewOld);
                 }
@@ -202,6 +213,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "Get picture failure:" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
