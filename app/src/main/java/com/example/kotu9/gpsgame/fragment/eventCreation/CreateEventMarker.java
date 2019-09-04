@@ -28,6 +28,7 @@ import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.LocationType;
 import com.example.kotu9.gpsgame.model.PhotoCompareType;
 import com.example.kotu9.gpsgame.model.QRcodeType;
+import com.example.kotu9.gpsgame.model.Rating;
 import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.utils.EventTypes;
 import com.google.android.gms.maps.CameraUpdate;
@@ -260,6 +261,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     private void setEventNullValues() {
         event.setActive(true);
         event.geofanceRadius = radius;
+        event.rating = new Rating();
         event.rating.globalRating = 0;
         event.rating.usersRating = new ArrayList<>();
         event.eventType.points += calculatePointByDifficulty();
@@ -269,9 +271,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         eventCreator.createdEvents.add(event);
     }
 
-    //TODO nie upadate tylko add to list
     private void updateUserCreatedEvents() {
-
         DocumentReference newUserRef = mDb
                 .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
         newUserRef.update("createdEvents", FieldValue.arrayUnion(event)).addOnCompleteListener(new OnCompleteListener<Void>() {

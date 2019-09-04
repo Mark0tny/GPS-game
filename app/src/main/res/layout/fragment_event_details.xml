@@ -73,6 +73,8 @@
                         android:id="@+id/textEventTypeD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_16dp"
                         android:layout_marginTop="@dimen/_5dp"
                         android:text="Event Type" />
 
@@ -80,6 +82,7 @@
                         android:id="@+id/textEventDifficultyD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15dp"
                         android:layout_marginLeft="@dimen/_5dp"
                         android:layout_marginTop="@dimen/_5dp"
                         android:text="Difficulty" />
@@ -97,12 +100,15 @@
                         android:id="@+id/textDistanceD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_16dp"
                         android:text="Distance: " />
 
                     <TextView
                         android:id="@+id/textDistanceValueD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15dp"
                         android:layout_marginStart="@dimen/_5dp"
                         android:text="DistanceValue" />
                 </LinearLayout>
@@ -119,12 +125,15 @@
                         android:id="@+id/textOwnerD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_16dp"
                         android:text="Owner: " />
 
                     <TextView
                         android:id="@+id/textOwnerValueD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15dp"
                         android:layout_marginStart="@dimen/_5dp"
                         android:text="OwnerValue" />
                 </LinearLayout>
@@ -142,12 +151,15 @@
                         android:id="@+id/textRatingD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_16dp"
                         android:text="Rating: " />
 
                     <TextView
                         android:id="@+id/textRatingValueD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15dp"
                         android:layout_marginStart="@dimen/_5dp"
                         android:text="RatingValue" />
 
@@ -193,6 +205,8 @@
                 <TextView
                     android:id="@+id/textDescriptionValueD"
                     android:layout_width="match_parent"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:layout_marginLeft="@dimen/_10dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textDescriptionD"
                     android:text="DescriptionValue" />

@@ -83,7 +83,7 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             statistics = new Statistics();
             usersComment = new Comment();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
-            //eventRating = clusterMarker.getEvent().getRating();
+            eventRating = clusterMarker.getEvent().getRating();
             timerValue = getArguments().getLong(String.valueOf(R.string.timerBundleGame));
             if (clusterMarker.getEvent().getEventType().eventType == EventTypes.Quiz)
                 correctAnswers = getArguments().getInt(String.valueOf(R.string.answersBundleGame));

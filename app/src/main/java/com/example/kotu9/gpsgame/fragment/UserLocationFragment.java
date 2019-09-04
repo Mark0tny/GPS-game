@@ -634,7 +634,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 .setNeutralButton("Show event details", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Fragment detailsFragment = new Fragment();
+                        Fragment detailsFragment = new EventDetails();
                         detailsFragment.setArguments(bundle);
                         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.frame_container, detailsFragment);
