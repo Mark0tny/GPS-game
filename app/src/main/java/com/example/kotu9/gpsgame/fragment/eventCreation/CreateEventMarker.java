@@ -57,7 +57,6 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firestore.v1.WriteResult;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ import java.util.ArrayList;
 import lombok.NonNull;
 
 
-public class CreateEventMarker extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+public class CreateEventMarker extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerDragListener {
 
     private static final String TAG = AppCompatActivity.class.getSimpleName();
     private Button btnSubmit;
@@ -145,6 +144,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             return;
         }
         mMap.setMyLocationEnabled(true);
+        mMap.setOnMarkerDragListener(this);
         addLocationMarker();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -155,8 +155,8 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 } else {
                     myEventLoc.setPosition(latLng);
                 }
-                latitude.setText(String.valueOf(latLng.latitude));
-                longitude.setText(String.valueOf(latLng.longitude));
+                latitude.setText(String.format("%.4f", latLng.latitude));
+                longitude.setText(String.format("%.4f", latLng.longitude));
                 drawGeofence();
             }
         });
@@ -499,7 +499,8 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
 
     private void markerForGeofence(LatLng latLng) {
         Log.i(TAG, "markerForGeofence(" + latLng + ")");
-        String title = latLng.latitude + ", " + latLng.longitude;
+
+        String title = String.format("%.4f", latLng.latitude) + ", " + String.format("%.4f", latLng.longitude);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .title(title);
@@ -509,6 +510,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 myEventLoc.remove();
             }
             myEventLoc = mMap.addMarker(markerOptions);
+            myEventLoc.setDraggable(true);
             drawGeofence();
             setMarkerIcon(myEventLoc);
         }
@@ -527,4 +529,24 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         geoFenceLimits = mMap.addCircle(circleOptions);
     }
 
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        latitude.setText(String.format("%.4f", marker.getPosition().latitude));
+        longitude.setText(String.format("%.4f", marker.getPosition().longitude));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        latitude.setText(String.format("%.4f", marker.getPosition().latitude));
+        longitude.setText(String.format("%.4f", marker.getPosition().longitude));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+
+        drawGeofence();
+    }
 }

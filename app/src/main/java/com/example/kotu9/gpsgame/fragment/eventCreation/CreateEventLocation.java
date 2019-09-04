@@ -7,9 +7,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -39,7 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.GeoPoint;
 
 
-public class CreateEventLocation extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+public class CreateEventLocation extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerDragListener {
 
     private static final String TAG = AppCompatActivity.class.getSimpleName();
     private Button btnSubmit;
@@ -83,7 +83,6 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
         setupView(view, savedInstanceState);
         addLocation.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-
         return view;
     }
 
@@ -128,16 +127,20 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
                     myEventLoc = mMap.addMarker(new MarkerOptions()
                             .position(latLng)
                             .title("Pleace to find"));
+
                 } else {
                     myEventLoc.setPosition(latLng);
+                    myEventLoc.setDraggable(true);
                 }
-                latitude.setText(String.valueOf(latLng.latitude));
-                longitude.setText(String.valueOf(latLng.longitude));
+                latitude.setText(String.format("%.4f", latLng.latitude));
+                longitude.setText(String.format("%.4f", latLng.longitude));
                 location = new GeoPoint(latLng.latitude, latLng.longitude);
                 event.setPointLocation(location);
 
             }
         });
+
+        mMap.setOnMarkerDragListener(this);
         setCameraView();
     }
 
@@ -217,5 +220,27 @@ public class CreateEventLocation extends Fragment implements OnMapReadyCallback,
             return;
         }
         return;
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        latitude.setText(String.format("%.4f", marker.getPosition().latitude));
+        longitude.setText(String.format("%.4f", marker.getPosition().longitude));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+        latitude.setText(String.format("%.4f", marker.getPosition().latitude));
+        longitude.setText(String.format("%.4f", marker.getPosition().longitude));
+        location = new GeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
+        event.setPointLocation(location);
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
     }
 }
