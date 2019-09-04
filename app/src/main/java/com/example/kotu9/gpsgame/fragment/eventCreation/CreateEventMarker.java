@@ -500,7 +500,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     private void markerForGeofence(LatLng latLng) {
         Log.i(TAG, "markerForGeofence(" + latLng + ")");
 
-        String title = String.format("%.4f", latLng.latitude) + ", " + String.format("%.4f", latLng.longitude);
+        String title = String.format("%.4f", latLng.latitude) + " , " + String.format("%.4f", latLng.longitude);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .title(title);
