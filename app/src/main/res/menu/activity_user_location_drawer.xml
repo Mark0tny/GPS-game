@@ -22,6 +22,11 @@
             android:icon="@drawable/ic_message_black_24dp"
             android:title="@string/menu_messages"></item>
 
+        <item
+            android:id="@+id/nav_my_events"
+            android:icon="@drawable/ic_folder_special_black_24dp"
+            android:title="@string/menu_my_events"></item>
+
 
         <item
             android:id="@+id/nav_logout"

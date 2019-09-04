@@ -49,7 +49,7 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
 
     @Override
     protected boolean shouldRenderAsCluster(Cluster<ClusterMarker> cluster) {
-        return cluster.getSize() > 5;
+        return cluster.getSize() > 3;
     }
 
     @Override
@@ -59,8 +59,20 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(item.getTitle());
     }
 
+
     @Override
     protected void onBeforeClusterRendered(Cluster<ClusterMarker> cluster, MarkerOptions markerOptions) {
+        if (cluster.getSize() > 4) {
+            Bitmap icon = iconGenerator.makeIcon(String.valueOf(cluster.getSize()));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
+        } else if (cluster.getSize() > 8) {
+            Bitmap icon = iconGenerator.makeIcon(String.valueOf(cluster.getSize()));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
+        } else {
+            Bitmap icon = iconGenerator.makeIcon(String.valueOf(cluster.getSize()));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
+        }
+
         super.onBeforeClusterRendered(cluster, markerOptions);
     }
 

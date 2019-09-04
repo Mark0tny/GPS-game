@@ -18,7 +18,7 @@
             android:layout_height="300dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_18dp"
-            tools:src="@tools:sample/avatars" />
+            android:src="@drawable/placeholder" />
 
         <LinearLayout
             android:id="@+id/buttonsPhoto"
@@ -34,18 +34,19 @@
                 android:id="@+id/imagePhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
                 android:layout_gravity="center_horizontal"
+                android:layout_weight=".5"
                 app:srcCompat="@drawable/ic_add_a_photo_black_48dp" />
 
             <ImageButton
                 android:id="@+id/imageGallery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:layout_marginTop="@dimen/_5dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_5dp"
+                android:layout_weight=".5"
                 app:srcCompat="@drawable/ic_sd_storage_black_24dp" />
+
 
         </LinearLayout>
 
@@ -53,11 +54,12 @@
             android:id="@+id/submitPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/buttonsPhoto"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_25dp"
+            android:layout_marginTop="@dimen/_40dp"
             android:text="@string/submitInfo" />
+
 
     </RelativeLayout>
 </FrameLayout>

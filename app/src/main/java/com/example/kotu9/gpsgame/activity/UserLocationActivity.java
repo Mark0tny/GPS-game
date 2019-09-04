@@ -2,18 +2,17 @@ package com.example.kotu9.gpsgame.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.fragment.MessagesFragment;
@@ -22,6 +21,7 @@ import com.example.kotu9.gpsgame.fragment.UserLocationFragment;
 import com.example.kotu9.gpsgame.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -120,6 +120,14 @@ public class UserLocationActivity extends ActivityManagePermission
         } else if (id == R.id.nav_addMark) {
             Intent intent = new Intent(getApplicationContext(), CreateEventActivity.class);
             startActivity(intent);
+
+
+        } else if (id == R.id.nav_my_events) {
+            //TODO myEvents
+//            MessagesFragment messagesFragment = new MessagesFragment();
+//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.frame_container, messagesFragment);
+//            fragmentTransaction.commit();
         } else if (id == R.id.nav_logout) {
             logout();
         }
@@ -171,22 +179,21 @@ public class UserLocationActivity extends ActivityManagePermission
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
-                case LoaderCallbackInterface.SUCCESS:
-                {
+                case LoaderCallbackInterface.SUCCESS: {
                     Log.i("OpenCV", "OpenCV loaded successfully");
 
-                } break;
-                default:
-                {
+                }
+                break;
+                default: {
                     super.onManagerConnected(status);
-                } break;
+                }
+                break;
             }
         }
     };
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
             Log.d("OpenCV", "Internal OpenCV library not found. Using OpenCV Manager for initialization");

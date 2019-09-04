@@ -266,6 +266,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
         eventCreator.createdEvents.add(event);
     }
 
+    //TODO nie upadate tylko add to list
     private void updateUserCreatedEvents() {
         DocumentReference newUserRef = mDb
                 .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
@@ -280,8 +281,6 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
                 Log.i("update created events", e.getMessage());
             }
         });
-
-
     }
 
     private double calculatePointByDifficulty() {
@@ -458,6 +457,8 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             addPictureFirebase();
             setEventMarker();
             addMarkerFirebase();
+
+//            moveToUserLocationActivity();
         } else {
             Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }

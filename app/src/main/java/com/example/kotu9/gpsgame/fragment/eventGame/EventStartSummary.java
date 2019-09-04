@@ -2,6 +2,7 @@ package com.example.kotu9.gpsgame.fragment.eventGame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +11,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
+import com.example.kotu9.gpsgame.model.Comment;
 import com.example.kotu9.gpsgame.model.Rating;
+import com.example.kotu9.gpsgame.model.Statistics;
 import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.utils.EventTypes;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import lombok.NonNull;
 
@@ -43,10 +49,13 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
     private User user;
+    private Statistics statistics;
+    private Comment usersComment;
     private long timerValue;
     private int correctAnswers;
 
     private Rating eventRating;
+    private boolean eventRated = false;
 
 
     public EventStartSummary() {
@@ -68,6 +77,8 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         if (getArguments() != null) {
             eventRating = new Rating();
             clusterMarker = new ClusterMarker();
+            statistics = new Statistics();
+            usersComment = new Comment();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
             timerValue = getArguments().getLong(String.valueOf(R.string.timerBundleGame));
             if (clusterMarker.getEvent().getEventType().eventType == EventTypes.PhotoCompare)
@@ -144,8 +155,80 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
 
         switch (v.getId()) {
             case R.id.buttonFinish:
-                //finishSummary();
+                setComment();
+                setStatistics();
+                setRating();
+                if (checkAllfieldsFill()) {
+                    uploadDatabase();
+                } else {
+                    Toast.makeText(getContext(), "Please add comment and rate event", Toast.LENGTH_LONG).show();
+                }
                 break;
+        }
+    }
+
+    private boolean checkAllfieldsFill() {
+
+        return (!TextUtils.isEmpty(mEditComment.getText().toString().trim()) && eventRated);
+    }
+
+    private void setRating() {
+        eventRating.setGlobalRating(calculateGlobalRating());
+    }
+
+    private float calculateGlobalRating() {
+        if (eventRating.getUsersRating() != null) {
+            float sum = 0;
+            for (float f : eventRating.getUsersRating()) {
+                sum += f;
+            }
+            return sum / eventRating.getUsersRating().size();
+        } else {
+            return 0;
+        }
+    }
+
+    private void uploadDatabase() {
+        //TO Upload wszystkiego do db
+
+        //finishSummary();
+    }
+
+    //TODO nie update tylko add ma byc
+    private void updateUserCreatedEvents() {
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+        newUserRef.update("completeEvents", user.completeEvents).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                Log.i("completeEvents: ", "SUCCESS");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                Log.i("update completeEvents", e.getMessage());
+            }
+        });
+    }
+
+
+    //TODO liczyć i zapisywać SCORE na userze
+    private void setStatistics() {
+        statistics.eventID = clusterMarker.getEvent().id;
+        statistics.eventName = clusterMarker.getEvent().name;
+        statistics.time = timerValue;
+        statistics.points = calculatePointsByTime();
+    }
+
+    private void setComment() {
+        if (TextUtils.isEmpty(mEditComment.getText().toString().trim())) {
+            mEditComment.setError("Please leave any comment");
+            mEditComment.requestFocus();
+            return;
+        } else {
+            usersComment.username = user.username;
+            usersComment.commentDate = Calendar.getInstance().getTime();
+            usersComment.body = mEditComment.getText().toString().trim();
         }
     }
 
@@ -156,6 +239,7 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
 
     @Override
     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+        eventRated = true;
         eventRating.getUsersRating().add(rating);
     }
 }

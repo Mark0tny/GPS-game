@@ -11,13 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
-
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/LOGO"
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+            app:srcCompat="@drawable/icon_login" />
+
+
+
+        <TextView
+            android:id="@+id/textViewNazwa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/LOGO"
+            android:text="@string/GPSGAME"
+            android:textAlignment="center"
+            android:textSize="@dimen/_40dp"
+            android:textColor="@color/colorPrimaryDark" />
 
     </RelativeLayout>
 
@@ -66,6 +80,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="7dp"
                 android:text="Login"
+                android:textSize="@dimen/_20dp"
                 android:background="@color/btnLoginRef"
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent" />
