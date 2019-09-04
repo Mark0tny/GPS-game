@@ -29,11 +29,11 @@ public class Event implements Serializable, Parcelable {
     public EventType eventType;
     public boolean active;
     public double distance;
-    public float rating;
-   // public  Rating rating;
+    public Rating rating;
     public float geofanceRadius;
     public List<User> ranking;
     public List<Comment> comments;
+
 
     @Override
     public int describeContents() {
@@ -50,7 +50,7 @@ public class Event implements Serializable, Parcelable {
         dest.writeParcelable(this.eventType, flags);
         dest.writeByte(this.active ? (byte) 1 : (byte) 0);
         dest.writeDouble(this.distance);
-        dest.writeFloat(this.rating);
+        dest.writeParcelable(this.rating, flags);
         dest.writeFloat(this.geofanceRadius);
         dest.writeTypedList(this.ranking);
         dest.writeTypedList(this.comments);
@@ -66,13 +66,13 @@ public class Event implements Serializable, Parcelable {
         this.eventType = in.readParcelable(EventType.class.getClassLoader());
         this.active = in.readByte() != 0;
         this.distance = in.readDouble();
-        this.rating = in.readFloat();
+        this.rating = in.readParcelable(Rating.class.getClassLoader());
         this.geofanceRadius = in.readFloat();
         this.ranking = in.createTypedArrayList(User.CREATOR);
         this.comments = in.createTypedArrayList(Comment.CREATOR);
     }
 
-    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
         public Event createFromParcel(Parcel source) {
             return new Event(source);

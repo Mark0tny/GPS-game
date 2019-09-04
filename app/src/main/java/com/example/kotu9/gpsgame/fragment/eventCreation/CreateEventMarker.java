@@ -50,12 +50,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.firestore.v1.WriteResult;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -258,7 +260,8 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     private void setEventNullValues() {
         event.setActive(true);
         event.geofanceRadius = radius;
-        event.rating = 0;
+        event.rating.globalRating = 0;
+        event.rating.usersRating = new ArrayList<>();
         event.eventType.points += calculatePointByDifficulty();
         event.comments = new ArrayList<>();
         event.ranking = new ArrayList<>();
@@ -268,9 +271,10 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
 
     //TODO nie upadate tylko add to list
     private void updateUserCreatedEvents() {
+
         DocumentReference newUserRef = mDb
                 .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
-        newUserRef.update("createdEvents", eventCreator.createdEvents).addOnCompleteListener(new OnCompleteListener<Void>() {
+        newUserRef.update("createdEvents", FieldValue.arrayUnion(event)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 Log.i("updateUserEvents: ", "SUCCESS");

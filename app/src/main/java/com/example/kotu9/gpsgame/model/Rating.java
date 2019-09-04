@@ -20,8 +20,8 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class Rating implements Serializable, Parcelable {
 
-    private float globalRating;
-    private List<Float> usersRating;
+    public float globalRating;
+    public List<Float> usersRating;
 
     @Override
     public int describeContents() {

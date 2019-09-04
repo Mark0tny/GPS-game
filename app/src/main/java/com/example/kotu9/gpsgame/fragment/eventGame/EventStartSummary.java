@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Comment;
+import com.example.kotu9.gpsgame.model.QuizType;
 import com.example.kotu9.gpsgame.model.Rating;
 import com.example.kotu9.gpsgame.model.Statistics;
 import com.example.kotu9.gpsgame.model.User;
@@ -29,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -56,10 +59,10 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
 
     private Rating eventRating;
     private boolean eventRated = false;
+    private ProgressBar progressBar;
 
 
     public EventStartSummary() {
-        // Required empty public constructor
     }
 
     public static EventStartSummary newInstance() {
@@ -80,8 +83,9 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             statistics = new Statistics();
             usersComment = new Comment();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
+            //eventRating = clusterMarker.getEvent().getRating();
             timerValue = getArguments().getLong(String.valueOf(R.string.timerBundleGame));
-            if (clusterMarker.getEvent().getEventType().eventType == EventTypes.PhotoCompare)
+            if (clusterMarker.getEvent().getEventType().eventType == EventTypes.Quiz)
                 correctAnswers = getArguments().getInt(String.valueOf(R.string.answersBundleGame));
         }
     }
@@ -108,6 +112,9 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         mEventName = view.findViewById(R.id.eventNameValue);
         mTimeValue = view.findViewById(R.id.eventTimeValue);
         mPointsValue = view.findViewById(R.id.eventPointsValue);
+        progressBar = view.findViewById(R.id.uploadDataSummary);
+        progressBar.setVisibility(View.INVISIBLE);
+
 
         ratingBarEvent.setOnRatingBarChangeListener(this);
         btnFinish.setOnClickListener(this);
@@ -147,7 +154,16 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
     }
 
     private double calculatePointsByTime() {
-        return 0;
+        long minutes = ((timerValue / (1000 * 60)) % 60);
+        double points = 0;
+        if (clusterMarker.getEvent().eventType.eventType.equals(EventTypes.Quiz)) {
+            points = (clusterMarker.getEvent().getEventType().points) * (correctAnswers / ((QuizType) clusterMarker.getEvent()).getQuestionsList().size());
+            points -= minutes;
+            return points;
+        } else {
+            points = (clusterMarker.getEvent().getEventType().points) - minutes;
+            return points;
+        }
     }
 
     @Override
@@ -157,6 +173,7 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             case R.id.buttonFinish:
                 setComment();
                 setStatistics();
+                caclucateUsersScore();
                 setRating();
                 if (checkAllfieldsFill()) {
                     uploadDatabase();
@@ -189,18 +206,21 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
     }
 
     private void uploadDatabase() {
-        //TO Upload wszystkiego do db
+        updateUserStatistics();
+        updateUserScore();
+        updateRating();
 
-        //finishSummary();
     }
 
-    //TODO nie update tylko add ma byc
-    private void updateUserCreatedEvents() {
+
+    private void updateUserStatistics() {
+        progressBar.setVisibility(View.VISIBLE);
         DocumentReference newUserRef = mDb
                 .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
-        newUserRef.update("completeEvents", user.completeEvents).addOnCompleteListener(new OnCompleteListener<Void>() {
+        newUserRef.update("completeEvents", FieldValue.arrayUnion(statistics)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.i("completeEvents: ", "SUCCESS");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -211,13 +231,58 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         });
     }
 
+    private void updateUserScore() {
+        progressBar.setVisibility(View.VISIBLE);
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+        newUserRef.update("score", user.score).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Log.i("score: ", "SUCCESS");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                Log.i("update score", e.getMessage());
+            }
+        });
+    }
 
-    //TODO liczyć i zapisywać SCORE na userze
+    private void updateRating() {
+        progressBar.setVisibility(View.VISIBLE);
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_events))
+                .document(clusterMarker.getEvent().getEventType().eventType.name())
+                .collection(clusterMarker.getEvent().getId())
+                .document(clusterMarker.getEvent().getId());
+        newUserRef.update("rating", eventRating).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Log.i("rating: ", "SUCCESS");
+                finishSummary();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                Log.i("update rating", e.getMessage());
+            }
+        });
+
+    }
+
+
     private void setStatistics() {
         statistics.eventID = clusterMarker.getEvent().id;
         statistics.eventName = clusterMarker.getEvent().name;
         statistics.time = timerValue;
         statistics.points = calculatePointsByTime();
+        user.completeEvents.add(statistics);
+    }
+
+    private void caclucateUsersScore() {
+        user.score += statistics.points;
     }
 
     private void setComment() {

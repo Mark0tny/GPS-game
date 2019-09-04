@@ -15,15 +15,6 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -33,6 +24,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.EventGameActivity;
@@ -111,6 +112,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
     private DatabaseReference geoDB;
     private GeoFire geoFire;
+    private GeoQuery geofence;
 
 
     public UserLocationFragment() {
@@ -196,14 +198,16 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         int id = item.getItemId();
         if (id == R.id.action_mapView) {
             mMarkerListRecyclerView.setVisibility(View.GONE);
-            markerRecyclerViewAdapter.notifyDataSetChanged();
+            if (markerRecyclerViewAdapter != null)
+                markerRecyclerViewAdapter.notifyDataSetChanged();
             fragmentMap.setVisibility(View.VISIBLE);
             return true;
         }
         if (id == R.id.action_listView) {
             fragmentMap.setVisibility(View.GONE);
             mMarkerListRecyclerView.setVisibility(View.VISIBLE);
-            markerRecyclerViewAdapter.notifyDataSetChanged();
+            if (markerRecyclerViewAdapter != null)
+                markerRecyclerViewAdapter.notifyDataSetChanged();
             return true;
         }
 
@@ -693,8 +697,10 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         geoFire = new GeoFire(geoDB);
     }
 
+
+    //TODO sprawdzić czy zadziała nie final.
     private void addGeofenceToMarkers(final ClusterMarker clusterMarker) {
-        final GeoQuery geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius / 1000));
+        geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius / 1000));
         Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius / 1000);
         geofence.addGeoQueryEventListener(new GeoQueryEventListener() {
 
@@ -706,7 +712,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
                 for (ClusterMarker findMarker : mClusterMarkers) {
                     if (findMarker.getPosition().equals(geoCeneter)) {
-                        createNotification(getContext(), "GPSgame ",  "You have entered the " + findMarker.getEvent().name + " game area");
+                        createNotification(getContext(), "GPSgame ", "You have entered the " + findMarker.getEvent().name + " game area");
 
                     }
                 }
@@ -721,7 +727,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
             @Override
             public void onKeyExited(String key) {
-                createNotification(getContext(), "GPSgame ",  "You have exited the " + " game area");
+                createNotification(getContext(), "GPSgame ", "You have exited the " + " game area");
                 Toast.makeText(getContext(), "GEOFENCE Exited" + key, Toast.LENGTH_LONG).show();
             }
 

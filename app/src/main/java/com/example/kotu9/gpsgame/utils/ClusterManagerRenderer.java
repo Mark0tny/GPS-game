@@ -115,8 +115,8 @@ public class ClusterManagerRenderer extends DefaultClusterRenderer<ClusterMarker
             eDifficulty.setText(clusterMarkerInfo.getEvent().difficulty.name());
             eDifficulty.setTextColor(clusterMarkerInfo.getEvent().difficulty.getColor());
             eDistance.setText(String.format("%.2f", clusterMarkerInfo.getEvent().distance));
-            eRatingValue.setText(String.valueOf(clusterMarkerInfo.getEvent().rating));
-            ratingEvent.setRating(clusterMarkerInfo.getEvent().rating);
+            eRatingValue.setText(String.valueOf(clusterMarkerInfo.getEvent().rating.globalRating));
+            ratingEvent.setRating(clusterMarkerInfo.getEvent().rating.globalRating);
         }
 
 

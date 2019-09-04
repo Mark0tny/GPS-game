@@ -10,6 +10,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
+        <ProgressBar
+            android:id="@+id/uploadDataSummary"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:id="@+id/welcomeWindow"
             android:layout_width="match_parent"
@@ -165,6 +173,8 @@
                 android:id="@+id/editComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10dp"
+                android:layout_marginRight="@dimen/_10dp"
                 android:maxLines="10"
                 android:minLines="2"
                 android:layout_marginTop="@dimen/_10dp"

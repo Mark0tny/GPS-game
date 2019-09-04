@@ -41,8 +41,8 @@ public class MarkerRecyclerViewAdapter extends RecyclerView.Adapter<MarkerRecycl
         viewHolder.eDifficulty.setText(markers.get(position).getEvent().getDifficulty().name());
         viewHolder.eDistance.setText(String.format("%.2f", markers.get(position).getEvent().distance));
         viewHolder.icon.setImageResource(markers.get(position).getIconPicture());
-        viewHolder.eRatingValue.setText(String.valueOf(markers.get(position).getEvent().rating));
-        viewHolder.ratingEvent.setRating(markers.get(position).getEvent().rating);
+        viewHolder.eRatingValue.setText(String.valueOf(markers.get(position).getEvent().rating.globalRating));
+        viewHolder.ratingEvent.setRating(markers.get(position).getEvent().rating.globalRating);
 
     }
 

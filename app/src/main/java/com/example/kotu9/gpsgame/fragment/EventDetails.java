@@ -4,10 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
@@ -43,7 +44,7 @@ import static java.lang.String.valueOf;
 public class EventDetails extends Fragment implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
 
-    TextView eName, eType, eDifficulty, eDistance,eDescription, eRatingValue, eLatValue,
+    TextView eName, eType, eDifficulty, eDistance, eDescription, eRatingValue, eLatValue,
             eLngValue, eOwnerName, hintListExp, commentsListExp, rankingListExp;
     RatingBar ratingEvent;
 
@@ -114,8 +115,8 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eType.setText(clusterMarker.getEvent().eventType.eventType.name());
         eDifficulty.setText(clusterMarker.getEvent().difficulty.name());
         eDistance.setText(String.format("%.2f", clusterMarker.getEvent().distance));
-        ratingEvent.setRating(clusterMarker.getEvent().rating);
-        eRatingValue.setText(valueOf(clusterMarker.getEvent().rating));
+        ratingEvent.setRating(clusterMarker.getEvent().rating.globalRating);
+        eRatingValue.setText(valueOf(clusterMarker.getEvent().rating.globalRating));
         eDescription.setText(clusterMarker.getEvent().description);
         eLatValue.setText(String.format("%.2f", clusterMarker.getPosition().latitude));
         eLngValue.setText(String.format("%.2f", clusterMarker.getPosition().longitude));
@@ -133,7 +134,7 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eLatValue = view.findViewById(R.id.textLatD);
         eLngValue = view.findViewById(R.id.textLngD);
         eOwnerName = view.findViewById(R.id.textOwnerValueD);
-        eDescription  = view.findViewById(R.id.textDescriptionValueD);
+        eDescription = view.findViewById(R.id.textDescriptionValueD);
         listView = view.findViewById(R.id.hintListD);
         mRecyclerViewComments = view.findViewById(R.id.recyclerComments);
         mRecyclerViewRanking = view.findViewById(R.id.recyclerRanking);
