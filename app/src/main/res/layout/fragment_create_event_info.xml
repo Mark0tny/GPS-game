@@ -15,6 +15,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/_20dp"
+        android:layout_marginTop="@dimen/_10dp"
+        android:layout_marginLeft="@dimen/_20dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:orientation="vertical">
@@ -24,8 +27,8 @@
             android:id="@+id/editNameEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
-            android:layout_marginBottom="@dimen/_10dp"
+            android:layout_margin="@dimen/_10dp"
+
             android:fontFamily="sans-serif"
             android:hint="Event name"
             android:paddingBottom="15dp"/>
@@ -35,7 +38,7 @@
             android:id="@+id/editEventDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_10dp"
+            android:layout_margin="@dimen/_10dp"
             android:fontFamily="sans-serif"
             android:hint="Event description"
             android:paddingBottom="15dp"
@@ -44,6 +47,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20dp"
             android:orientation="vertical">
 
             <TextView
@@ -83,7 +87,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_30dp"
             android:orientation="vertical">
 
             <TextView
@@ -108,7 +112,7 @@
         <Button
             android:id="@+id/submitInfo"
             android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_75dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/submitInfo" />
