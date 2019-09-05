@@ -64,6 +64,11 @@
     <!--    https://stackoverflow.com/questions/41693154/custom-seekbar-thumb-size-color-and-background-->
     <style name="Widget.AppCompat.RatingBar.Indicator.MyRatingBar"></style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/browser_actions_title_color</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

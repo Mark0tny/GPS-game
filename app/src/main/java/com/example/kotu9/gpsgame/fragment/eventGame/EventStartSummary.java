@@ -101,7 +101,6 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         loadUserInformation();
-
         return view;
     }
 
@@ -208,10 +207,11 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
     }
 
     private void uploadDatabase() {
+
         updateUserStatistics();
         updateUserScore();
         updateRating();
-
+        updateComments();
     }
 
 
@@ -224,11 +224,12 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 progressBar.setVisibility(View.INVISIBLE);
                 Log.i("completeEvents: ", "SUCCESS");
+                Toast.makeText(getContext(),"STAT()",Toast.LENGTH_LONG).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@androidx.annotation.NonNull Exception e) {
-                Log.i("update completeEvents", e.getMessage());
+                Log.i("update_completeEvents", e.getMessage());
             }
         });
     }
@@ -241,6 +242,7 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(),"SCORE",Toast.LENGTH_LONG).show();
                 Log.i("score: ", "SUCCESS");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -262,13 +264,37 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(),"RATING()",Toast.LENGTH_LONG).show();
                 Log.i("rating: ", "SUCCESS");
-                finishSummary();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@androidx.annotation.NonNull Exception e) {
                 Log.i("update rating", e.getMessage());
+            }
+        });
+
+    }
+
+    private void updateComments() {
+        progressBar.setVisibility(View.VISIBLE);
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_events))
+                .document(clusterMarker.getEvent().getEventType().eventType.name())
+                .collection(clusterMarker.getEvent().getId())
+                .document(clusterMarker.getEvent().getId());
+        newUserRef.update("comments",  FieldValue.arrayUnion(usersComment)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(),"COMM()",Toast.LENGTH_LONG).show();
+                Log.i("comments: ", "SUCCESS");
+                finishSummary();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@androidx.annotation.NonNull Exception e) {
+                Log.i("update comments", e.getMessage());
             }
         });
 

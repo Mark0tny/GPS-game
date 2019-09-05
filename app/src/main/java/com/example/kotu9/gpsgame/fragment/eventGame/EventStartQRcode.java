@@ -141,11 +141,12 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
                             mQRmessage.setTextColor(Color.WHITE);
                             mQRmessage.setVisibility(View.VISIBLE);
 
+
                             Bundle bundle = new Bundle();
                             bundle.putParcelable(String.valueOf(R.string.markerBundleGame), clusterMarker);
                             bundle.putLong(String.valueOf(R.string.timerBundleGame), timerValue);
                             completedGame(bundle);
-                            qrEader.stop();
+
                             return;
                         } else {
                             mQRmessage.setText("Incorrect Qrcode");
@@ -165,6 +166,7 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
     }
 
     private void completedGame(Bundle bundle) {
+        qrEader.stop();
         navController.navigate(R.id.eventStartSummary, bundle);
     }
 

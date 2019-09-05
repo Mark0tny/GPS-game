@@ -22,6 +22,7 @@ import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.activity.UserLocationActivity;
 import com.example.kotu9.gpsgame.adapters.CommentsRecyclerViewAdapter;
 import com.example.kotu9.gpsgame.adapters.RankingRecyclerViewAdapter;
+import com.example.kotu9.gpsgame.fragment.eventGame.EventStartSummary;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Comment;
 import com.example.kotu9.gpsgame.model.Event;
@@ -36,13 +37,22 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+
+import lombok.NonNull;
 
 import static java.lang.String.valueOf;
 
 public class EventDetails extends Fragment implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
+    private static final String TAG = EventStartSummary.class.getSimpleName();
 
     TextView eName, eType, eDifficulty, eDistance, eDescription, eRatingValue, eLatValue,
             eLngValue, eOwnerName, hintListExp, commentsListExp, rankingListExp;
@@ -59,6 +69,9 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     private RankingRecyclerViewAdapter mAdapterRanking;
 
     private Event event;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mDb;
+
     private ArrayList<Comment> comments;
     private Hint hintList;
 
@@ -92,22 +105,50 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
             if (clusterMarker != null) {
                 Log.i("clusterMarkerBundle", clusterMarker.toString());
                 event = clusterMarker.getEvent();
-                comments = (ArrayList<Comment>) clusterMarker.getEvent().getComments();
                 hintList.hints = clusterMarker.getEvent().getHintList().getHints();
             }
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_details, container, false);
         setupViews(view, savedInstanceState);
-
+        mDb = FirebaseFirestore.getInstance();
+        getEvent();
         setEventInfoTextView(clusterMarker);
         initCommentsListRecyclerView();
         initRankingListRecyclerView();
         return view;
+    }
+
+    private void getEvent() {
+
+        DocumentReference newUserRef = mDb
+                .collection(getString(R.string.collection_events))
+                .document(clusterMarker.getEvent().getEventType().eventType.name())
+                .collection(clusterMarker.getEvent().getId())
+                .document(clusterMarker.getEvent().getId());
+        newUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        event = task.getResult().toObject(Event.class);
+                        comments = (ArrayList<Comment>) event.comments;
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
     }
 
     private void setEventInfoTextView(ClusterMarker clusterMarker) {
@@ -115,12 +156,13 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         eType.setText(clusterMarker.getEvent().eventType.eventType.name());
         eDifficulty.setText(clusterMarker.getEvent().difficulty.name());
         eDistance.setText(String.format("%.2f", clusterMarker.getEvent().distance));
-        ratingEvent.setRating(clusterMarker.getEvent().rating.globalRating);
-        eRatingValue.setText(valueOf(clusterMarker.getEvent().rating.globalRating));
         eDescription.setText(clusterMarker.getEvent().description);
         eLatValue.setText(String.format("%.2f", clusterMarker.getPosition().latitude));
         eLngValue.setText(String.format("%.2f", clusterMarker.getPosition().longitude));
         eOwnerName.setText(clusterMarker.getOwner().username);
+
+        ratingEvent.setRating(event.rating.globalRating);
+        eRatingValue.setText(valueOf(event.rating.globalRating));
 
     }
 
