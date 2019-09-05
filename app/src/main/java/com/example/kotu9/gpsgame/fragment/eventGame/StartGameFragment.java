@@ -39,7 +39,6 @@ public class StartGameFragment extends Fragment implements View.OnClickListener 
     private TextView username, timerText,eventName;
     private Button startEvent, cancelEvent;
 
-    Chronometer chronometer;
     public NavController navController;
     private Event event;
     private ClusterMarker clusterMarker;

@@ -1,18 +1,28 @@
 package com.example.kotu9.gpsgame.fragment.eventGame;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -22,6 +32,12 @@ import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.Question;
 import com.example.kotu9.gpsgame.model.QuizType;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -36,8 +52,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventStartQuiz extends Fragment implements View.OnClickListener {
-
+public class EventStartQuiz extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+    private static final String TAG = EventStartLocation.class.getSimpleName();
 
     private static final int DIALOG_DISMISS_TIME = 2000;
     int index = 0, thisQuestion, totalQuestion, correctAnswer;
@@ -48,6 +64,11 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
     private TextView mQuestionValue, mQuestionNum, mScore;
     private NavController navController;
     private Chronometer eventTimer;
+    private FrameLayout frameLayout;
+
+    private GoogleMap mMap;
+    private MapView mapView;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
 
     //Data
@@ -89,13 +110,98 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_event_start_quiz, container, false);
 
-        setupViews(view);
+        setupViews(view, savedInstanceState);
         mDb = FirebaseFirestore.getInstance();
         setQuestionsList();
         eventTimer.setBase(SystemClock.elapsedRealtime());
         eventTimer.start();
 
         return view;
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        setupMapView();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        drawGeofence(clusterMarker);
+    }
+
+    public void setupMapView() {
+        UiSettings settings = mMap.getUiSettings();
+        settings.setAllGesturesEnabled(true);
+        settings.setCompassEnabled(true);
+        settings.setMyLocationButtonEnabled(true);
+        settings.setRotateGesturesEnabled(true);
+        settings.setScrollGesturesEnabled(true);
+        settings.setTiltGesturesEnabled(true);
+        settings.setZoomControlsEnabled(true);
+        settings.setZoomGesturesEnabled(true);
+    }
+
+    private void drawGeofence(ClusterMarker clusterMarker) {
+        Log.d(TAG, "drawGeofence()");
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(clusterMarker.getPosition())
+                .strokeColor(Color.argb(50, 70, 70, 70))
+                .fillColor(Color.argb(100, 150, 150, 150))
+                .radius(clusterMarker.getEvent().geofanceRadius);
+        mMap.addCircle(circleOptions);
+
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_showHints:
+                showHintDialog();
+                return true;
+            case R.id.action_MapView:
+                frameLayout.setVisibility(View.GONE);
+                mapView.setVisibility(View.VISIBLE);
+                return true;
+            case R.id.action_eventView:
+                mapView.setVisibility(View.GONE);
+                frameLayout.setVisibility(View.VISIBLE);
+                return true;
+
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private void showHintDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("List of hints:");
+        builder.setCancelable(true);
+        String[] hints = clusterMarker.getEvent().hintList.hints.toArray(new String[0]);
+        builder.setItems(hints, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setQuestionsList() {
@@ -127,7 +233,15 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
 
     }
 
-    private void setupViews(View view) {
+    private void setupViews(View view, Bundle savedInstanceState) {
+
+        frameLayout = view.findViewById(R.id.gameQuiz);
+        mapView = view.findViewById(R.id.mapQuiz);
+
+        mapView = view.findViewById(R.id.mapLocation);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
 
         btnA = view.findViewById(R.id.btnAnswer1);
         btnB = view.findViewById(R.id.btnAnswer2);
