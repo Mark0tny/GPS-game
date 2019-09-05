@@ -38,16 +38,12 @@
             android:textSize="@dimen/_20dp" />
     </LinearLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.gms.maps.MapView
         android:id="@+id/mapQuiz"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/gameTimer"
-        android:layout_marginBottom="0dp"
-        tools:context=".activity.UserLocationActivity" />
+        android:layout_below="@id/gameTimer" />
+
 
     <FrameLayout
         android:id="@+id/gameQuiz"

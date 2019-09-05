@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -121,6 +122,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
         OpenCVLoader.initDebug();
 
         if (getArguments() != null) {
+            eventTimer = new Chronometer(getContext());
             clusterMarker = new ClusterMarker();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
             photoCompare = new PhotoCompareType((Event) clusterMarker.getEvent());
@@ -136,6 +138,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
         mDb = FirebaseFirestore.getInstance();
         setupViews(view);
         setObjectToFind();
+        eventTimer.setBase(SystemClock.elapsedRealtime());
         eventTimer.start();
         return view;
     }
@@ -192,7 +195,7 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
             openCVcomparasion(uriToFind.getPath(), uriUsersPhoto.getPath());
             if (imagesMatch) {
                 eventTimer.stop();
-                timerValue = eventTimer.getBase();
+                timerValue = SystemClock.elapsedRealtime() - eventTimer.getBase();
                 showDialog("Congratulations event finished" + "\nImages match in " + String.format("%.2f", compareResult) + " %");
             } else {
                 Toast.makeText(getContext(), "Images do not match. Please try again", Toast.LENGTH_LONG).show();

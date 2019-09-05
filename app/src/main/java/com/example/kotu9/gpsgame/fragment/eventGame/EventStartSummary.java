@@ -54,7 +54,7 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
     private User user;
     private Statistics statistics;
     private Comment usersComment;
-    private long timerValue;
+    private long timerValue = 0;
     private int correctAnswers;
 
     private Rating eventRating;
@@ -82,12 +82,14 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             clusterMarker = new ClusterMarker();
             statistics = new Statistics();
             usersComment = new Comment();
+            user = new User();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
             eventRating = clusterMarker.getEvent().getRating();
             timerValue = getArguments().getLong(String.valueOf(R.string.timerBundleGame));
             if (clusterMarker.getEvent().getEventType().eventType == EventTypes.Quiz)
                 correctAnswers = getArguments().getInt(String.valueOf(R.string.answersBundleGame));
         }
+
     }
 
     @Override
@@ -95,11 +97,11 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_event_start_summary, container, false);
-
+        setupViews(view);
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         loadUserInformation();
-        setupViews(view);
+
         return view;
     }
 
@@ -114,7 +116,6 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         mPointsValue = view.findViewById(R.id.eventPointsValue);
         progressBar = view.findViewById(R.id.uploadDataSummary);
         progressBar.setVisibility(View.INVISIBLE);
-
 
         ratingBarEvent.setOnRatingBarChangeListener(this);
         btnFinish.setOnClickListener(this);
@@ -131,12 +132,13 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             user = task.getResult().toObject(User.class);
+                            Log.e(TAG, "Load user isSuccessful");
                             setTextViewValues();
                         } else {
-                            Log.d(TAG, "No such document");
+                            Log.e(TAG, "No such document");
                         }
                     } else {
-                        Log.d(TAG, "get failed with ", task.getException());
+                        Log.e(TAG, "get failed with ", task.getException());
                     }
                 }
             });
@@ -278,7 +280,7 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         statistics.eventName = clusterMarker.getEvent().name;
         statistics.time = timerValue;
         statistics.points = calculatePointsByTime();
-        user.completeEvents.add(statistics);
+       // user.completeEvents.add(statistics);
     }
 
     private void caclucateUsersScore() {

@@ -87,7 +87,8 @@ import static com.example.kotu9.gpsgame.utils.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.kotu9.gpsgame.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, MarkerRecyclerViewAdapter.OnMarkerClickListener {
+public class UserLocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
+        MarkerRecyclerViewAdapter.OnMarkerClickListener{
 
     private static final String TAG = "UserLocationActivity";
     private FirebaseAuth mAuth;
@@ -159,6 +160,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         setupMapView();
         Context context = getActivity();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            setupMapView();
             return;
         }
         mMap.setMyLocationEnabled(true);
@@ -698,22 +700,26 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
 
+    private double calculateDistanceGeofence(User user, LatLng geofenceCenter) {
+        float[] distance = new float[10];
+        Location.distanceBetween(user.getLocation().getLatitude(), user.getLocation().getLongitude(),
+                geofenceCenter.latitude, geofenceCenter.longitude, distance);
+        return distance[0];
+    }
+
     //TODO sprawdzić czy zadziała nie final.
     private void addGeofenceToMarkers(final ClusterMarker clusterMarker) {
         geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius / 1000));
         Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius / 1000);
         geofence.addGeoQueryEventListener(new GeoQueryEventListener() {
-
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
                 LatLng geoCeneter = new LatLng(geofence.getCenter().latitude, geofence.getCenter().longitude);
                 Log.e(TAG, "geoCenterDistanceM: " + calculateDistanceGeofence(user, geoCeneter));
 
-
                 for (ClusterMarker findMarker : mClusterMarkers) {
                     if (findMarker.getPosition().equals(geoCeneter)) {
                         createNotification(getContext(), "GPSgame ", "You have entered the " + findMarker.getEvent().name + " game area");
-
                     }
                 }
                 for (ClusterMarker clusterMarker : mClusterMarkers) {
@@ -727,7 +733,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
             @Override
             public void onKeyExited(String key) {
-                createNotification(getContext(), "GPSgame ", "You have exited the " + " game area");
+                createNotification(getContext(), "GPSgame ", "You have exited the game area");
                 Toast.makeText(getContext(), "GEOFENCE Exited" + key, Toast.LENGTH_LONG).show();
             }
 
@@ -745,19 +751,9 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
             public void onGeoQueryError(DatabaseError error) {
                 Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
+
+
         });
-
-    }
-
-
-    private double calculateDistanceGeofence(User user, LatLng geofenceCenter) {
-        float[] distance = new float[10];
-        Location.distanceBetween(user.getLocation().getLatitude(), user.getLocation().getLongitude(),
-                geofenceCenter.latitude, geofenceCenter.longitude, distance);
-        return distance[0];
     }
 
 }
-
-
-

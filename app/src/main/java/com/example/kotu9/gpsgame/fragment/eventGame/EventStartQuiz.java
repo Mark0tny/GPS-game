@@ -3,11 +3,10 @@ package com.example.kotu9.gpsgame.fragment.eventGame;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -76,6 +75,7 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
         getActivity().setTitle(R.string.fr_start_quiz);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            eventTimer = new Chronometer(getContext());
             clusterMarker = new ClusterMarker();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
             quizType = new QuizType((Event) clusterMarker.getEvent());
@@ -92,7 +92,7 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
         setupViews(view);
         mDb = FirebaseFirestore.getInstance();
         setQuestionsList();
-
+        eventTimer.setBase(SystemClock.elapsedRealtime());
         eventTimer.start();
 
         return view;
@@ -165,8 +165,8 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
                 showQuestion(++index);
             }
             mScore.setText(String.format("%d", correctAnswer));
-        }else {
-            showDialog("Congratulations quiz finished\nYour score\n" + String.format("%d/%d", correctAnswer , totalQuestion));
+        } else {
+            showDialog("Congratulations quiz finished\nYour score\n" + String.format("%d/%d", correctAnswer, totalQuestion));
             endQuiz(endGame());
         }
     }
@@ -226,7 +226,8 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
     }
 
     private Bundle endGame() {
-        timerValue = eventTimer.getBase();
+        eventTimer.stop();
+        timerValue = SystemClock.elapsedRealtime() - eventTimer.getBase();
         Bundle bundle = new Bundle();
         bundle.putParcelable(String.valueOf(R.string.markerBundleGame), clusterMarker);
         bundle.putLong(String.valueOf(R.string.timerBundleGame), timerValue);
@@ -235,7 +236,7 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener {
     }
 
     private void endQuiz(Bundle bundle) {
-        showDialog("Congratulations quiz finished\nYour score\n" + String.format("%d/%d", correctAnswer , totalQuestion));
+        showDialog("Congratulations quiz finished\nYour score\n" + String.format("%d/%d", correctAnswer, totalQuestion));
         navController.navigate(R.id.eventStartSummary, bundle);
     }
 

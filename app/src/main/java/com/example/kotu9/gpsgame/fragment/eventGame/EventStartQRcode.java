@@ -3,6 +3,7 @@ package com.example.kotu9.gpsgame.fragment.eventGame;
 import android.Manifest;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -38,7 +39,7 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
     private QREader qrEader;
     private ClusterMarker clusterMarker;
     private NavController navController;
-    private long timerValue;
+    private long timerValue = 0;
 
 
     public EventStartQRcode() {
@@ -57,9 +58,11 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.fr_start_QR);
+        setRetainInstance(true);
         if (getArguments() != null) {
             clusterMarker = new ClusterMarker();
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
+            mTimerValue = new Chronometer(getContext());
         }
     }
 
@@ -83,15 +86,17 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_start_game);
         mQRid = view.findViewById(R.id.startQReventID);
         mQRmessage = view.findViewById(R.id.startQReventMessage);
-        mTimerValue = view.findViewById(R.id.gameTimerValue);
+        mTimerValue = view.findViewById(R.id.gameTimerValueQR);
         btnSwitch = view.findViewById(R.id.btn_switch_QR);
         scanner = view.findViewById(R.id.cameraView);
         btnSwitch.setOnClickListener(this);
+        mTimerValue.setBase(SystemClock.elapsedRealtime());
         mTimerValue.start();
     }
 
     @Override
     public void onPermissionGranted(PermissionGrantedResponse response) {
+
     }
 
     @Override
@@ -108,10 +113,10 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
     public void onClick(View v) {
         if (qrEader.isCameraRunning()) {
             btnSwitch.setChecked(false);
-           // qrEader.stop();
+            qrEader.stop();
         } else {
             btnSwitch.setChecked(true);
-           // qrEader.start();
+            qrEader.start();
         }
     }
 
@@ -123,15 +128,15 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
                     @Override
                     public void run() {
                         mQRid.setText(data);
-                        Log.i("TAG","NAME:" +clusterMarker.getEvent().id);
-                        Log.i("TAG","DATA:" + data);
-                        Log.i("TAG","BOLEAN:" + clusterMarker.getEvent().id.equalsIgnoreCase(data));
+                        Log.i("TAG", "NAME:" + clusterMarker.getEvent().id);
+                        Log.i("TAG", "DATA:" + data);
+                        Log.i("TAG", "BOLEAN:" + clusterMarker.getEvent().id.equalsIgnoreCase(data));
 
-                        if(clusterMarker.getEvent().id.equalsIgnoreCase(data)){
+                        if (clusterMarker.getEvent().id.equalsIgnoreCase(data)) {
                             mQRid.setText(data);
                             mTimerValue.stop();
-                            timerValue = mTimerValue.getBase();
-                            Log.i("TAG","TIMER:" + timerValue);
+                            timerValue = SystemClock.elapsedRealtime() - mTimerValue.getBase();
+                            Log.i("TAG", "TIMER:" + timerValue);
                             mQRmessage.setText("Correct Qrcode");
                             mQRmessage.setTextColor(Color.WHITE);
                             mQRmessage.setVisibility(View.VISIBLE);
@@ -142,7 +147,7 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
                             completedGame(bundle);
                             qrEader.stop();
                             return;
-                        }else {
+                        } else {
                             mQRmessage.setText("Incorrect Qrcode");
                             mQRmessage.setTextColor(Color.RED);
                             mQRmessage.setVisibility(View.VISIBLE);
@@ -159,8 +164,8 @@ public class EventStartQRcode extends Fragment implements PermissionListener, Vi
                 .build();
     }
 
-    private void completedGame(Bundle bundle){
-        navController.navigate(R.id.eventStartSummary,bundle);
+    private void completedGame(Bundle bundle) {
+        navController.navigate(R.id.eventStartSummary, bundle);
     }
 
 
