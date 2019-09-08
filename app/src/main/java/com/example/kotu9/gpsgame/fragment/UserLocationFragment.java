@@ -383,7 +383,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                                     Log.e(TAG, "GeoFire Complete");
                                 }
                             });
-                    startLocationService();
+
                 }
             }
         });
@@ -496,7 +496,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 );
                 mClusterManager.setRenderer(mClusterManagerRenderer);
             }
-
             for (ClusterMarker clusterMarker : mClusterMarkers1) {
                 clusterMarker.setIconPicture(clusterMarker.getIconPicture());
                 if (clusterMarker.getEvent().active) {
@@ -507,7 +506,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                     Log.i(TAG, "Event " + clusterMarker.getEvent().name + " inactive");
                 }
             }
-
             mClusterManager.cluster();
             setCameraView();
         }
@@ -627,6 +625,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 .setCancelable(true)
                 .setPositiveButton("Start event game", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        getActivity().stopService(new Intent(getActivity(), LocationService.class));
                         Intent intent = new Intent(getContext(), EventGameActivity.class);
                         intent.putExtra(String.valueOf(R.string.markerBundle), bundle);
                         startActivity(intent);
@@ -636,6 +635,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
                 .setNeutralButton("Show event details", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        getActivity().stopService(new Intent(getActivity(), LocationService.class));
                         Fragment detailsFragment = new EventDetails();
                         detailsFragment.setArguments(bundle);
                         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -655,7 +655,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
         if (clickedClusterMarker != null) {
             if (geoMap != null) {
-                alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(geoMap.get(clickedClusterMarker.getEvent().name));
+               // alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(geoMap.get(clickedClusterMarker.getEvent().name));
             }
         }
 

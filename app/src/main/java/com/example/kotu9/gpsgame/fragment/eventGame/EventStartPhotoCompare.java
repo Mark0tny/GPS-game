@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,10 +15,15 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +41,11 @@ import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.PhotoCompareType;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -63,7 +74,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 
-public class EventStartPhotoCompare extends Fragment implements View.OnClickListener {
+public class EventStartPhotoCompare extends Fragment implements View.OnClickListener, OnMapReadyCallback {
     static {
         OpenCVLoader.initDebug();
     }
@@ -93,7 +104,10 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     private ImageView mPhotoViewOld, mPhotoViewNew;
     private TextView compareMessage;
     private ProgressBar progressBar;
+    private GoogleMap mMap;
+    private MapView mapView;
 
+    private FrameLayout frameLayout;
     private LinearLayout imageOld;
     private LinearLayout imageNew;
     private Bitmap bitmap;
@@ -134,16 +148,101 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_start_photo_compare, container, false);
-
+        setHasOptionsMenu(true);
         mDb = FirebaseFirestore.getInstance();
-        setupViews(view);
+        setupViews(view, savedInstanceState);
         setObjectToFind();
         eventTimer.setBase(SystemClock.elapsedRealtime());
         eventTimer.start();
         return view;
     }
 
-    private void setupViews(View view) {
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        setupMapView();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        drawGeofence(clusterMarker);
+    }
+
+    public void setupMapView() {
+        UiSettings settings = mMap.getUiSettings();
+        settings.setAllGesturesEnabled(true);
+        settings.setCompassEnabled(true);
+        settings.setMyLocationButtonEnabled(true);
+        settings.setRotateGesturesEnabled(true);
+        settings.setScrollGesturesEnabled(true);
+        settings.setTiltGesturesEnabled(true);
+        settings.setZoomControlsEnabled(true);
+        settings.setZoomGesturesEnabled(true);
+    }
+
+    private void drawGeofence(ClusterMarker clusterMarker) {
+        Log.d(TAG, "drawGeofence()");
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(clusterMarker.getPosition())
+                .strokeColor(Color.argb(50, 70, 70, 70))
+                .fillColor(Color.argb(100, 150, 150, 150))
+                .radius(clusterMarker.getEvent().geofanceRadius);
+        mMap.addCircle(circleOptions);
+
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.start_game_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_showHints:
+                showHintDialog();
+                return true;
+            case R.id.action_MapView:
+                frameLayout.setVisibility(View.GONE);
+                mapView.setVisibility(View.VISIBLE);
+                return true;
+            case R.id.action_eventView:
+                mapView.setVisibility(View.GONE);
+                frameLayout.setVisibility(View.VISIBLE);
+                return true;
+
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private void showHintDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("List of hints:");
+        builder.setCancelable(true);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1, clusterMarker.getEvent().hintList.hints);
+
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void setupViews(View view, Bundle savedInstanceState) {
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_start_game);
         eventTimer = view.findViewById(R.id.gameTimerValuePC);
         compareMessage = view.findViewById(R.id.photoMessage);
@@ -167,6 +266,14 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
 
         btnComparePhoto.setOnClickListener(this);
         btnSwitch.setOnClickListener(this);
+
+        frameLayout = view.findViewById(R.id.gamePhotoCompare);
+        mapView = view.findViewById(R.id.mapPhoto);
+
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
+
 
     }
 

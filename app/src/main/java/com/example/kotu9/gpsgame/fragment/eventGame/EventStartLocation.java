@@ -18,8 +18,12 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
@@ -140,7 +144,7 @@ public class EventStartLocation extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_start_location, container, false);
-
+        setHasOptionsMenu(true);
 
         setupViews(view, savedInstanceState);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -180,7 +184,41 @@ public class EventStartLocation extends Fragment implements OnMapReadyCallback {
         settings.setZoomControlsEnabled(true);
         settings.setZoomGesturesEnabled(true);
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.start_game_loc_hints, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_showHints:
+                showHintDialog();
+                return true;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private void showHintDialog() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+        builder.setTitle("List of hints:");
+        builder.setCancelable(true);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1, mClusterMarker.getEvent().hintList.hints);
+
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     @Override
     public void onResume() {
@@ -323,7 +361,8 @@ public class EventStartLocation extends Fragment implements OnMapReadyCallback {
                     startLocationService();
                     Log.d(TAG, "getLastKnownLocation:" + geoPoint.toString());
 
-                    geoFire.setLocation(mAuth.getCurrentUser().getUid(), new GeoLocation(location.getLatitude(), location.getLongitude()), new
+                    geoFire.setLocation(mAuth.getCurrentUser().getUid(),
+                            new GeoLocation(location.getLatitude(), location.getLongitude()), new
                             GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
@@ -422,19 +461,20 @@ public class EventStartLocation extends Fragment implements OnMapReadyCallback {
     }
 
     private void createGeofenceArea() {
-        geofenceArea = geoFire.queryAtLocation(new GeoLocation(mClusterMarker.getPosition().latitude, mClusterMarker.getPosition().longitude), (mClusterMarker.getEvent().geofanceRadius / 1000));
-        Log.i("GeoQuery Area", geofenceArea.getCenter().toString() + geofenceArea.getRadius() + "CLUSTER RADIUS" + mClusterMarker.getEvent().geofanceRadius / 1000);
+        geofenceArea = geoFire.queryAtLocation(new GeoLocation(
+                        mClusterMarker.getPosition().latitude, mClusterMarker.getPosition().longitude)
+                , (mClusterMarker.getEvent().geofanceRadius / 1000));
         geofenceArea.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                Toast.makeText(getContext(), "DUZA", Toast.LENGTH_LONG).show();
                 createNotification(getContext(), "GPSgame", "Welcome back in game area");
                 Toast.makeText(getContext(), "Welcome back in game area", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onKeyExited(String key) {
-                createNotification(getContext(), "GPSgame", "You have exited the game area, please back");
+                createNotification(getContext(), "GPSgame",
+                        "You have exited the game area, please back");
                 Toast.makeText(getContext(), "You have exited the game area", Toast.LENGTH_LONG).show();
             }
 

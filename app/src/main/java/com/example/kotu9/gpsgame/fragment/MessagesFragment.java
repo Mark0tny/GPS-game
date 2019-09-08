@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,7 +68,7 @@ public class MessagesFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         loadUserInformation();
-        initCommentsListRecyclerView();
+
         return view;
     }
 
@@ -92,6 +93,8 @@ public class MessagesFragment extends Fragment {
                         if (document.exists()) {
                             User user = task.getResult().toObject(User.class);
                             messageList = user.messages;
+                            initCommentsListRecyclerView();
+                            Toast.makeText(getContext(), messageList.toString(), Toast.LENGTH_LONG).show();
                         } else {
                             Log.d(TAG, "No such document");
                         }

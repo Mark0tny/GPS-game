@@ -94,6 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/rating"
         android:layout_centerHorizontal="true"
+        android:theme="@style/RatingBar"
         android:focusable="false"
         android:isIndicator="true"
         android:numStars="5"

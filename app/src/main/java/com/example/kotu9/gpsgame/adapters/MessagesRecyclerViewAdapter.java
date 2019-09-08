@@ -55,8 +55,8 @@ public class MessagesRecyclerViewAdapter extends RecyclerView.Adapter<MessagesRe
             super(itemView);
             mUsername = itemView.findViewById(R.id.mUsername);
             mDate = itemView.findViewById(R.id.mDate);
-            mBody = itemView.findViewById(R.id.mEventname);
-            mEventName = itemView.findViewById(R.id.mBody);
+            mBody = itemView.findViewById(R.id.mBody);
+            mEventName = itemView.findViewById(R.id.mEventname);
         }
     }
 }

@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
@@ -109,7 +110,7 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener, On
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_event_start_quiz, container, false);
-
+        setHasOptionsMenu(true);
         setupViews(view, savedInstanceState);
         mDb = FirebaseFirestore.getInstance();
         setQuestionsList();
@@ -162,8 +163,7 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener, On
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Do something that differs the Activity's menu here
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.start_game_menu, menu);
     }
 
     @Override
@@ -192,8 +192,10 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener, On
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("List of hints:");
         builder.setCancelable(true);
-        String[] hints = clusterMarker.getEvent().hintList.hints.toArray(new String[0]);
-        builder.setItems(hints, new DialogInterface.OnClickListener() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_list_item_1, clusterMarker.getEvent().hintList.hints);
+
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -238,7 +240,6 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener, On
         frameLayout = view.findViewById(R.id.gameQuiz);
         mapView = view.findViewById(R.id.mapQuiz);
 
-        mapView = view.findViewById(R.id.mapLocation);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);

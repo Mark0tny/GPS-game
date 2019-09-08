@@ -172,17 +172,6 @@
         android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
-        <Chronometer
-            android:id="@+id/gameTimerValuePC"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/_10dp"
-            android:layout_marginTop="@dimen/_5dp"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/_20dp" />
-
         <TextView
             android:id="@+id/gameTimerName"
             android:layout_width="wrap_content"
@@ -194,6 +183,19 @@
             android:text="Timer: "
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/_20dp" />
+
+        <Chronometer
+            android:id="@+id/gameTimerValuePC"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_10dp"
+            android:layout_marginTop="@dimen/_5dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_20dp" />
+
+
     </LinearLayout>
 
 
@@ -201,7 +203,8 @@
         android:id="@+id/mapPhoto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/gameTimer" />
+        android:layout_below="@id/gameTimer"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

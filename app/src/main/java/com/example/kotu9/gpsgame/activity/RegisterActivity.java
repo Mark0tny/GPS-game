@@ -2,7 +2,6 @@ package com.example.kotu9.gpsgame.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -11,8 +10,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.kotu9.gpsgame.model.User;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.kotu9.gpsgame.R;
+import com.example.kotu9.gpsgame.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -79,39 +80,39 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         final String password = editTextPassword.getText().toString().trim();
         registrationFieldsCheck(email, username, password);
 
-        if(userNameExistsAlready(username) || emailExistsAlready(email)) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(RegisterActivity.this,new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            User user = new User(username, email, password,
-                                    null, FirebaseAuth.getInstance().getCurrentUser().getUid(), USER_ROLE_USER,
-                                    0, getCurrentDate(), new GeoPoint(0, 0), null, null,null);
-                            FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                                    .setSslEnabled(true)
-                                    .build();
-                            mDb.setFirestoreSettings(settings);
-                            DocumentReference newUserRef = mDb
-                                    .collection(getString(R.string.collection_users))
-                                    .document(FirebaseAuth.getInstance().getUid());
-                            newUserRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        progressBar.setVisibility(View.GONE);
-                                        finish();
-                                        startActivity(new Intent(getApplicationContext(), UserLocationActivity.class));
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        Toast.makeText(getApplicationContext(), "Could not register user",
-                                                Toast.LENGTH_SHORT).show();
+        if (userNameExistsAlready(username) || emailExistsAlready(email)) {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                User user = new User(username, email, password,
+                                        null, FirebaseAuth.getInstance().getCurrentUser().getUid(), USER_ROLE_USER,
+                                        0, getCurrentDate(), new GeoPoint(0, 0), null, null, null);
+                                FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                                        .setSslEnabled(true)
+                                        .build();
+                                mDb.setFirestoreSettings(settings);
+                                DocumentReference newUserRef = mDb
+                                        .collection(getString(R.string.collection_users))
+                                        .document(FirebaseAuth.getInstance().getUid());
+                                newUserRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            progressBar.setVisibility(View.GONE);
+                                            finish();
+                                            startActivity(new Intent(getApplicationContext(), UserLocationActivity.class));
+                                        } else {
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(getApplicationContext(), "Could not register user",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
-                    }
-                });
+                    });
         }
     }
 
@@ -160,11 +161,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Query mQuery = mDb.collection(getString(R.string.collection_users))
                 .whereEqualTo("username", username);
 
-        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>(){
+        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                for (DocumentSnapshot ds: queryDocumentSnapshots){
-                    if (ds!=null && ds.exists()){
+                for (DocumentSnapshot ds : queryDocumentSnapshots) {
+                    if (ds != null && ds.exists()) {
                         Toast.makeText(RegisterActivity.this, "Username already exists!", Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     }
@@ -178,12 +179,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Query mQuery = mDb.collection(getString(R.string.collection_users))
                 .whereEqualTo("email", email);
 
-        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>(){
+        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                for (DocumentSnapshot ds: queryDocumentSnapshots){
-                    if (ds!=null && ds.exists()){
-                        Toast.makeText(RegisterActivity.this, "Email already exists!", Toast.LENGTH_SHORT).show();
+                for (DocumentSnapshot ds : queryDocumentSnapshots) {
+                    if (ds != null && ds.exists()) {
+                        Toast.makeText(RegisterActivity.this,
+                                "Email already exists!",
+                                Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                     }
                 }
