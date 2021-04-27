@@ -56,10 +56,11 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
     private Comment usersComment;
     private long timerValue = 0;
     private int correctAnswers;
-
+    private int numberofQuestions;
     private Rating eventRating;
     private boolean eventRated = false;
     private ProgressBar progressBar;
+
 
 
     public EventStartSummary() {
@@ -86,8 +87,11 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
             clusterMarker = (ClusterMarker) getArguments().get(String.valueOf(R.string.markerBundleGame));
             eventRating = clusterMarker.getEvent().getRating();
             timerValue = getArguments().getLong(String.valueOf(R.string.timerBundleGame));
-            if (clusterMarker.getEvent().getEventType().eventType == EventTypes.Quiz)
+            if (clusterMarker.getEvent().getEventType().eventType == EventTypes.Quiz){
                 correctAnswers = getArguments().getInt(String.valueOf(R.string.answersBundleGame));
+                numberofQuestions = getArguments().getInt(String.valueOf(R.string.listsizeBundleGame));
+            }
+
         }
 
     }
@@ -158,7 +162,8 @@ public class EventStartSummary extends Fragment implements View.OnClickListener,
         long minutes = ((timerValue / (1000 * 60)) % 60);
         double points = 0;
         if (clusterMarker.getEvent().eventType.eventType.equals(EventTypes.Quiz)) {
-            points = (clusterMarker.getEvent().getEventType().points) * (correctAnswers / ((QuizType) clusterMarker.getEvent()).getQuestionsList().size());
+            double multipler = ((double) correctAnswers) / numberofQuestions;
+            points = (clusterMarker.getEvent().getEventType().points * multipler);
             points -= minutes;
             return points;
         } else {

@@ -259,7 +259,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
     }
 
     private void setEventNullValues() {
-        event.setActive(true);
+        event.setActive(false);
         event.geofanceRadius = radius;
         event.rating = new Rating();
         event.rating.globalRating = 0;
@@ -408,10 +408,11 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             public void onComplete(@lombok.NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Saving event in database successfuly", Toast.LENGTH_SHORT).show();
-                    moveToUserLocationActivity();
+
                 } else {
                     Toast.makeText(getContext(), "Could not save event in database", Toast.LENGTH_SHORT).show();
                 }
+                moveToUserLocationActivity();
             }
         });
     }
@@ -461,8 +462,7 @@ public class CreateEventMarker extends Fragment implements OnMapReadyCallback, V
             addPictureFirebase();
             setEventMarker();
             addMarkerFirebase();
-
-//            moveToUserLocationActivity();
+             moveToUserLocationActivity();
         } else {
             Toast.makeText(getContext(), "Pleace to find must be inside event radius", Toast.LENGTH_LONG).show();
         }

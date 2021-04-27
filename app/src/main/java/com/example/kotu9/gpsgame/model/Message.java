@@ -36,7 +36,7 @@ public class Message implements Serializable, Parcelable {
         dest.writeString(this.eventName);
     }
 
-    protected Message(Parcel in) {
+    public Message(Parcel in) {
         this.body = in.readString();
         long tmpCommentDate = in.readLong();
         this.messageDate = tmpCommentDate == -1 ? null : new Date(tmpCommentDate);

@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.kotu9.gpsgame.R;
 import com.example.kotu9.gpsgame.fragment.MessagesFragment;
+import com.example.kotu9.gpsgame.fragment.MyEventsFragment;
 import com.example.kotu9.gpsgame.fragment.ProfileFragment;
 import com.example.kotu9.gpsgame.fragment.UserLocationFragment;
 import com.example.kotu9.gpsgame.model.User;
@@ -123,11 +124,10 @@ public class UserLocationActivity extends ActivityManagePermission
 
 
         } else if (id == R.id.nav_my_events) {
-            //TODO myEvents
-//            MessagesFragment messagesFragment = new MessagesFragment();
-//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.frame_container, messagesFragment);
-//            fragmentTransaction.commit();
+            MyEventsFragment myEventsFragment = new MyEventsFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_container, myEventsFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_logout) {
             logout();
         }

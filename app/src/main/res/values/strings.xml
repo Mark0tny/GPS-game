@@ -55,59 +55,51 @@
     <string name="TapHintProfileImage">Tap on icon to choose profile picture</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string-array name="Types">
-        <item>Choose</item>
-        <item>Location</item>
-        <item>QRcode</item>
-        <item>Quiz</item>
-        <item>PhotoCompare</item>
-    </string-array>
+    <string name="title_activity_create_event">CreateEventActivity</string>
 
     <!--    Navigation    -->
-    <string name="title_activity_create_event">CreateEventActivity</string>
     <string name="title_step1">Step 1</string>
     <string name="title_step2">Step 2</string>
     <string name="title_step3">Step 3</string>
     <string name="title_step4">Step 4</string>
+    <string name="createEvent_location">Location</string>
 
     <!--    Event picker     -->
-    <string name="createEvent_location">Location</string>
     <string name="createEvent_qrCode">QR Code</string>
     <string name="navigation_photoCompare">Photo Compare</string>
     <string name="navigation_quiz">Quiz</string>
+    <string name="add_questions">Please, Add questions and answers</string>
 
     <!--    Event Quiz    -->
-    <string name="add_questions">Please, Add questions and answers</string>
     <string name="add_question">Enter a Question</string>
     <string name="add_answers">Enter an answer</string>
     <string name="answerHint">Only one should be correct</string>
     <string name="submitQuiz">Submit Quiz</string>
     <string name="add_answer">Add Answer</string>
+    <string name="Send_QR">Send to Email</string>
 
     <!--    Event QRcode    -->
-    <string name="Send_QR">Send to Email</string>
     <string name="downloadQR">Download QR code</string>
     <string name="markPleaceToFind">Pleace mark pleace to find</string>
     <string name="eventLocalization">Enter Event Localization on Map</string>
+    <string name="add_hint">Enter a Hint</string>
 
     <!--    Event Hints    -->
-    <string name="add_hint">Enter a Hint</string>
     <string name="add_hint_butt">Add Hint</string>
     <string name="submitHints">Submit Hints</string>
-
     <string name="markerLocalization">Enter Marker Localization on Map</string>
+
     <string name="submitInfo">Submit</string>
-
-
     <string name="submitQuestion">Submit Question</string>
+
+
     <string name="generate">Generate QRcode</string>
     <string name="QRmessage">QR code message</string>
     <string name="menu_messages">Messages</string>
-
+    <string name="ac_login">Login</string>
 
 
     <!--Fragment and Activity names-->
-    <string name="ac_login">Login</string>
     <string name="ac_register">Register</string>
     <string name="ac_user_location">User Location</string>
     <string name="ac_start_game">Start Game</string>
@@ -128,17 +120,17 @@
     <string name="ac_admin">Admin Dashboard</string>
     <string name="fr_navigation_maps">Map</string>
     <string name="fr_add_basicInfo">Event Basic Info</string>
+    <string name="timerBundleGame">timerBundleGame</string>
 
     <!--Bundle-->
-    <string name="timerBundleGame">timerBundleGame</string>
     <string name="answersBundleGame">answersBundleGame</string>
     <string name="eventBundle">eventBundle</string>
     <string name="markerBundle">markerBundle</string>
     <string name="markerBundleGame">markerBundleGame</string>
     <string name="emailBundle">emailBundle</string>
+    <string name="congratulations">Congratulations!</string>
 
     <!--Messages-->
-    <string name="congratulations">Congratulations!</string>
     <string name="finished">You have finished event:</string>
     <string name="statistics">Your score:</string>
     <string name="comAndRate">Pleace comment and rate event</string>
@@ -148,6 +140,14 @@
     <string name="showHints">Show Hints</string>
     <string name="eventView">Game View</string>
     <string name="changeView">Change View</string>
+    <string name="listsizeBundleGame">listsizeBundleGame</string>
+    <string-array name="Types">
+        <item>Choose</item>
+        <item>Location</item>
+        <item>QRcode</item>
+        <item>Quiz</item>
+        <item>PhotoCompare</item>
+    </string-array>
 
 
 </resources>

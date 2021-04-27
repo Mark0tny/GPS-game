@@ -85,7 +85,7 @@ public class LocationService extends Service {
                             User user = new User();
                             GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                             user.setLocation(geoPoint);
-                            //saveUserLocation(user);
+                            saveUserLocation(user);
                         }
                     }
                 },

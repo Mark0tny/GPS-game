@@ -1,4 +1,4 @@
-package com.example.kotu9.gpsgame.activity.administration;
+package com.example.kotu9.gpsgame.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kotu9.gpsgame.R;
-import com.example.kotu9.gpsgame.adapters.AdminEventRecyclerViewAdapter;
+import com.example.kotu9.gpsgame.adapters.MessagesRecyclerViewAdapter;
+import com.example.kotu9.gpsgame.adapters.MyEventsRecyclerViewAdapter;
 import com.example.kotu9.gpsgame.model.ClusterMarker;
+import com.example.kotu9.gpsgame.model.Message;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,22 +26,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminEventListFragment extends Fragment implements AdminEventRecyclerViewAdapter.OnEventClickListener {
+public class MyEventsFragment extends Fragment {
 
-    private static final String TAG = AdminEventListFragment.class.getSimpleName();
-    private RecyclerView mRecyclerViewInEvents;
-    private AdminEventRecyclerViewAdapter mAdapterEvents;
+    private static final String TAG = MyEventsFragment.class.getSimpleName();
+    private RecyclerView mRecyclerViewMyEvents;
+    private MyEventsRecyclerViewAdapter mAdapterEvents;
     private List<ClusterMarker> events = new ArrayList<>();
 
     FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
 
-    public AdminEventListFragment() {
-
+    public MyEventsFragment() {
     }
 
-    public static AdminEventListFragment newInstance() {
-        AdminEventListFragment fragment = new AdminEventListFragment();
+    public static MyEventsFragment newInstance() {
+        MyEventsFragment fragment = new MyEventsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -56,10 +56,9 @@ public class AdminEventListFragment extends Fragment implements AdminEventRecycl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_my_events, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_admin_event_list, container, false);
-
-        mRecyclerViewInEvents = view.findViewById(R.id.recyclerInactiveEvents);
+        mRecyclerViewMyEvents = view.findViewById(R.id.recyclerMyEvents);
         mAuth = FirebaseAuth.getInstance();
         mDb = FirebaseFirestore.getInstance();
         getMapMarkersListDB();
@@ -69,12 +68,11 @@ public class AdminEventListFragment extends Fragment implements AdminEventRecycl
     private void initListRecyclerView() {
         if (getContext() != null) {
 
-            mAdapterEvents = new AdminEventRecyclerViewAdapter(getContext(), events, this);
-            mRecyclerViewInEvents.setAdapter(mAdapterEvents);
-            mRecyclerViewInEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mAdapterEvents = new MyEventsRecyclerViewAdapter(getContext(), events);
+            mRecyclerViewMyEvents.setAdapter(mAdapterEvents);
+            mRecyclerViewMyEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
     }
-
 
     private void getMapMarkersListDB() {
         mDb.collection(getString(R.string.collection_markers)).get()
@@ -87,15 +85,10 @@ public class AdminEventListFragment extends Fragment implements AdminEventRecycl
                         } else {
                             List<ClusterMarker> clusterMarkerList = documentSnapshots.toObjects(ClusterMarker.class);
                             events.addAll(clusterMarkerList);
-
-                            for (int i = 0; i < events.size(); i++) {
-                                if (!events.get(i).getEvent().active)
-                                    events.remove(events.get(i));
-                                events.get(i).setPosition(new LatLng(events.get(i).getPosition2().getLatitude(), events.get(i).getPosition2().getLongitude()));
+                            for (ClusterMarker clusterMarker : events) {
+                                clusterMarker.setPosition(new LatLng(clusterMarker.getPosition2().getLatitude(), clusterMarker.getPosition2().getLongitude()));
                             }
-
                             Log.d(TAG, "onSuccess: " + events);
-
                             initListRecyclerView();
                         }
                     }
@@ -108,14 +101,4 @@ public class AdminEventListFragment extends Fragment implements AdminEventRecycl
         });
     }
 
-    @Override
-    public void onMarkerListClick(int position) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(String.valueOf(R.string.markerBundle), events.get(position));
-
-        AdminEventAcceptFragment adminEventAcceptFragment = new AdminEventAcceptFragment();
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_container, adminEventAcceptFragment);
-        fragmentTransaction.commit();
-    }
 }

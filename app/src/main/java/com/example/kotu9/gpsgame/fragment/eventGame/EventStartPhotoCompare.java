@@ -373,22 +373,22 @@ public class EventStartPhotoCompare extends Fragment implements View.OnClickList
 
         int hBins = 50, sBins = 60;
         int[] histSize = {hBins, sBins};
-        // hue varies from 0 to 179, saturation from 0 to 255
         float[] ranges = {0, 180, 0, 256};
-        // Use the 0-th and 1-st channels
         int[] channels = {0, 1};
         Mat histBase = new Mat(), histTest1 = new Mat();
         List<Mat> hsvBaseList = Arrays.asList(hsvBase);
-        Imgproc.calcHist(hsvBaseList, new MatOfInt(channels), new Mat(), histBase, new MatOfInt(histSize), new MatOfFloat(ranges), false);
+        Imgproc.calcHist(hsvBaseList, new MatOfInt(channels), new Mat(), histBase,
+                new MatOfInt(histSize), new MatOfFloat(ranges), false);
         Core.normalize(histBase, histBase, 0, 1, Core.NORM_MINMAX);
         List<Mat> hsvTest1List = Arrays.asList(hsvTest1);
-        Imgproc.calcHist(hsvTest1List, new MatOfInt(channels), new Mat(), histTest1, new MatOfInt(histSize), new MatOfFloat(ranges), false);
+        Imgproc.calcHist(hsvTest1List, new MatOfInt(channels), new Mat(), histTest1,
+                new MatOfInt(histSize), new MatOfFloat(ranges), false);
         Core.normalize(histTest1, histTest1, 0, 1, Core.NORM_MINMAX);
-
 
         double baseBase = Imgproc.compareHist(histBase, histBase, 0);
         double baseTest1 = Imgproc.compareHist(histBase, histTest1, 0);
         compareResult = (baseTest1 / baseBase) * 100;
+
         if (compareResult > 40) {
             imagesMatch = true;
         } else {

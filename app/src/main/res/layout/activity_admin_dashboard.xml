@@ -6,19 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".activity.administration.AdminDashboardActivity">
 
-    <TextView
-        android:id="@+id/AdminHello"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Blank Admin Page" />
+    <fragment android:name="com.example.kotu9.gpsgame.activity.administration.AdminEventListFragment"
+        android:id="@+id/admin_fragment"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

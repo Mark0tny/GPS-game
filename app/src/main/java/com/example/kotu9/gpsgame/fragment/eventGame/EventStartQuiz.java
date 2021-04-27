@@ -347,6 +347,7 @@ public class EventStartQuiz extends Fragment implements View.OnClickListener, On
         bundle.putParcelable(String.valueOf(R.string.markerBundleGame), clusterMarker);
         bundle.putLong(String.valueOf(R.string.timerBundleGame), timerValue);
         bundle.putInt(String.valueOf(R.string.answersBundleGame), correctAnswer);
+        bundle.putInt(String.valueOf(R.string.listsizeBundleGame), questionList.size());
         return bundle;
     }
 

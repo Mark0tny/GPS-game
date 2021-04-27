@@ -4,11 +4,232 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.administration.AdminEventAcceptFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/detailMap"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="2" />
+
+            <LinearLayout
+                android:id="@+id/eventInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailMap"
+                android:layout_marginTop="@dimen/_10dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textEventNameD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eventname"
+                    android:textSize="@dimen/_25dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textLatD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Lat" />
+
+                    <TextView
+                        android:id="@+id/textLngD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Lng" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/moreInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textEventTypeD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_16dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Event Type" />
+
+                    <TextView
+                        android:id="@+id/textEventDifficultyD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15dp"
+                        android:layout_marginLeft="@dimen/_5dp"
+                        android:layout_marginTop="@dimen/_5dp"
+                        android:text="Difficulty" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/owner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/distance"
+                    android:layout_marginTop="@dimen/_5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textOwnerD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_16dp"
+                        android:text="Owner: " />
+
+                    <TextView
+                        android:id="@+id/textOwnerValueD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_15dp"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="OwnerValue" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eventInfo"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textDescriptionD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Event description: "
+                    android:textSize="@dimen/_18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textDescriptionValueD"
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="@dimen/_10dp"
+                    android:layout_marginLeft="@dimen/_10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textDescriptionD"
+                    android:text="DescriptionValue" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/lists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/description"
+                android:layout_marginTop="9dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/hintListD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone">
+
+                    </ListView>
+
+                    <TextView
+                        android:id="@+id/hintListName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/_5dp"
+                        android:text="Hints"
+                        android:textSize="@dimen/_18dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="@dimen/_50dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/addMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add message: "
+                        android:textSize="@dimen/_18dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/addMessageValue"
+                        android:layout_width="match_parent"
+                        android:layout_marginRight="@dimen/_10dp"
+                        android:layout_marginLeft="@dimen/_10dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Add Feedback to user"
+                        android:textColorHighlight="@color/colorPrimaryDark"
+                       />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="@dimen/_50dp"
+                    android:orientation="horizontal">
+
+
+                    <Button
+                        android:id="@+id/accept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Accept" />
+
+                    <Button
+                        android:id="@+id/reject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Reject" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </FrameLayout>

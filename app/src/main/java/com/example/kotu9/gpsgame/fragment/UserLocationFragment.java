@@ -227,11 +227,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         }
     }
 
-    private List<ClusterMarker> updateMarkers(List<ClusterMarker> clusterMarkers) {
-        //TODO update zrobic/ dodawac do adaptera i addMarka
-
-        return clusterMarkers;
-    }
 
     @Override
     public void onStart() {
@@ -655,7 +650,7 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
 
         if (clickedClusterMarker != null) {
             if (geoMap != null) {
-               // alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(geoMap.get(clickedClusterMarker.getEvent().name));
+               alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(geoMap.get(clickedClusterMarker.getEvent().name));
             }
         }
 
@@ -707,7 +702,6 @@ public class UserLocationFragment extends Fragment implements OnMapReadyCallback
         return distance[0];
     }
 
-    //TODO sprawdzić czy zadziała nie final.
     private void addGeofenceToMarkers(final ClusterMarker clusterMarker) {
         geofence = geoFire.queryAtLocation(new GeoLocation(clusterMarker.getPosition().latitude, clusterMarker.getPosition().longitude), (clusterMarker.getEvent().geofanceRadius / 1000));
         Log.i("GeoQuery", geofence.getCenter().toString() + geofence.getRadius() + "CLUSTER RADIUS" + clusterMarker.getEvent().geofanceRadius / 1000);

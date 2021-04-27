@@ -663,7 +663,7 @@ public class EventStartLocation extends Fragment implements OnMapReadyCallback {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(0, builder.build());
-        Log.d("IntentServiceNoti", builder.build().toString());
+        Log.d("NotificationService", builder.build().toString());
 
     }
 

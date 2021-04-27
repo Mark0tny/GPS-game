@@ -26,18 +26,6 @@
                 android:layout_marginTop="@dimen/_18dp"
                 tools:srcCompat="@tools:sample/avatars[0]" />
 
-            <RatingBar
-                android:id="@+id/ratingEvent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textRating"
-                android:layout_marginStart="@dimen/_20dp"
-                android:layout_toEndOf="@+id/textEventDifficulty"
-                android:focusable="false"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:stepSize=".5" />
-
             <TextView
                 android:id="@+id/textEventType"
                 android:layout_width="wrap_content"
@@ -58,40 +46,6 @@
                 android:layout_marginTop="@dimen/_5dp"
                 android:layout_toEndOf="@+id/markerIcon"
                 android:text="Difficulty" />
-
-            <TextView
-                android:id="@+id/textDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_40dp"
-                android:layout_toEndOf="@+id/textEventName"
-                android:text="Distance:" />
-
-            <TextView
-                android:id="@+id/textDistanceValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5dp"
-                android:layout_toEndOf="@+id/textDistance"
-                android:text="DistanceValue" />
-
-            <TextView
-                android:id="@+id/textRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textDistance"
-                android:layout_marginStart="80dp"
-                android:layout_toEndOf="@+id/textEventDifficulty"
-                android:text="Rating: " />
-
-            <TextView
-                android:id="@+id/textRatingValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textDistance"
-                android:layout_marginStart="@dimen/_5dp"
-                android:layout_toEndOf="@+id/textRating"
-                android:text="RatingValue" />
 
             <TextView
                 android:id="@+id/textEventName"

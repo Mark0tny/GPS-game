@@ -27,6 +27,7 @@ import com.example.kotu9.gpsgame.model.ClusterMarker;
 import com.example.kotu9.gpsgame.model.Comment;
 import com.example.kotu9.gpsgame.model.Event;
 import com.example.kotu9.gpsgame.model.Hint;
+import com.example.kotu9.gpsgame.model.User;
 import com.example.kotu9.gpsgame.utils.EventTypes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -71,6 +73,7 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     private Event event;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDb;
+    private User user;
 
     private ArrayList<Comment> comments;
     private Hint hintList;
@@ -98,6 +101,7 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         if (getArguments() != null) {
             clusterMarker = new ClusterMarker();
             event = new Event();
+            user = new User();
             comments = new ArrayList<>();
             hintList = new Hint();
             hintList.hints = new ArrayList<>();
@@ -110,6 +114,26 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         }
     }
 
+    private void loadUserInformation() {
+        if (user != null) {
+            DocumentReference docRef = mDb.collection(getString(R.string.collection_users)).document(mAuth.getCurrentUser().getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            user = task.getResult().toObject(User.class);
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +141,8 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
         View view = inflater.inflate(R.layout.fragment_event_details, container, false);
         setupViews(view, savedInstanceState);
         mDb = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        loadUserInformation();
         getEvent();
         setEventInfoTextView(clusterMarker);
         initCommentsListRecyclerView();
@@ -125,7 +151,6 @@ public class EventDetails extends Fragment implements View.OnClickListener, OnMa
     }
 
     private void getEvent() {
-
         DocumentReference newUserRef = mDb
                 .collection(getString(R.string.collection_events))
                 .document(clusterMarker.getEvent().getEventType().eventType.name())
